@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[plain]{algorithm}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{rotating}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 4 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- newcommands
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Einführung in die Wahrscheinlichkeitstheorie}\\
+\large{Übungsserie 1}
+\end{center}
+%----- tasks
+\setcounter{task}{1}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{enumerate}[label={(\alph*)}]
+\item $A\setminus (B\cup C) = A\cap (B\cup C)^C = A\cap B^C\cap C^C = (A\cap B^C)\cap (A\cap C^C) = \underline{\underline{(A\setminus B)\cap (A\setminus C)}}$
+\item $A\cup\bigcap\limits_{i=1}^k B_i = \left( A^C\cap\left(\bigcap\limits_{i=1}^k B_i \right)^C \right)^C = \left( A^C\cap\left(\bigcup\limits_{i=1}^k B_i^C \right) \right)^C = \left(\bigcup\limits_{i=1}^k A^C\cap B_i^C \right)^C = \bigcap\limits_{i=1}^k\left( A^C\cap B_i^C \right)^C\\ = \bigcap\limits_{i=1}^k\left( A^C\cap B_i^C \right)^C = \underline{\underline{\bigcap\limits_{i=1}^k\left( A\cup B_i \right)}}$
+\end{enumerate}
+\end{task}
+\setcounter{task}{5}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{flalign*}
+B_1 &= \bigcap\limits_{j=1}^{n}A_j,\ \left\vert B_1\right\vert = 1 &\\
+B_2 &= \bigcup\limits_{j=1}^{n}A_j,\ \left\vert B_2\right\vert = 2^n-1 &\\
+B_3 &= \bigcup\limits_{j=1}^{n}\left(A_j\cap\bigcap\limits_{i=1}^{n}A_i^C\mid i\neq j\right),\ \left\vert B_3\right\vert = n &\\
+B_4 &= \bigcap\limits_{j=1}^{n}A_j \cup \bigcap\limits_{j=1}^{n}A_j^C,\ \left\vert B_4\right\vert = 2 &\\
+\end{flalign*}
+\end{task}
+\end{document}

@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[plain]{algorithm}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{rotating}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 4 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- newcommands
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Einführung in die Wahrscheinlichkeitstheorie}\\
+\large{Übungsserie 2}
+\end{center}
+%----- tasks
+\setcounter{task}{2}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{enumerate}
+\item[(A)] $\binom{13}{9}$
+\item[(U)] $5^9$
+\item[(a)] \begin{enumerate}
+\item[(A)] $1$
+\item[(U)] $5!$
+\end{enumerate}
+\item[(b)]\begin{enumerate}
+\item[(A)] $\binom{9}{5}$
+\item[(U)] $9^{\underline{5}}$
+\end{enumerate}
+\end{enumerate}
+\end{task}
+\setcounter{task}{4}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{enumerate}[label={(\alph*)}]
+\item $\sum\limits_{k=0}^{n}\binom{n}{k}\cdot 1^k\cdot 1^{n-k}-(n+1)=(1+1)^n-(n+1)=\underline{\underline{2^n-n-1}}$
+\item $\sum\limits_{n=0}^{n} 2^{-k+1}\binom{n}{k} = 2\cdot\sum\limits_{n=0}^{n} \binom{n}{k}\cdot \left(\frac{1}{2}\right)^{k} = \underline{\underline{2(1+\frac{1}{2})^n}}$
+\item $\sum\limits_{n=0}^{5}\binom{12}{k}\binom{13}{5-k}\stackrel{\mbox{\tiny{Vandermonde}}}{=}\underline{\underline{\binom{25}{5}}}$
+\item Hilfssatz: $\binom{n}{k}=\frac{n!}{k!\cdot(n-k)!}=\frac{n}{k}\cdot\frac{(n-1)!}{(k-1)!\cdot(n-k)}=\underline{\frac{n}{k}\cdot\binom{n-1}{k-1}}$\\
+$\sum\limits_{k=1}^{n}k\binom{n}{k}\stackrel{\mbox{\tiny{Hilfssatz}}}{=}n\cdot\sum\limits_{k=1}^{n}\binom{n-1}{k-1}\stackrel{\mbox{\tiny{shift}}}{=}n\cdot\sum\limits_{k=0}^{n-1}\binom{n-1}{k}=\underline{\underline{n\cdot 2^{n-1}}}$
+\item $\sum\limits_{n=10}^{19}\binom{19}{k}=\sum\limits_{n=0}^{19}\binom{19}{k}-\sum\limits_{n=0}^{9}\binom{19}{k}\stackrel{\mbox{\tiny{Sym.}}}{=}\sum\limits_{n=0}^{19}\binom{19}{k}-\sum\limits_{n=10}^{19}\binom{19}{k}=\frac{1}{2}\sum\limits_{n=0}^{19}\binom{19}{k}=\underline{\underline{2^{18}}}$
+\end{enumerate}
+\end{task}
+
+\begin{task}
+$\binom{n}{k}+\binom{n}{k-1}=\frac{n!}{k!\cdot(n-k)!}+\frac{n!}{(k-1)!\cdot(n-k+1)!}=
+\frac{n!\cdot (n-k+1)}{k!\cdot(n-k+1)!}+\frac{n!\cdot k}{k!\cdot(n-k+1)!}=
+\frac{n!\cdot (n+1)}{k!\cdot(n+1-k)!}=\underline{\underline{\binom{n+1}{k}}}$
+\end{task}
+\end{document}
