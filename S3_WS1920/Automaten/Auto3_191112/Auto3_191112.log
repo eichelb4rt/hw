@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.5.17)  11 NOV 2019 17:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.5.17)  12 NOV 2019 00:23
 entering extended mode
 **./Auto3_191112.tex
 (Auto3_191112.tex
@@ -1037,8 +1037,6 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 45.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-AED: lastpage setting LastPage
-
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.161pt.
  We now make it that large for the rest of the document.
@@ -1047,28 +1045,30 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 [1{C:/Users/mauri/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 ]
-(Auto3_191112.aux) ) 
+
+AED: lastpage setting LastPage
+[2] (Auto3_191112.aux) ) 
 Here is how much of TeX's memory you used:
- 16546 strings out of 493305
- 331619 string characters out of 3138874
- 398003 words of memory out of 3000000
- 19783 multiletter control sequences out of 15000+200000
+ 16606 strings out of 493305
+ 332690 string characters out of 3138874
+ 407001 words of memory out of 3000000
+ 19843 multiletter control sequences out of 15000+200000
  9192 words of font info for 35 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,15n,68p,429b,974s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.
-pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/
-Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmsy8.pfb>
-Output written on Auto3_191112.pdf (1 page, 109561 bytes).
+ 55i,15n,68p,429b,1029s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cme
+x10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Progr
+am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmsy8.pfb>
+Output written on Auto3_191112.pdf (2 pages, 118910 bytes).
 PDF statistics:
- 49 PDF objects out of 1000 (max. 8388607)
+ 52 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
