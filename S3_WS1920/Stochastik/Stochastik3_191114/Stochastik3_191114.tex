@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[plain]{algorithm}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{rotating}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 4 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- newcommands
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Einführung in die Wahrscheinlichkeitstheorie}\\
+\large{Übungsserie 3}
+\end{center}
+%----- tasks
+\begin{task}
+abdsnlkdsa
+\end{task}
+
+\setcounter{task}{2}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{enumerate}[label={(\alph*)}]
+\item \hfill\vspace{-8mm}
+\begin{align*}
+0\leq P(A\cap B) \leq P(B) &= 0 \implies P(A\cap B) = 0&\\
+P(A\cup B) &= P(A) + \underbrace{P(B)}_{=0} - \underbrace{P(A\cap B)}_{=0} = \underline{\underline{P(A)}}&\\
+P(A\cup B) &= P(A\setminus B) + P(B\setminus A) + P(A\cap B)&\\
+&= \underline{P(A\setminus B)} + \underbrace{P(B\cap A^C)}_{=0} + \underbrace{P(A\cap B)}_{=0} = \underline{\underline{P(A)}}&\tag{1}
+\end{align*}
+\item \hfill\vspace{-8mm}
+\begin{align*}
+P(B^C)&=1-P(B)=0&\\
+P(A\cap B)&=P(A\setminus B^C) \stackrel{\mbox{\tiny (1)}}{=} \underline{\underline{P(A)}}&\tag{2}\\
+P(B\setminus A)&=P(B\cap A^C) \stackrel{\mbox{\tiny (2)}}{=} \underline{\underline{P(A^C)}}
+\end{align*}
+\end{enumerate}
+\end{task}
+\end{document}
