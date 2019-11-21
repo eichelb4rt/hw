@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{rotating}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 4 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgabena
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- newcommands
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Einführung in die Wahrscheinlichkeitstheorie}\\
+\large{Übungsserie 4}
+\end{center}
+%----- tasks
+\setcounter{task}{2}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{align*}
+A &= \{\text{alle 3 Farben gezogen}\}\\
+A^C &= B_{weiss} \cup B_{rot} \cup B_{schwarz}\\
+B_i &= \{\text{Farbe }i\text{ nicht gezogen}\}\\
+\mathbb{P}(A^C) &=
+ \mathbb{P}(B_{weiss}) + \mathbb{P}(B_{rot}) + \mathbb{P}(B_{schwarz})\\
+&\phantom{=}  - (\mathbb{P}(B_{weiss}\cap B_{rot}) + \mathbb{P}(B_{weiss}\cap B_{schwarz}) + \mathbb{P}(B_{schwarz}\cap B_{rot}))\\
+&\phantom{=} + \mathbb{P}(B_{weiss} \cap B_{rot} \cap B_{schwarz})\\
+\mathbb{P}(A^C) &= \frac{\binom{13}{5}}{\binom{20}{5}} + \frac{\binom{12}{5}}{\binom{20}{5}} + \frac{\binom{15}{5}}{\binom{20}{5}}\\
+&\phantom{=}\ - \left(\frac{\binom{5}{5}}{\binom{20}{5}} + \frac{\binom{8}{5}}{\binom{20}{5}} + \frac{\binom{7}{5}}{\binom{20}{5}}\right)\\
+&\phantom{=}\ + 0\\
+\mathbb{P}(A) &= \underline{\underline{1-\mathbb{P}(A^C)}}
+\end{align*}
+\end{task}
+\setcounter{task}{4}
+\begin{task}
+\hfill\vspace{-5mm}
+\begin{enumerate}[label={(\alph*)}]
+\item $\Omega = \{(w,w,u_i),(w,s,u_i),(s,w,u_i),(s,s,u_i)\mid i\in [1,3]\}\setminus \{(s,s,u_1)\}$
+\item \hfill\vspace{-5mm}\begin{align*}
+U_i &= \{\text{Urne } i \text{ wurde ausgewählt}\}\\
+A_{xy} &= \{\text{Farbe } x\text{, dann }y \text{ wurde gezogen}\}\\\\
+\mathbb{P}(A_{ww}) &= \mathbb{P}(U_1)\mathbb{P}(A_{ww}\vert U_1) + \mathbb{P}(U_2)\mathbb{P}(A_{ww}\vert U_2) + \mathbb{P}(U_3)\mathbb{P}(A_{ww}\vert U_3)\\
+&= \frac{1}{3}(\mathbb{P}(A_{ww}\vert U_1) + \mathbb{P}(A_{ww}\vert U_2) + \mathbb{P}(A_{ww}\vert U_3))\\
+&= \underline{\frac{1}{3}\left(\frac{\binom{2}{5}}{\binom{2}{6}} + \frac{\binom{2}{4}}{\binom{2}{6}} + \frac{\binom{2}{5}}{\binom{2}{6}}\right)}\\\\
+\mathbb{P}(A_{ss}) &= \frac{1}{3}(\mathbb{P}(A_{ss}\vert U_1) + \mathbb{P}(A_{ss}\vert U_2) + \mathbb{P}(A_{ss}\vert U_3))\\
+&= \underline{\frac{1}{3}\left(0 + \frac{\binom{2}{2}}{\binom{2}{6}} + \frac{\binom{2}{3}}{\binom{2}{6}}\right)}\\\\
+\mathbb{P}(A_{ws}\cup A_{sw})&= \mathbb{P}(A_{ws}) + \mathbb{P}(A_{sw})\\
+&= \frac{1}{3}\left(\frac{\binom{1}{5}}{\binom{1}{6}}\cdot \frac{\binom{1}{1}}{\binom{1}{5}} + \frac{\binom{1}{4}}{\binom{1}{6}}\cdot \frac{\binom{1}{2}}{\binom{1}{5}} + \frac{\binom{1}{3}}{\binom{1}{6}}\cdot \frac{\binom{1}{3}}{\binom{1}{5}}\right)\\
+&\phantom{=}\ + \frac{1}{3}\left(\frac{\binom{1}{1}}{\binom{1}{6}}\cdot \frac{\binom{1}{5}}{\binom{1}{5}} + \frac{\binom{1}{2}}{\binom{1}{6}}\cdot \frac{\binom{1}{4}}{\binom{1}{5}} + \frac{\binom{1}{3}}{\binom{1}{6}}\cdot \frac{\binom{1}{3}}{\binom{1}{5}}\right)\\
+&= \underline{\frac{2}{3}\left(\frac{\binom{1}{5}}{\binom{1}{6}}\cdot \frac{\binom{1}{1}}{\binom{1}{5}} + \frac{\binom{1}{4}}{\binom{1}{6}}\cdot \frac{\binom{1}{2}}{\binom{1}{5}} + \frac{\binom{1}{3}}{\binom{1}{6}}\cdot \frac{\binom{1}{3}}{\binom{1}{5}}\right)}
+\end{align*}
+\end{enumerate}
+\end{task}
+\end{document}
