@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 2 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+%----- tikz automata
+\usetikzlibrary{arrows, automata, positioning}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Automaten und Berechenbarkeit}\\
+\large{4. Übungsserie}
+\end{center}
+%----- tasks
+
+\end{document}
