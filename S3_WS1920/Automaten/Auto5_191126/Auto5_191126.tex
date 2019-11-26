@@ -61,7 +61,7 @@
 \end{task}
 
 \begin{task}
-    $F = \underbrace{\{\bigcup_{m\in \mathbb{N}} 0^{m+n} 1^{m}\mid n\in\mathbb{N}\}}_{\text{Wörter, die noch } n \text{ Einsen brauchen}}\cup \underbrace{\{\Sigma^*\setminus \{ 0^{m+n} 1^{m}\mid m,n\in\mathbb{N}\}\}}_{\text{Wörter, die nicht mehr in } L \text{ sein können}}$\\
+    $F = \underbrace{\{\bigcup_{m\in \mathbb{N},m\geq 1} 0^{m+n} 1^{m}\mid n\in\mathbb{N}\}}_{\text{Wörter, die noch } n \text{ Einsen brauchen}}\cup \underbrace{\{0^{n}\mid n\in\mathbb{N}\}}_{\text{Wörter, die noch mindestens } n \text{ Einsen brauchen}}\cup \underbrace{\{\Sigma^*\setminus \{ 0^{m+n} 1^{m}\mid m,n\in\mathbb{N}\}\}}_{\text{Wörter, die nicht mehr in } L \text{ sein können}}$\\
     Da der Schnitt zweier Äquivalenzklassen leer ist und die Vereinigung aller Äquivalenzklassen $\Sigma^*$ darstellt,\\ist $F$ eine Zerlegung von $\Sigma^*$.
 \end{task}
 
