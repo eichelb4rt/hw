@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{rotating}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 4 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgabena
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- newcommands
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Einführung in die Wahrscheinlichkeitstheorie}\\
+\large{Übungsserie 6}
+\end{center}
+%----- tasks
+\setcounter{task}{1}
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $\mathbb{P}((A\cap B)\cup(A\cap C)) = \mathbb{P}(A\cap B) + \mathbb{P}(A\cap C) - \mathbb{P}(A\cap B\cap C) = \frac{1}{9} + \frac{1}{9} - \frac{1}{27} = \underline{\underline{\frac{5}{27}}}$
+        \item $\mathbb{P}(A\setminus (B\cup C)) = \mathbb{P}((A\cap B^C)\cup (A\cap C^C)) = \mathbb{P}(A\cap B^C) + \mathbb{P}(A\cap C^C) - \mathbb{P}(A\cap B^C\cap C^C) = \frac{2}{9} + \frac{2}{9} - \frac{4}{27} = \underline{\underline{\frac{8}{27}}}$
+    \end{enumerate}
+\end{task}
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{align*}
+        \mathbb{P}(A) &= \frac{\binom{6}{4}}{2^6} = \frac{15}{2^6}\\
+        \mathbb{P}(B) &= \frac{1}{2}\\
+        \mathbb{P}(A\cap B) &= \frac{1}{2^2}\cdot \frac{1}{2^4} + \frac{1}{2^2}\cdot \frac{\binom{4}{2}}{2^4} = \frac{7}{2^6}\\
+        &\neq \underline{\underline{\mathbb{P}(A)\mathbb{P}(B)}}
+    \end{align*}
+    $\implies$ Die beiden Ereignisse sind nicht unabhängig voneinander.
+\end{task}
+\setcounter{task}{4}
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $\mathbb{P}(A\cap (B\cup C)) = \mathbb{P}((A\cap B)\cup (A\cap C)) = \mathbb{P}(A)\cdot \mathbb{P}(B) + \mathbb{P}(A)\cdot \mathbb{P}(C) - \underbrace{\mathbb{P}(A\cap B\cap C)}_{= 0\ (B\cap C = \emptyset)} \\= \mathbb{P}(A)(\mathbb{P}(B) + \mathbb{P}(C)) = \underline{\underline{\mathbb{P}(A)\mathbb{P}(B\cup C)}}$
+        \item $\mathbb{P}(A\cap (B\cup C)) = \mathbb{P}(A)\mathbb{P}(B) + \mathbb{P}(A)\mathbb{P}(C) - \mathbb{P}(A)\mathbb{P}(B)\mathbb{P}(C) = \mathbb{P}(A)(\mathbb{P}(B) + \mathbb{P}(C) - \mathbb{P}(B)\mathbb{P}(C)) = \underline{\underline{\mathbb{P}(A)\mathbb{P}(B\cup C)}}$
+    \end{enumerate}
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}
+        \item[(c)] $\mathbb{P}(A) = 1: \mathbb{P}(A\cap B) \stackrel{\mbox{\tiny ÜS 3}}{=} \mathbb{P}(B) = \underline{\underline{\mathbb{P}(A)\mathbb{P}(B)}}$\\
+        $\mathbb{P}(A) = 0: \mathbb{P}(A\cap B) \stackrel{\mbox{\tiny ÜS 3}}{=} \mathbb{P}(A) = \underline{\underline{\mathbb{P}(A)\mathbb{P}(B)}}$
+    \end{enumerate}
+\end{task}
+\end{document}
