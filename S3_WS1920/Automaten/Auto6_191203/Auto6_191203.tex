@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 2 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+%----- tikz automata
+\usetikzlibrary{arrows, automata, positioning}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Automaten und Berechenbarkeit}\\
+\large{6. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item Nein, Pumping Lemma: $n\in \mathbb{N},\ z = \#a^{2^n}\#\\ uv = \#a^m,
+        v = 
+        \begin{cases}
+            a^r & uv^2 w = \#a^{2^n + r}\#,\ r < 2^n\implies 2^n < 2^n + r < 2^{n+1}\implies \underline{\underline{uv^2w \notin L}}\\
+            \#a^r & uv^2w = \#a^x\#a^y\#a^z \notin L
+        \end{cases}$
+        \item $F = \{ \{ \#a^m\}\mid m\in \mathbb{N} \}\cup \{\{\lambda\}\}\cup (\Sigma^*\setminus\{ \{ \#a^m\}\mid m\in \mathbb{N} \}\cup \{\{\lambda\}\})$ , denn für $m\neq n \in \mathbb{N}$ gilt \\$\exists_{d\in \mathbb{N}}: \#a^{m+d}\#\in L \land \#a^{n+d}\#\notin L$. Da der Schnitt zweier Äquivalenzklassen leer ist und die Vereinigung aller Äquivalenzklassen $\Sigma^*$ darstellt, ist $F$ eine Zerlegung von $\Sigma^*$.
+    \end{enumerate}
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $G = (N,T,S,P)$
+        \begin{flalign*}
+            N &= \{X\}&\\
+            T &= \{a,b\}&\\
+            S &= \{X\}&\\
+            P &= \{ X\rightarrow \lambda,\ X\rightarrow XX,\ X\rightarrow aXb,\ X\rightarrow bXa\} &
+        \end{flalign*}
+        $L(G)\subseteq L_{2equal}$ (trivial)\\
+        $L_{2equal}\subseteq L(G)$:\vspace{3mm}\\
+        \begin{tabular}{rl}
+            IA:&$n = |v| = 0$, $v\in L_{2equal}, v\in L(G)$\\
+            IV:&für $n = |v|, v\in L_{2equal}$ gilt: $v\in L(G)$\\
+            IB:&für $n+2 = |uvw|, uvw\in L_{2equal}$ gilt: $uvw\in L(G)$\\
+            IS:&$v\rightarrow uvw$\\
+            &$uvw = \begin{cases}
+                abv & X\rightarrow^* v\implies X\rightarrow XX \rightarrow abX \rightarrow^* abv\\
+                bav & X\rightarrow^* v\implies X\rightarrow XX \rightarrow baX \rightarrow^* bav\\
+                vab & X\rightarrow^* v\implies X\rightarrow XX \rightarrow Xab \rightarrow^* vab\\
+                vba & X\rightarrow^* v\implies X\rightarrow XX \rightarrow Xba \rightarrow^* vba\\
+                avb & X\rightarrow^* v\implies X\rightarrow aXb \rightarrow^* avb\\
+                bva & X\rightarrow^* v\implies X\rightarrow bXa \rightarrow^* bva
+            \end{cases}\implies \underline{\underline{uvw \in L(G)}}$
+            \end{tabular}\vspace{3mm}\\
+            $\implies L(G) = L_{2equal}$
+            \item $X\rightarrow XX\rightarrow XaXb\rightarrow abaXb\rightarrow ababXab\rightarrow ababbaab\\
+            X\rightarrow XX\rightarrow XXXX\rightarrow abbaabba$
+            \item $|F_L(L_{2equal})| = |Q|\ (\text{Differenz der Anzahl von } a \text{ und } b) = \aleph_0\implies L_{2equal}$ ist nicht regulär
+    \end{enumerate}
+\end{task}
+
+\begin{task}
+    \hfill
+\end{task}
+\end{document}
