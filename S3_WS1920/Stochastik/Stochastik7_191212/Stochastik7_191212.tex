@@ -27,6 +27,7 @@
 \theoremstyle{break}
 \newtheorem{task}{Aufgabe}
 %----- newcommands
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
 %------------------------------------------ main
 \begin{document}
 %----- title
@@ -37,17 +38,50 @@
 %----- tasks
 \setcounter{task}{1}
 \begin{task}
+    $\mathbb{P}(X=k) = \begin{cases}
+        \frac{6}{36} & k = 0\\
+        \frac{10}{36} & k = 1\\
+        \frac{8}{36} & k = 2\\
+        \frac{6}{36} & k = 3\\
+        \frac{4}{36} & k = 4\\
+        \frac{2}{36} & k = 5\\
+        0 & \text{sonst}
+    \end{cases}
+    \implies F(s) = \begin{cases}
+        0 & X < 0\\
+        \frac{6}{36} & 0 \leq s < 1\\
+        \frac{16}{36} & 1 \leq s < 2\\
+        \frac{24}{36} & 2 \leq s < 3\\
+        \frac{30}{36} & 3 \leq s < 4\\
+        \frac{34}{36} & 4 \leq s < 5\\
+        1 & 5 \leq s
+    \end{cases}$
+\end{task}
+\setcounter{task}{3}
+\begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate}[label={(\alph*)}]
-        \item $F(w) = \begin{cases}
-            \frac{6}{36} & X(w) = 0\\
-            \frac{10}{36} & X(w) = 1\\
-            \frac{8}{36} & X(w) = 2\\
-            \frac{6}{36} & X(w) = 3\\
-            \frac{4}{36} & X(w) = 4\\
-            \frac{2}{36} & X(w) = 5\\
+        \item \hfill\vspace{-5mm}\\$\mathbb{P}(X=t) = \begin{cases}
+            \frac{1}{3} & t = 0\\
+            \frac{1}{9} & t = 1\\
+            \frac{1}{3} & t = 2\\
+            \frac{2}{9} & t = 3\\
             0 & \text{sonst}
         \end{cases}$
+        \item \hfill\vspace{-5mm}\begin{flalign*}
+            \mathbb{P}\{0.5 < X \leq 2\} &= F(2) - F(0.5) = \frac{4}{9}&\\
+            \mathbb{P}\{X < 2\} &= \mathbb{P}(\{ X \leq 2 \}\setminus \{ X = 2\}) = F(2) - \mathbb{P}(2) = \frac{4}{9}&\\
+            \mathbb{P}\{X > 1.5\} &= 1- F(1.5) = \frac{5}{9}&\\
+        \end{flalign*}
+    \end{enumerate}
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $\mathbb{P}\set{X=0} = 1 - \mathbb{P}\set{X>0} = 1 - \sum\limits_{k=1}^{\infty}\frac{1}{3^k} = 1 - \left(\frac{1}{1-\frac{1}{3}}-1\right) = \underline{\underline{\frac{1}{2}}}$
+        \item $\mathbb{P}\set{X\geq m} = \sum\limits_{k=m}^{\infty}\frac{1}{3^k} = \sum\limits_{k=1}^{\infty}\frac{1}{3^k} - \sum\limits_{k=1}^{m-1}\frac{1}{3^k} = \underline{\underline{\frac{1}{2} - \sum\limits_{k=1}^{m-1}\frac{1}{3^k}}}$
+        \item $\mathbb{P}\set{X\in A} = \sum\limits_{k=1}^{\infty}\frac{1}{3^{2k}} = \sum\limits_{k=1}^{\infty}\frac{1}{9^k} = \frac{1}{1 - \frac{1}{9}} - 1 = \underline{\underline{\frac{1}{8}}}$
     \end{enumerate}
 \end{task}
 \end{document}
