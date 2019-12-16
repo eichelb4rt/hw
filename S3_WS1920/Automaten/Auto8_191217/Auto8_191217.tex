@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 2 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+%----- tikz automata
+\usetikzlibrary{arrows, automata, positioning}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Automaten und Berechenbarkeit}\\
+\large{8. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    $G_4 = (N, T, S, P)$\vspace{-2mm}
+    \begin{flalign*}
+        N &= \set{S, L, R} &\\
+        T &= \set{a,b,c,d} &\\
+        S &= S &\\
+        P &= \set{S\to \lambda, S\to abcd, S\to Rabcd, Ra\to aR, Rb\to bR, Rc\to cR, dL\to Ld, cL\to Lc, bL\to Lb,&\\&\phantom{=}\ aRb\to aabbR, cRd\to ccddL, cRd\to Lccdd, aLb\to Raabb, cRd\to ccdd, aLb\to aabb } &
+    \end{flalign*}
+    $\implies L$ ist kontextsensitiv\vspace{3mm}\\
+    Pumping-Lemma: $z = a^{n_L} b^{n_L} c^{n_L} d^{n_L}, \abs{vwx} \leq n_L \implies \text{$vwx$ besteht aus maximal 2 unterschiedlichen Buchstaben}\\\implies uv^iwx^iy \text{ mit $i\neq 1$ ändert die Anzahl von maximal 2 unterschiedlichen Buchstaben}\implies z\notin L_4$\vspace{3mm}\\
+    $\implies L$ ist nicht kontextfrei $\implies L\in CH(1)$
+\end{task}
+
+\begin{task}
+    Taminos Lösung
+\end{task}
+
+\begin{task}
+    Nein, Pumping-Lemma: $z = a^{n_L} b^{n_L^2}, \abs{vwx}\leq n_L\implies \abs{vx}_b \leq n_L\\\implies n_L^2 + \abs{vx}_b \leq n_L^2 + n_L < n_L^2 + 2 n_L  + 1 = (n_L + 1)^2 \stackrel{\mbox\tiny{\abs{vx}_b > 0}}{\implies} z_L^2 < \abs{z_2}_b < (z_L + 1)^2\implies z_2\notin L$\\
+    falls $\abs{vx}_b = 0$ dann ist $vx = a^\alpha, \alpha \geq 1\implies z_2 \notin L$
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $G_{Sp-bin} = (N, T, S, P)$\vspace{-2mm}
+        \begin{flalign*}
+            N &= \set{S, X} &\\
+            T &= \set{0,1, \$} &\\
+            S &= S &\\
+            P &= \set{S\to 0\$0, S\to X, X\to 0X0, X\to 1X1, X\to 1\$1} &
+        \end{flalign*} (ist kontextfrei)
+        \item Taminos Lösung
+    \end{enumerate}
+\end{task}
+\end{document}
