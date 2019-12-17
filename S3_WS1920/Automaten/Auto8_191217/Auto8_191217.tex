@@ -56,7 +56,9 @@
 \end{task}
 
 \begin{task}
-    Taminos Lösung
+    Intuition: Um festzustellen, ob ein beliebiges $w\in \overline{L_3}$, sollte man überprüfen, ob $w\in L_3$ $\implies \overline{L_3}$ ist kontextsensitiv.\\
+    Wikipedia: $\mathcal{CSL}$ ist unter Komplementbildung abgeschlossen $\implies \overline{L_3}$ ist kontextsensitiv.\\
+    Pumping-Lemma: Funktioniert, $\overline{L_3}$ könnte kontextfrei sein.
 \end{task}
 
 \begin{task}
@@ -74,7 +76,17 @@
             S &= S &\\
             P &= \set{S\to 0\$0, S\to X, X\to 0X0, X\to 1X1, X\to 1\$1} &
         \end{flalign*} (ist kontextfrei)
-        \item Taminos Lösung
+        \item \hfill\vspace{-5mm}\begin{enumerate}[align=left, label={Fall \arabic*:}]
+            \item $\mathrm{Sp}(\mathrm{bin}(n)) = \mathrm{bin}(n) = 1^n \implies \mathrm{bin}(n+1) = 10^n$
+            \item $\mathrm{bin}(n) = r 0 1^n, n\in \mathbb{N}, r\in \set{1}\cdot \Sigma^*\implies \mathrm{Sp}(\mathrm{bin}(n)) = 1^n 0 \mathrm{Sp}(r), \mathrm{bin}(n+1) = r 1 0^n$
+        \end{enumerate}
+        $\implies G_{Sp-bin+1} = (N, T, S, P)$\vspace{-2mm}
+        \begin{flalign*}
+            N &= \set{S, X, Y} &\\
+            T &= \set{0,1, \$} &\\
+            S &= S &\\
+            P &= \set{S\to 0\$1, S\to X, X\to 1X0, X\stackrel{\mbox{\tiny{Fall 1}}}{\to}1\$10, X\stackrel{\mbox{\tiny{Fall 2}}}{\to} 0Y1, Y\to 1Y1, Y\to 0Y0, Y\to 1\$1 } &
+        \end{flalign*} (ist kontextfrei)
     \end{enumerate}
 \end{task}
 \end{document}
