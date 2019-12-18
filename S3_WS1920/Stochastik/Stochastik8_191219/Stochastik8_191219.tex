@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{rotating}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 4 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgabena
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- newcommands
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Einführung in die Wahrscheinlichkeitstheorie}\\
+\large{Übungsserie 8}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item \hfill\vspace{-4mm}\\$p(X) = \begin{cases}
+            \frac{21}{36}& X=0\\
+            \frac{5}{36}& X=1\\
+            \frac{4}{36}& X=2\\
+            \frac{3}{36}& X=3\\
+            \frac{2}{36}& X=4\\
+            \frac{1}{36}& X=5
+        \end{cases}$
+        \item \hfill\vspace{-5mm}\begin{enumerate}[label={\Roman*.}]
+            \item $\mathbb{E}X = \sum\limits_{t=0}^{5} t\cdot p(t) = \frac{1}{36}\cdot\sum\limits_{t=1}^{5}t\cdot(6-t) = \underline{\underline{\frac{35}{36}}}$
+            \item $\mathbb{E}[-X] = -\mathbb{E}X = \underline{\underline{-\frac{35}{36}}}$
+            \item $\mathbb{E}[3X-2] = 3\mathbb{E}X-2 = \underline{\underline{\frac{11}{12}}}$
+            \item $\mathbb{E}[X(5-X)] = \sum\limits_{t=0}^{5} t\cdot(5-t)\cdot p(t) = \frac{1}{36}\sum\limits_{t=1}^{4} t\cdot(5-t)\cdot (6-t) = \underline{\underline{\frac{67}{36}}}$
+        \end{enumerate}
+    \end{enumerate}
+\end{task}
+\begin{task}
+    Wenn die Aufteilung nach dem Verhältnis der Siegwahrscheinlichkeiten als fair angesehen wird, sollte wie folgt ausgeteilt werden:
+    $A$ bekommt $35\,\text{Taler} = (\frac{1}{2}^3 + \frac{1}{2}^2 + \frac{1}{2})\cdot 40\,\text{Taler}$, B bekommt $5\,\text{Taler} = \frac{1}{2}^3 \,\text{Taler}$.
+    Andernfalls würde ich keinem der beiden etwas geben, da keiner die Gewinnbedingung erfüllt hat und das Spiel selbst damit gewinnt.
+\end{task}
+\setcounter{task}{4}
+\begin{task}
+    $\mathbb{E}[X_j] = 1\cdot \mathbb{P}\set{\text{"Box j bleibt leer"}} = \frac{\binom{n + N - 2}{n}}{\binom{n + N - 1}{n}} = \frac{N-1}{n + N - 1}$,\\
+    also ist die durchschnittliche Anzahl der leeren Boxen $\frac{N\cdot(N-1)}{n + N - 1}$
+\end{task}
+\end{document}
