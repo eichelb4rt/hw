@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 2 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+%----- tikz automata
+\usetikzlibrary{arrows, automata, positioning}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Automaten und Berechenbarkeit}\\
+\large{9. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $G_a = (N_a, T, S_a, P_a)$\vspace{-2mm}
+        \begin{flalign*}
+            N_a &= \set{Q_0, Q_1, Q_2, Q_3, Q_4} &\\
+            T &= \set{a,b} &\\
+            S_a &= Q_0 &\\
+            P_a &= \set{Q_0\to \lambda, Q_0\to aQ_1, Q_0\to bQ_0, Q_1\to aQ_2, Q_1\to bQ_1, Q_2\to aQ_3, Q_2\to bQ_2,&\\&\phantom{=\{ }\ Q_3\to aQ_4, Q_3\to bQ_3, Q_4\to aQ_0, Q_4\to bQ_4} &
+        \end{flalign*}
+        $G_{a2} = (N_{a2}, T, S_{a2}, P_{a2})$\vspace{-2mm}
+        \begin{flalign*}
+            N_{a2} &= \set{Q_0, Q_1, Q_2, Q_3, Q_4} &\\
+            T &= \set{a,b} &\\
+            S_{a2} &= Q_0 &\\
+            P_{a2} &= \set{Q_0\to \lambda, Q_1\to Q_0a, Q_0\to Q_0b, Q_2\to Q_1a, Q_1\to Q_1b, Q_3\to Q_2a, Q_2\to Q_2b,&\\&\phantom{=\{ }\ Q_4\to Q_3a, Q_3\to Q_3b, Q_0\to Q_4a, Q_4\to Q_4b} &
+        \end{flalign*}
+        \item $G_b = (N_b, T, S_b, P_b)$\vspace{-2mm}
+        \begin{flalign*}
+            N_b &= \set{Q_0, Q_1, Q_2, Q_3} &\\
+            T &= \set{a,b} &\\
+            S_b &= Q_0 &\\
+            P_b &= \set{Q_0\to \lambda, Q_1\to \lambda, Q_2\to \lambda, Q_2\to \lambda, Q_0\to bQ_0, Q_0\to aQ_1, Q_1\to aQ_1, Q_1\to bQ_2,&\\&\phantom{=\{ }\ Q_2\to aQ_3, Q_2\to bQ_0, Q_3\to aQ_3, Q_3\to bQ_3} &
+        \end{flalign*}
+        $G_{b2} = (N_{b2}, T, S_{b2}, P_{b2})$\vspace{-2mm}
+        \begin{flalign*}
+            N_{b2} &= \set{Q_0, Q_1, Q_2, Q_3, S} &\\
+            T &= \set{a,b} &\\
+            S_{b2} &= S &\\
+            P_{b2} &= \set{Q_0\to \lambda, S\to Q_0, S\to Q_1, S\to Q_2, Q_0\to Q_0b, Q_1\to Q_0a, Q_1\to Q_1a, Q_2\to Q_1b,&\\&\phantom{=\{ }\ Q_3\to Q_2a, Q_0\to Q_2b, Q_3\to Q_3a, Q_3\to Q_3b} &
+        \end{flalign*}
+        \item $G_c = (N_c, T, S_c, P_c)$\vspace{-2mm}
+        \begin{flalign*}
+            N_c &= \set{Q_0, Q_1, Q_2, Q_3, Q_4} &\\
+            T &= \set{a,b} &\\
+            S_c &= Q_0 &\\
+            P_c &= \set{Q_0\to \lambda, Q_1\to \lambda, Q_2\to \lambda, Q_2\to \lambda, Q_3\to \lambda, Q_0\to aQ_0, Q_0\to bQ_1, Q_1\to aQ_0, Q_1\to bQ_2,&\\&\phantom{=\{ }\ Q_2\to aQ_3, Q_2\to bQ_2, Q_3\to aQ_4, Q_3\to bQ_2, Q_4\to aQ_4, Q_4\to bQ_4} &
+        \end{flalign*}
+        $G_{c2} = (N_{c2}, T, S_c{c2}, P_{c2})$\vspace{-2mm}
+        \begin{flalign*}
+            N_{c2} &= \set{Q_0, Q_1, Q_2, Q_3, Q_4, S} &\\
+            T &= \set{a,b} &\\
+            S_{c2} &= Q_0 &\\
+            P_{c2} &= \set{Q_0\to \lambda, S\to Q_0, S\to Q_1, S\to Q_2, S\to Q_3, Q_0\to Q_0a, Q_1\to Q_0b, Q_0\to Q_1b, Q_2\to Q_1b,&\\&\phantom{=\{ }\ Q_3\to Q_2a, Q_2\to Q_2b, Q_4\to Q_3a, Q_2\to Q_3b, Q_4\to Q_4a, Q_4\to Q_4b} &
+        \end{flalign*}
+    \end{enumerate}
+\end{task}
+\newpage
+\begin{task}
+    Pumping-Lemma: $z = 10^{n_L}1^{n_L}\$ 10^{n_L-1}10^{n_L}$. Damit $z_i = uv^iwx^iy \in L_{bin-bin+1}$,\\ muss $\abs{v} = \abs{x}$ und $w = 1^a \$ 1 0^b\text{ mit } a,b\in \mathbb{N}$. Da $\abs{vwx}\leq n_L \text{ und } \abs{vx} \geq 1$, muss $v = 1^c, x = 0^c\text{ mit } c \geq 1$.\\
+    $\implies z_0 = 1 0^{n_L} 1^{n_L - c}\$ 1 0^{n_L - (c+1)} 1 0^{n_L}\notin L_{bin-bin+1} \implies L_{bin-bin+1}$ ist nicht kontextfrei.
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item jkdas
+        \item Beispiel aus der Vorlesung: $L = \set{a^i b^j c^k\mid i=0 \lor j=k}$, Nicht-Regularität kann mit Präfix-Version nicht nachgewiesen werden.\\
+        Suffix-Version: $z = ab^{n_L}c^{n_L}, v = c^x, x\geq 1\text{, da } \abs{vw}\leq n_L.\implies z_0 = ab^{n_L}c^{n_L - x}\notin L$        
+    \end{enumerate}
+\end{task}
+\end{document}
