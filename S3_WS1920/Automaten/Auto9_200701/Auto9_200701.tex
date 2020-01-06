@@ -98,7 +98,7 @@
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate}[label={(\alph*)}]
-        \item jkdas
+        \item Sei $L$ eine reguläre Sprache, dann ist $Sp(L)$ regulär. Dann existiert eine Zahl $n$, so dass für jedes Wort $z\in L \implies Sp(z) \in Sp(L)$ mit $\abs{z} = \abs{Sp(z)} \geq n$ eine Zerlegung existiert $Sp(z) = Sp(w) Sp(v) Sp(u) \implies z=uvw$ mit (1) $\abs{vw} = \abs{Sp(w) Sp(v)} \leq n$, (2) $\abs{v} = \abs{Sp(v)} \geq 1$ und (3) für alle $i\in \mathbb{N}$ gilt: $Sp(w)Sp(v)^i Sp(u) = Sp(wv^iu) \in Sp(L) \implies uv^iw\in L$.
         \item Beispiel aus der Vorlesung: $L = \set{a^i b^j c^k\mid i=0 \lor j=k}$, Nicht-Regularität kann mit Präfix-Version nicht nachgewiesen werden.\\
         Suffix-Version: $z = ab^{n_L}c^{n_L}, v = c^x, x\geq 1\text{, da } \abs{vw}\leq n_L.\implies z_0 = ab^{n_L}c^{n_L - x}\notin L$        
     \end{enumerate}
