@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 2 (Do 12-14)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+%----- tikz automata
+\usetikzlibrary{arrows, automata, positioning}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Automaten und Berechenbarkeit}\\
+\large{11. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-4mm}\\
+    \begin{tabular}{c|c|c|c|c|c}
+        &$a$&$b$&$c$&$x$&$\square$\\\hline
+        $q_a$&$(q_b,x,R)$&$(q_T,b,N)$&$(q_T,c,N)$&$(q_a,x,R)$&$(q_F,\square,L)$\\\hline
+        $q_b$&$(q_b,a,R)$&$(q_c,x,R)$&$(q_T,c,N)$&$(q_b,x,R)$&$(q_T,\square,L)$\\\hline
+        $q_c$&$(q_T,a,N)$&$(q_c,b,R)$&$(q_L,x,L)$&$(q_c,x,R)$&$(q_T,\square,L)$\\\hline
+        $q_L$&$(q_L,a,L)$&$(q_L,b,L)$&$(q_L,c,L)$&$(q_L,x,L)$&$(q_a,\square,R)$\\\hline
+        $q_T$&$(q_T,a,R)$&$(q_T,b,R)$&$(q_T,c,R)$&$(q_T,x,R)$&$(q_{T_2},\square,L)$\\\hline
+        $q_{T_2}$&$(q_{T_2},\square,L)$&$(q_{T_2},\square,L)$&$(q_{T_2},\square,L)$&$(q_{T_2},\square,L)$&$(q_{T_2},\square,N)$\\\hline
+        $q_F$&$-$&$-$&$-$&$(q_F,\square,L)$&$(q_F,\square,N)$
+    \end{tabular}
+\end{task}
+
+\begin{task}
+    $\abs{Q}\cdot \abs{\Gamma}^{s(n)}\cdot s(n)$ ist die maximale Anzahl von Konfigurationen für eine Turingmaschine, die $s(n)$ Zellen benutzt. Wird eine Konifguration von einer Turingmaschine ein zweites Mal berechnet, so ist sie eine Nachfolgekonfiguration von sich selbst und die Turingmaschine terminiert nicht. Da also eine Turingmaschine jede Konfiguration nur maximal einmal berechnen kann, wenn sie terminiert, braucht sie maximal $\abs{Q}\cdot \abs{\Gamma}^{s(n)}\cdot s(n)$ Takte.
+\end{task}
+\end{document}
