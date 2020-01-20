@@ -43,7 +43,7 @@
 \end{center}
 %----- tasks
 \begin{task}
-    \hfill\vspace{-4mm}\\
+    \hfill\vspace{-3mm}\\
     \begin{tabular}{c|c|c|c|c|c}
         &$a$&$b$&$c$&$x$&$\square$\\\hline
         $q_a$&$(q_b,x,R)$&$(q_T,b,N)$&$(q_T,c,N)$&$(q_a,x,R)$&$(q_F,\square,L)$\\\hline
@@ -63,20 +63,23 @@
 \end{task}
 
 \begin{task}
-    \hfill\vspace{-4mm}\\
-    \begin{tabular}{c|c|c|c|c|c|c}
-        &$a$&$b$&$A$&$B$&$\#$&$\square$\\\hline
-        $q_0$&$-$&$-$&$-$&$-$&$-$&$(q_1,\#,R)$\\\hline
-        $q_1$&$-$&$-$&$-$&$-$&$-$&$(q_{copy},a,R)$\\\hline
-        $q_{copy}$&$(q_{copy},a,R)$&$q_{copy,b,R}$&$-$&$-$&$-$&$(q_{cp_l},\#,L)$\\\hline
-        $q_{cp_{r}}$&$(q_{cp_{r}},a,L)$&$(q_{cp_{r}},b,L)$&$-$&$-$&$(q_{cp_l},\#,L)$&$-$\\\hline
-        $q_{cp_l}$&$(q_{cp_l},a,L)$&$(q_{cp_l},b,L)$&$(q_{cp_1},A,R)$&$(q_{cp_1},B,R)$&$(q_{cp_1},\#,R)$&$-$\\\hline
-        $q_{cp_1}$&$(q_{paste_a},A,R)$&$(q_{paste_b},B,R)$&$-$&$-$&$(q_{clean},\#,L)$&$-$\\\hline
-        $q_{paste_a}$&$(q_{paste_a},a,R)$&$(q_{paste_a},b,R)$&$-$&$-$&$(q_{paste_a},\#,R)$&$(q_{cp_{r}},a,L)$\\\hline
-        $q_{paste_b}$&$(q_{paste_b},a,R)$&$(q_{paste_b},b,R)$&$-$&$-$&$(q_{paste_b},\#,R)$&$(q_{cp_{r}},b,L)$\\\hline
-        $q_{clean}$&$(q_{clean},a,R)$&$(q_{clean},b,R)$&$(q_{clean},a,L)$&$(q_{clean},b,L)$&$(q_{clean},\#,R)$&$(q_{inc},\square,L)$\\\hline
-        $q_{inc}$&$(q_{copy},b,L)$&$(q_{inc},a,L)$&$-$&$-$&$(q_{grow},\#,R)$&$-$\\\hline
-        $q_{grow}$&$(q_{grow},a,L)$&$-$&$-$&$-$&$-$&$(q_{copy},a,R)$
-    \end{tabular}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item \hfill\vspace{-5mm}\\\begin{tabular}{c|c|c|c|c|c|c}
+            &$a$&$b$&$A$&$B$&$\#$&$\square$\\\hline
+            $q_0$&$-$&$-$&$-$&$-$&$-$&$(q_1,\#,R)$\\\hline
+            $q_1$&$-$&$-$&$-$&$-$&$-$&$(q_{copy},a,R)$\\\hline
+            $q_{copy}$&$(q_{copy},a,R)$&$q_{copy,b,R}$&$-$&$-$&$-$&$(q_{cp_l},\#,L)$\\\hline
+            $q_{cp_{r}}$&$(q_{cp_{r}},a,L)$&$(q_{cp_{r}},b,L)$&$-$&$-$&$(q_{cp_l},\#,L)$&$-$\\\hline
+            $q_{cp_l}$&$(q_{cp_l},a,L)$&$(q_{cp_l},b,L)$&$(q_{cp_1},A,R)$&$(q_{cp_1},B,R)$&$(q_{cp_1},\#,R)$&$-$\\\hline
+            $q_{cp_1}$&$(q_{paste_a},A,R)$&$(q_{paste_b},B,R)$&$-$&$-$&$(q_{clean},\#,L)$&$-$\\\hline
+            $q_{paste_a}$&$(q_{paste_a},a,R)$&$(q_{paste_a},b,R)$&$-$&$-$&$(q_{paste_a},\#,R)$&$(q_{cp_{r}},a,L)$\\\hline
+            $q_{paste_b}$&$(q_{paste_b},a,R)$&$(q_{paste_b},b,R)$&$-$&$-$&$(q_{paste_b},\#,R)$&$(q_{cp_{r}},b,L)$\\\hline
+            $q_{clean}$&$(q_{clean},a,R)$&$(q_{clean},b,R)$&$(q_{clean},a,L)$&$(q_{clean},b,L)$&$(q_{clean},\#,R)$&$(q_{inc},\square,L)$\\\hline
+            $q_{inc}$&$(q_{copy},b,L)$&$(q_{inc},a,L)$&$-$&$-$&$(q_{grow},\#,R)$&$-$\\\hline
+            $q_{grow}$&$(q_{grow},a,L)$&$-$&$-$&$-$&$-$&$(q_{copy},a,R)$
+        \end{tabular}\vspace{3mm}\\
+        Erst werden $\lambda$ und $a$ erzeugt. Dann kopiert die TM das vorherige Wort und "addiert" 1. Wenn alle möglichen Wörter der gleichen Länge geschrieben wurden, besteht das letzte Wort nur aus $b$ und die Inkrementierung erweitert (neben der Invertierung aller vorherigen $b$) das Wort um ein $a$.
+    \end{enumerate}
 \end{task}
 \end{document}

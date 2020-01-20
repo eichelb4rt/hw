@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.1.6)  20 JAN 2020 22:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.1.6)  20 JAN 2020 22:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -711,13 +711,13 @@ This may cause the page layout to be inconsistent, however.
 
 ] (./Auto11_200121.aux) ) 
 Here is how much of TeX's memory you used:
- 16449 strings out of 494055
- 331403 string characters out of 6171239
- 403258 words of memory out of 5000000
- 20295 multiletter control sequences out of 15000+600000
+ 16453 strings out of 494055
+ 331485 string characters out of 6171239
+ 404258 words of memory out of 5000000
+ 20299 multiletter control sequences out of 15000+600000
  9192 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,12n,66p,531b,211s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,12n,66p,531b,291s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
@@ -728,7 +728,7 @@ live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/symbols/msam10.pfb>
-Output written on Auto11_200121.pdf (1 page, 106998 bytes).
+Output written on Auto11_200121.pdf (1 page, 108074 bytes).
 PDF statistics:
  51 PDF objects out of 1000 (max. 8388607)
  37 compressed objects within 1 object stream
