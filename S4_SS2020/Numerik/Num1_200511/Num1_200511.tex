@@ -12,6 +12,8 @@
 \usepackage{multicol}
 \usepackage{subcaption}
 \usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
 %------------------------------------------ preamble
 %----- fancyhdr
 \fancyhead[R]{Übungsgruppe: 1 (Di 10-12)}
@@ -25,11 +27,24 @@
 {\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
 \theoremstyle{break}
 \newtheorem{task}{Aufgabe}
+%----- listings
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\lstset{
+    language=python,
+    basicstyle=\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{mygray},
+    breaklines=true
+}
 %----- new commands
 \newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
 \newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
 \newcommand{\set}[1]{\ensuremath{\{#1\}}}
 \newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\script}[1]{
+    skripte/aufgabe#1.sh
+    \lstinputlisting{skripte/aufgabe#1.py}
+}
 %------------------------------------------ main
 \begin{document}
 %----- title
@@ -53,5 +68,8 @@
     0\; 10 \; 10 \;\;\; \text{ entspricht: } (-1)^1 \cdot (1 + \frac{2}{2^2}) \cdot 2^{2-1} &= 3&\\
     0\; 10 \; 11 \;\;\; \text{ entspricht: } (-1)^1 \cdot (1 + \frac{3}{2^2}) \cdot 2^{2-1} &= 3.5&
 \end{flalign*}
+\end{task}
+\begin{task}
+    
 \end{task}
 \end{document}
