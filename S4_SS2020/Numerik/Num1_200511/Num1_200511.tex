@@ -25,17 +25,60 @@
 \pagestyle{fancy}
 %----- aufgaben
 \newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
-{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
 \theoremstyle{break}
 \newtheorem{task}{Aufgabe}
 %----- listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
-\lstset{
-    language=python,
-    basicstyle=\ttfamily,
-    numbers=left,
-    numberstyle=\tiny\color{mygray},
-    breaklines=true
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white}, 
+% choose the background color; you must add
+basicstyle=\footnotesize, 
+% the size of the fonts that are used for the code
+breakatwhitespace=false, 
+% sets if automatic breaks should only happen at whitespace
+breaklines=true,
+% sets automatic line breaking
+captionpos=b,
+% sets the caption-position to bottom
+commentstyle=\color{mygreen},
+% comment style
+deletekeywords={...},
+% if you want to delete keywords from the given language
+extendedchars=true,
+% lets you use non-ASCII characters; for 8-bits encodings only   
+% adds a frame around the code
+keepspaces=true, 
+% keeps spaces in text, useful for keeping indentation of code
+keywordstyle=\color{blue}, 
+% keyword style
+language=java, 
+% the language of the code
+otherkeywords={@Override},
+% if you want to add more keywords to the set
+numbers=left, 
+% where to put the line-numbers; possible values(none, left, right)
+numbersep=5pt, 
+% how far the line-numbers are from the code
+numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+% if not set, frame-color can change on line-breaks to text-color
+showspaces=false, 
+% show spaces everywhere adding particular underscores;
+showstringspaces=false, 
+% underline spaces within strings only
+showtabs=false, 
+% show tabs within strings adding particular underscores
+stepnumber=1, 
+% the step between two line-numbers.
+stringstyle=\color{mymauve}, 
+% string literal style
+tabsize=2,     
+% sets default tabsize to 2 spaces
+% show the filename of files included with \lstinputlisting;
+emph={@Override},
+emphstyle={\color{Goldenrod}}
 }
 %----- new commands
 \newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
@@ -46,7 +89,7 @@
 \newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\script}[1]{
-    skripte/aufgabe#1.sh
+    skripte/aufgabe#1.py
     \lstinputlisting{skripte/aufgabe#1.py}
 }
 \newcommand{\ndy}{
@@ -54,12 +97,14 @@
     \reversemarginpar
     \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
 }
+%..... homework number
+\newcommand{\hw}{1}
 %------------------------------------------ main
 \begin{document}
 %----- title
 \begin{center}
 \Large{Numerische Mathematik}\\
-\large{1. Übungsserie}
+\large{\hw. Übungsserie}
 \end{center}
 %----- tasks
 \begin{task}
@@ -79,11 +124,12 @@
     &0\; 10 \; 11 \;\;\; \text{ entspricht: } (-1)^0 \cdot (1 + \frac{3}{2^2}) \cdot 2^{2-1} &&\hspace{-5cm}= 3.5&
 \end{flalign*}
 \end{task}
-
+\newpage
 \begin{task}
-    \ndy
+    \hfill\vspace{-5mm}
+    \lstinputlisting{skripte/aufgabe2.java}
 \end{task}
-
+\newpage
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate} [label={(\alph*)}]
