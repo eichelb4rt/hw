@@ -109,7 +109,7 @@ emphstyle={\color{Goldenrod}}
 %----- tasks
 \begin{task}
 \begin{flalign*}
-    &1\; 00 \; 00 \;\;\; \text{ entspricht: } (-1)^0 \cdot \frac{0}{2^2} \cdot 2^{1-1} &&\hspace{-5cm}= 0&\\
+    &1\; 00 \; 00 \;\;\; \text{ entspricht: } (-1)^1 \cdot \frac{0}{2^2} \cdot 2^{1-1} &&\hspace{-5cm}= 0&\\
     &0\; 00 \; 00 \;\;\; \text{ entspricht: } (-1)^0 \cdot \frac{0}{2^2} \cdot 2^{1-1} &&\hspace{-5cm}= 0&\\
     &0\; 00 \; 01 \;\;\; \text{ entspricht: } (-1)^0 \cdot \frac{1}{2^2} \cdot 2^{1-1} &&\hspace{-5cm}= 0.25&\\
     &0\; 00 \; 10 \;\;\; \text{ entspricht: } (-1)^0 \cdot \frac{2}{2^2} \cdot 2^{1-1} &&\hspace{-5cm}= 0.5&\\
@@ -137,7 +137,7 @@ emphstyle={\color{Goldenrod}}
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate} [label={(\alph*)}]
-        \item Sei $S\in \R^n$ eine Orthonormalbasis aus Eigenvektoren von $A^TA$, sodass $S^TA^TAS=D$ eine Diagonalmatrix aus Eigenwerten $\lambda_1, \dots, \lambda_n$ von $A^TA$ ist (Spektralsatz). Weiterhin sei $x = Sy,\ x,y\in\R^n$.
+        \item Sei $S\in \R^{n\times n}$ eine Orthonormalbasis aus Eigenvektoren von $A^TA$, sodass $S^TA^TAS=D$ eine Diagonalmatrix aus Eigenwerten $\lambda_1, \dots, \lambda_n$ von $A^TA$ ist (Spektralsatz). Weiterhin sei $x = Sy,\ x,y\in\R^n$.
         $$\norm{A}_2^2 = (\max\limits_{\norm{x}_2 = 1} \norm{Ax}_2)^2 = \max\limits_{\norm{Sy}_2 = 1} \skal{ASy}{ASy} = \max\limits_{\norm{y}_2 = 1} \skal{S^TA^TASy}{y} = \max\limits_{\norm{y}_2 = 1} \sum\limits_{i=1}^n \lambda_i y_i^2$$
         Diese Summe ist maximal mit $y=e_i=:e_{max}$, mit $i\in \set{1,\dots, n}$, sodass $\lambda_i = \lambda_{max} := \max\limits_{i\in\set{1,\dots,n}} \lambda_i$:
         \begin{align*}
@@ -147,7 +147,7 @@ emphstyle={\color{Goldenrod}}
         \end{align*}
         \item \begin{align*}
             \norm{A}_\infty &= \max\limits_{x\in \R^n, \norm{x}_\infty = 1}\norm{Ax}_\infty\\
-            &= \max\limits_{x\in \R^n, \norm{x}_\infty = 1}\norm{\sum\limits_{i=1}^n\left(
+            &= \max\limits_{x\in \R^n, \norm{x}_\infty = 1}\norm{\sum\limits_{j=1}^n\left(
             \begin{matrix}
                 A_{1,j}x_j\\
                 A_{2,j}x_j\\
@@ -162,7 +162,7 @@ emphstyle={\color{Goldenrod}}
         $(1)\ \sum\limits_{j=1}^n A_{i,j}x_j$ ist maximal mit $x_j = \frac{\abs{A_{i,j}}}{A_{i,j}}$, da $\forall j\in\set{1,\dots,n}:\abs{x_j}\leq 1$
     \end{enumerate}
 \end{task}
-
+\newpage
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate} [label={(\alph*)}]
@@ -170,6 +170,13 @@ emphstyle={\color{Goldenrod}}
         $\implies$ $f$ ist stetig in $[a,b]$.\vspace{3mm}\\
         Falls $L=0$, dann $\forall x,y\in [a,b]: \norm{f(x)-f(y)}=0$\\
         $\implies$ $f$ ist stetig in $[a,b]$.
+        \item Sei $g(t)=y+v\cdot t$ mit $0\leq t\leq \norm{x-y}$ und $v=\frac{x-y}{\norm{x-y}}$. Dann gilt mit $\norm{v}=1$ und $\norm{J_f}\leq L$:
+        \begin{align*}
+            f(x)-f(y)&=f(g(\norm{x-y}))-f(g(0))\\
+            &= \int_{0}^{\norm{x-y}} \frac{\mathrm{d}}{\mathrm{d}t}(f(g(t)))\,\mathrm{d}t\\
+            &= \int_{0}^{\norm{x-y}} J_f(g(t))\cdot v\,\mathrm{d}t\\
+            \implies \norm{f(x)-f(y)}&\leq \int_{0}^{\norm{x-y}} L\cdot \norm{v}\,\mathrm{d}t = \underline{\underline{L\cdot \norm{x-y}}}
+        \end{align*}
     \end{enumerate}
 \end{task}
 \end{document}
