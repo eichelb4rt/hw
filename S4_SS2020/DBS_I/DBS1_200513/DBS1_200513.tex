@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[plain]{algorithm}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[L]{Name: Maurice Wenig}
+\fancyhead[R]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\ndy}{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Datenbanksysteme I}\\
+\large{1. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    Auf beiden Seiten werden die Kontostände gleichzeitig unter $a_A,b_A$ auf Seite A und unter $a_B,b_B$ auf Seite B zwischengespeichert. Dann wird $Kontostand(A)=a_A-x$ und $Kontostand(B)=b_B-x'$ ausgeführt, dann $Kontostand(B)=b_A+x$ und $Kontostand(A):= a_B+x'$. Dadurch werden die Abzüge der Beträge von der jeweils anderen Überweisung überschrieben, wodurch am Ende mehr Geld da ist, als vorher.
+\end{task}
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item Selbst Implementieren ist noch aufwendiger und dazu nicht skalierbar.
+        \item Doch, gleichzeitiges Zugreifen auf Daten kann manchmal nicht vermieden werden und führt ohne Mehrbenutzersynchronisation zu Problemen.
+        \item Zugriffe selbst implementieren ist nicht trivial und nicht leicht zu warten. Diese müssten dann höchstwahrscheinlich auch von mehr als einer Person gelernt werden und sind nicht breit nutzbar (nur für das eine Projekt).
+        \item Unkontrollierte Redundanz bringt nur mehr Aufwand und braucht viel Platz.
+    \end{enumerate}
+\end{task}
+\begin{task}
+    Zur Fehlererkennung und -behebung in logs.
+\end{task}
+\end{document}
