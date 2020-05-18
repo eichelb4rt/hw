@@ -22,7 +22,7 @@ class Main {
         h[7] = Math.pow(2, -20);
         h[8] = Math.pow(2, -23);
         for(int i=0; i<h.length; ++i) {
-            System.out.printf("%g\n", f1(1) - W(1, h[i]));
+            System.out.printf("%.10g\n", f1(1) - W(1, h[i]));
         }
         System.out.printf("%g\n", Math.abs(f1(1)-W(1, h[4])) - Math.abs(f1(1)-W(1, h[5])));
     }
