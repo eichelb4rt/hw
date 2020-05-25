@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 1 (Di 10-12)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white}, 
+% choose the background color; you must add
+basicstyle=\footnotesize, 
+% the size of the fonts that are used for the code
+breakatwhitespace=false, 
+% sets if automatic breaks should only happen at whitespace
+breaklines=true,
+% sets automatic line breaking
+captionpos=b,
+% sets the caption-position to bottom
+commentstyle=\color{mygreen},
+% comment style
+deletekeywords={...},
+% if you want to delete keywords from the given language
+extendedchars=true,
+% lets you use non-ASCII characters; for 8-bits encodings only   
+% adds a frame around the code
+keepspaces=true, 
+% keeps spaces in text, useful for keeping indentation of code
+keywordstyle=\color{blue}, 
+% keyword style
+language=java, 
+% the language of the code
+otherkeywords={@Override},
+% if you want to add more keywords to the set
+numbers=left, 
+% where to put the line-numbers; possible values(none, left, right)
+numbersep=5pt, 
+% how far the line-numbers are from the code
+numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+% if not set, frame-color can change on line-breaks to text-color
+showspaces=false, 
+% show spaces everywhere adding particular underscores;
+showstringspaces=false, 
+% underline spaces within strings only
+showtabs=false, 
+% show tabs within strings adding particular underscores
+stepnumber=1, 
+% the step between two line-numbers.
+stringstyle=\color{mymauve}, 
+% string literal style
+tabsize=2,     
+% sets default tabsize to 2 spaces
+% show the filename of files included with \lstinputlisting;
+emph={@Override},
+emphstyle={\color{Goldenrod}}
+}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\script}[1]{
+    skripte/aufgabe#1.py
+    \lstinputlisting{skripte/aufgabe#1.py}
+}
+\newcommand{\ndy}{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%..... homework number
+\newcommand{\hw}{3}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Numerische Mathematik}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $f(4)=-1,\ f(4.5) = 2^{4.5} - 18 - 1 = \sqrt{2^9} - \sqrt{361} > 0\\
+        \implies f$ hat mindestens eine Nullstelle in $[4,4.5]$\vspace{3mm}\\
+        $f'(x) = 2^x\ln 2 - 4$ ist streng monoton steigend,\\
+        $f'(4)=16\ln 2 - 4 > 16\log_4 2 - 4 > 0\\
+        \implies f$ ist streng monoton steigend in $[4,4.5]$\vspace{3mm}\\
+        $\implies f$ hat genau eine Nullstelle in $[4,4.5]$
+        \item $\epsilon = 4\cdot 10^{-2}$, nach Vorschrift muss $\abs{a_n-b_n} = \frac{\abs{a_n-b_n}}{2^n} < 2\epsilon\iff \frac{1}{2^{n+2}} < 4\cdot 10^{-2}\iff 2^{n+4}>10^2$\\
+        Das wird erfüllt mit $n=3$. Berechnung:
+        \begin{align*}
+            a_0 &= 4     & b_0 &= 4.5     & M &= 4.25      & f(M) &\approx 1.02731384\\
+            a_1 &= 4     & b_1 &= 4.25    & M &= 4.125     & f(M) &\approx -0.05187628\\
+            a_2 &= 4.125 & b_2 &= 4.25    & M &= 4.1875    & f(M) &\approx 0.47061816\\
+            a_3 &= 4.125 & b_3 &= 4.1875  & M &= 4.15625   &&
+        \end{align*}
+    \end{enumerate}
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $N_f(x) = x - \frac{f(x)}{f'(x)}$, potentielle Extremstellen von $N_f$ gibt es bei $x=a, x=b, N'_f(x) = 0$. 
+        Da $f'(x) = 3x^2 - 6x = 3x(x-2)$, ist $f'(x)\neq 0$ in $[a,b]$, wodurch $x=a, x=b, N'_f(x) = 0$ alle potentiellen Extremstellen von $N_f$ in sind.
+        \begin{align*}
+        N'_f &= 1-\frac{f'^2 - f\cdot f''}{f'^2} = \frac{f\cdot f''}{f'^2}\\ 
+        N'_f(x) = 0 &\implies f(x)=0\lor f''(x)=0
+        \end{align*}
+        Fall $f(x)=0:\ N_f(x) = x - \frac{0}{\underbrace{f'(x)}_{\neq 0}} = x \in [a,b]$\\
+        Fall $f''(x)=0:\ f''(x) = 6x-6,\ f''(b)=0$\\
+        Außerdem: $N_f(a) =\frac{1}{2} - \frac{1 + \frac{1}{8} - \frac{3}{4}}{\frac{3}{4}-3} = \frac{1}{2} + \frac{1}{3} \in [a,b], N_f(b) = 1 - \frac{1 + 1 - 3}{3-6} = \frac{2}{3}\in [a,b]$\vspace{3mm}\\
+        Alle potentiellen Extremwerte von $N_f$ liegen in $[a,b]$ und $N_f$ ist stetig (da $f'(x)\neq 0$ in $[a,b]$ und $f$ stetig).\\
+        $\implies N_f:[a,b]\rightarrow [a,b]$
+        \item $N'_f = \begin{displaystyle} \frac{f\cdot f''}{f'^2} \end{displaystyle}$\vspace{3mm}\\
+        $f'(x) = 3x^2 - 6x = 3x(x-2)$ ist eine Parabel mit Scheitelpunkt bei $x=1$ und Nullstellen $x_1=0, x_2=2$ und somit monoton fallend in $[a,b]$. Also ist $\abs{f'(x)}$ ist monoton steigend in $[a,b]$.\vspace{3mm}\\
+        $f(x)$ ist monoton fallend in $[a,b]$, da $f'(x)<0$ in $[a,b]$.
+        \ndy\\
+        \textit{wird auch nicht mehr gemacht, bin müde}
+    \end{enumerate}
+\end{task}
+\newpage
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $\phi'(x) = -2x e^{-x^2},\ \phi''(x) = -2e^{-x^2} + 4x^2 e^{-x^2} = (\underbrace{4x^2-2}_{\text{Nullstellen und Vorzeichenwechsel bei } \pm \sqrt{2}})\cdot \underbrace{e^{-x^2}}_{>0}\\\implies \abs{\phi(x)}\leq\phi(\sqrt{2}) = \frac{\sqrt{2}}{e^2} \leq 0.2 = L$
+        \item \textit{A-priori-Abschätzung:} $\abs{x_\nu-x^*}\leq\frac{L^\nu}{1-L}\abs{x_0-x_1} = \frac{5}{4}\cdot 2^\nu\cdot 10^{-\nu} = 2^{\nu-3}\cdot 10^{-\nu+1} < 10^{-5}$\\
+        erfüllt mit $\nu=7$
+        \item $N_f(x) = x - \frac{e^{-x^2}-x}{-2xe^{-x^2}-1}$
+        \begin{align*}
+            x_1 &= 1.000000 & y_1 &= 0.333333\\
+            x_2 &= 0.367879 & y_2 &= 0.534613\\
+            x_3 &= 0.873423 & y_3 &= 0.621232\\
+            x_4 &= 0.466327 & y_4 &= 0.646061
+        \end{align*}
+    \end{enumerate}
+\end{task}
+\end{document}
