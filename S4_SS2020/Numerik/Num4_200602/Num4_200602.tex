@@ -1,0 +1,192 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 1 (Di 10-12)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white}, 
+% choose the background color; you must add
+basicstyle=\footnotesize, 
+% the size of the fonts that are used for the code
+breakatwhitespace=false, 
+% sets if automatic breaks should only happen at whitespace
+breaklines=true,
+% sets automatic line breaking
+captionpos=b,
+% sets the caption-position to bottom
+commentstyle=\color{mygreen},
+% comment style
+deletekeywords={...},
+% if you want to delete keywords from the given language
+extendedchars=true,
+% lets you use non-ASCII characters; for 8-bits encodings only   
+% adds a frame around the code
+keepspaces=true, 
+% keeps spaces in text, useful for keeping indentation of code
+keywordstyle=\color{blue}, 
+% keyword style
+language=java, 
+% the language of the code
+otherkeywords={@Override},
+% if you want to add more keywords to the set
+numbers=left, 
+% where to put the line-numbers; possible values(none, left, right)
+numbersep=5pt, 
+% how far the line-numbers are from the code
+numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+% if not set, frame-color can change on line-breaks to text-color
+showspaces=false, 
+% show spaces everywhere adding particular underscores;
+showstringspaces=false, 
+% underline spaces within strings only
+showtabs=false, 
+% show tabs within strings adding particular underscores
+stepnumber=1, 
+% the step between two line-numbers.
+stringstyle=\color{mymauve}, 
+% string literal style
+tabsize=2,     
+% sets default tabsize to 2 spaces
+% show the filename of files included with \lstinputlisting;
+emph={@Override},
+emphstyle={\color{Goldenrod}}
+}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\script}[1]{
+    skripte/aufgabe#1.py
+    \lstinputlisting{skripte/aufgabe#1.py}
+}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{{\normalfont\hbox{1\kern-0.18em \vrule width .6pt}}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%----- homework number
+\newcommand{\hw}{4}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Numerische Mathematik}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item $A\cdot F(k;\alpha_{k+1},\dots,\alpha_{m})=(\1 + F(k;\alpha_{k+1},\dots,\alpha_{m}) - \1) \cdot A = A + (F(k;\alpha_{k+1},\dots,\alpha_{m}) - \1) \cdot A$
+        \begin{align*}
+            F(k;\alpha_{k+1},\dots,\alpha_{m})_{i,j} - \1 &= \begin{cases}
+                \alpha_{i} &: j=k\land i>k\\
+                0 &: \text{sonst}
+            \end{cases}\\
+            \implies ((F(k;\alpha_{k+1},\dots,\alpha_{m}) - \1)\cdot A)_{i,j} &= \begin{cases}
+                \alpha_{i}\cdot A_{k,j} &: i>k\\
+                0 &: sonst
+            \end{cases}
+        \end{align*}
+        \item $F\cdot F^{-1}$: jeweils das $\alpha_i$-Fache der $k$-ten Zeile wird zur $i$-ten Zeile von $F^{-1}$ addiert. Die $k$-te Zeile ist 1 in der $k$-ten Spalte, sonst 0. Damit ist das $\alpha_i$-Fache der $k$-ten Zeile $\alpha_i$. Das wird zur $i$-ten Zeile von $F^{-1}$ addiert, in der $-\alpha_i$ steht. $\implies F\cdot F^{-1}=\1$
+        \item $F_{>k}:=F_{k+1}\cdot \ldots \cdot F_{m-1}$, $F_k\cdot F_{>k}$ ist jeweils das $\alpha_{i,k}$-Fache der $k$-ten Zeile von $F_{>k}$ zur $i$-ten Zeile von $F_{>k}$ addiert. $(F_{>k})_{k,k} = 1$, sonst ist $F_{>k}$ in der $k$-ten Zeile und Spalte 0. Also ist $F_k\cdot F_{>k} = F_{>k} (+) \alpha_{i,k}$ jeweils in der $i$-ten Zeile der $k$-ten Spalte. Da $F_{m-1} = F(m-1;\alpha_{m,m-1})$ ist $F_{>k}$ die normierte Dreiecksmatrix, deren Einträge unterhalb der Diagonale gegeben sind durch $\forall i>j>k:F_{i,j}=\alpha_{i,j}$. $F_{>0}=F$.
+        \item Matrixmultiplikation auf $\R^{m\times m}$ ist assoziativ und hat das neutrale Element $\1_m$. $A,B\in L_m(\R)\implies (A\cdot B)_{i,j} = \sum\limits_{l=1}^{m} A_{i,l}\cdot B_{l,j}=\begin{cases}
+            1 &: i=j\\
+            0 &: i<j\\
+            \text{irgendetwas} &: i>j
+        \end{cases}\implies AB\in L_m(\R)$. Jedes $F\in L_m(\R)$ ist ein Produkt aus Frobenius-Matrizen $F_1\cdot\ldots\cdot F_{m-1}$ mit $F_k=F(k;F_{k+1,k},\dots,F_{m,k})$. Dann hat $F$ ein Inverses $F^{-1} = F^{-1}_{m-1}\cdot\ldots\cdot F^{-1}_{1}$: $F^{-1}\cdot F = F^{-1}_{m-1}\cdot\ldots\cdot F^{-1}_{1} \cdot F_1\cdot\ldots\cdot F_{m-1}=\1$ durch Assoziativität. Durch (b) und (c) ist $F^{-1}\in L_m(\R)$
+    \end{enumerate}
+\end{task}
+
+\begin{task}
+    \begin{align*}
+        & \begin{pmatrix}
+            6 & -2 & 2 & 4 \\
+            12 & -8 & 6 & 10 \\
+            3 & -13 & 9 & 3 \\
+            -6 & 4 & 1 & -18
+        \end{pmatrix} && 
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1 
+        \end{pmatrix}\\
+        & \begin{pmatrix}
+            6 & -2 & 2 & 4 \\
+            0 & -4 & 2 & 2 \\
+            0 & -12 & 8 & 1 \\
+            0 & 2 & 3 & -14
+        \end{pmatrix} && 
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            2 & 1 & 0 & 0 \\
+            \frac{1}{2} & 0 & 1 & 0 \\
+            -1 & 0 & 0 & 1 
+        \end{pmatrix}\\
+        & \begin{pmatrix}
+            6 & -2 & 2 & 4 \\
+            0 & -4 & 2 & 2 \\
+            0 & 0 & 2 & -5 \\
+            0 & 0 & 4 & -13
+        \end{pmatrix} && 
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            2 & 1 & 0 & 0 \\
+            \frac{1}{2} & 3 & 1 & 0 \\
+            -1 & -\frac{1}{2} & 0 & 1 
+        \end{pmatrix}\\
+        R &= \begin{pmatrix}
+            6 & -2 & 2 & 4 \\
+            0 & -4 & 2 & 2 \\
+            0 & 0 & 2 & -5 \\
+            0 & 0 & 0 & -3
+        \end{pmatrix} & L &= 
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            2 & 1 & 0 & 0 \\
+            \frac{1}{2} & 3 & 1 & 0 \\
+            -1 & -\frac{1}{2} & 2 & 1 
+        \end{pmatrix}
+    \end{align*}
+\end{task}
+
+\begin{task}
+    \ndy
+\end{task}
+\end{document}
