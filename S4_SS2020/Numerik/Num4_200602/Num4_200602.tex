@@ -185,8 +185,84 @@ emphstyle={\color{Goldenrod}}
         \end{pmatrix}
     \end{align*}
 \end{task}
-
+\newpage
 \begin{task}
-    \ndy
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item \hfill\vspace{-5mm}\\
+        $\left(\begin{array}{cc|c}
+            10^{-3} & 1 & 1\\
+            1 & 1 & 2
+        \end{array}\right)
+        \rightarrow\left(\begin{array}{cc|c}
+            10^{-3} & 1 & 1\\
+            0 & -999 & -998
+        \end{array}\right)
+        \rightarrow LR(A;b)=\left\{\begin{array}{c}
+            \frac{1000}{999}\vspace{1mm}\\
+            \frac{998}{999}
+        \end{array}\right\}$
+
+        \item \hfill\vspace{-5mm}\\
+        $\left(\begin{array}{cc|c}
+            10^{-3} & 1 & 1\\
+            1 & 1 & 2
+        \end{array}\right)
+        \rightarrow\left(\begin{array}{cc|c}
+            10^{-3} & 1 & 1\\
+            0 & -10^3 & -10^3
+        \end{array}\right)
+        \rightarrow LR(A;b)=\left\{\begin{array}{c}
+            0\vspace{1mm}\\
+            1
+        \end{array}\right\}$
+
+        \item \hfill\vspace{-5mm}\\
+        $\left(\begin{array}{cc|c}
+            1 & 1 & 2\\
+            10^{-3} & 1 & 1
+        \end{array}\right)
+        \rightarrow\left(\begin{array}{cc|c}
+            1 & 1 & 2\\
+            0 & 1 & 1
+        \end{array}\right)
+        \rightarrow LR(A;b)=\left\{\begin{array}{c}
+            1\vspace{1mm}\\
+            1
+        \end{array}\right\}$
+
+        \item $A(\overline{x} + y) = A\overline{x} + Ay = b - A\overline{x} + A\overline{x} = b$\\
+        $(b):\ \Delta = \left\{\begin{array}{c}
+            0\vspace{1mm}\\
+            1
+        \end{array}\right\},\ \left(\begin{array}{cc|c}
+            10^{-3} & 1 & 0\\
+            1 & 1 & 1
+        \end{array}\right)
+        \rightarrow \left(\begin{array}{cc|c}
+            10^{-3} & 1 & 0\\
+            0 & -10^3 & 1
+        \end{array}\right)
+        \rightarrow LR(A;\Delta) = \left\{\begin{array}{c}
+            1\vspace{1mm}\\
+            -10^{-3}
+        \end{array}\right\}\\$
+        
+        $(c):\ \Delta = \left\{\begin{array}{c}
+            10^{-3}\vspace{1mm}\\
+            0
+        \end{array}\right\},\ \left(\begin{array}{cc|c}
+            10^{-3} & 1 & 10^{-3}\\
+            1 & 1 & 0
+        \end{array}\right)
+        \rightarrow \left(\begin{array}{cc|c}
+            10^{-3} & 1 & 10^{-3}\\
+            0 & -10^3 & 1
+        \end{array}\right)
+        \rightarrow LR(A;\Delta) = \left\{\begin{array}{c}
+            2\vspace{1mm}\\
+            -10^{-3}
+        \end{array}\right\}$
+    \end{enumerate}
 \end{task}
 \end{document}
