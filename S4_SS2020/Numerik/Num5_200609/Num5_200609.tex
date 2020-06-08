@@ -3,6 +3,7 @@
 \geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
@@ -81,23 +82,25 @@ emphstyle={\color{Goldenrod}}
 }
 %----- new commands
 \newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
-\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
 \newcommand{\set}[1]{\ensuremath{\{#1\}}}
 \newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
 \newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
 \newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
-\newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\script}[1]{
     skripte/aufgabe#1.py
     \lstinputlisting{skripte/aufgabe#1.py}
 }
-\newcommand{\ndy}{
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{{\normalfont\hbox{1\kern-0.18em \vrule width .6pt}}}}
+\def\ndy{
     \textcolor{red} {\hfill not done yet!}
     \reversemarginpar
     \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
 }
-%..... homework number
-\newcommand{\hw}{3}
+%----- homework number
+\newcommand{\hw}{5}
 %------------------------------------------ main
 \begin{document}
 %----- title
@@ -109,19 +112,54 @@ emphstyle={\color{Goldenrod}}
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate}[label={(\alph*)}]
-        \item $f(4)=-1,\ f(4.5) = 2^{4.5} - 18 - 1 = \sqrt{2^9} - \sqrt{361} > 0\\
-        \implies f$ hat mindestens eine Nullstelle in $[4,4.5]$\vspace{3mm}\\
-        $f'(x) = 2^x\ln 2 - 4$ ist streng monoton steigend,\\
-        $f'(4)=16\ln 2 - 4 > 16\log_4 2 - 4 > 0\\
-        \implies f$ ist streng monoton steigend in $[4,4.5]$\vspace{3mm}\\
-        $\implies f$ hat genau eine Nullstelle in $[4,4.5]$
-        \item $\epsilon = 4\cdot 10^{-2}$, nach Vorschrift muss $\abs{a_n-b_n} = \frac{\abs{a_n-b_n}}{2^n} < 2\epsilon\iff \frac{1}{2^{n+2}} < 4\cdot 10^{-2}\iff 2^{n+4}>10^2$\\
-        Das wird erfüllt mit $n=3$. Berechnung:
+        \item \hfill\vspace{-5mm}
         \begin{align*}
-            a_0 &= 4     & b_0 &= 4.5     & M &= 4.25      & f(M) &\approx 1.02731384\\
-            a_1 &= 4     & b_1 &= 4.25    & M &= 4.125     & f(M) &\approx -0.05187628\\
-            a_2 &= 4.125 & b_2 &= 4.25    & M &= 4.1875    & f(M) &\approx 0.47061816\\
-            a_3 &= 4.125 & b_3 &= 4.1875  & M &= 4.15625   &&
+            (L;b) & = \left(\begin{array}{cc|c}
+                1 & 0 & 1\\
+                \frac{104}{105} & 1 & 2
+            \end{array}\right)\rightarrow\left(\begin{array}{cc|c}
+                1 & 0 & 1\\
+                0 & 1 & 1
+            \end{array}\right)\\
+            \implies \overline{z} &= \begin{pmatrix}
+                1\\
+                1.01
+            \end{pmatrix}\\
+            (R,\overline{z}) &= \left(\begin{array}{cc|c}
+                1.05 & 1.02 & 1\\
+                1.04 & 1.02 & 1.01
+            \end{array}\right)\rightarrow\left(\begin{array}{cc|c}
+                1.05 & 1.02 & 1\\
+                0 & 9.71\cdot 10^{-3} & 1.95\cdot 10^{-2}
+            \end{array}\right)\\
+            \implies \overline{x} &= \begin{pmatrix}
+                -9.90\cdot 10^{-1}\\
+                2
+            \end{pmatrix}
+        \end{align*}
+        \item \begin{align*}
+            \Delta_3 &= \begin{pmatrix}
+                0\\
+                0.99
+            \end{pmatrix}\\
+            \Delta_6 &= \begin{pmatrix}
+                5\cdot 10^{-4}\\
+                9.896\cdot 10^{-1}
+            \end{pmatrix}
+        \end{align*}
+        \item \hfill\vspace{-5mm}
+        \begin{align*}
+            (A;\Delta_6) &= \left(\begin{array}{cc|c}
+                1.05 & 1.02 & 5\cdot 10^{-4}\\
+                1.04 & 1.02 & 9.896\cdot 10^{-1}
+            \end{array}\right) \rightarrow \left(\begin{array}{cc|c}
+                1.05 & 1.02 & 5\cdot 10^{-4}\\
+                0 & 9.71\cdot 10^{-3} & 9.90\cdot 10^{-1}
+            \end{array}\right)\\
+            \overline{y} &= \begin{pmatrix}
+                -99.1\\
+                102
+            \end{pmatrix}
         \end{align*}
     \end{enumerate}
 \end{task}
@@ -129,37 +167,37 @@ emphstyle={\color{Goldenrod}}
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate}[label={(\alph*)}]
-        \item $N_f(x) = x - \frac{f(x)}{f'(x)}$, potentielle Extremstellen von $N_f$ gibt es bei $x=a, x=b, N'_f(x) = 0$. 
-        Da $f'(x) = 3x^2 - 6x = 3x(x-2)$, ist $f'(x)\neq 0$ in $[a,b]$, wodurch $x=a, x=b, N'_f(x) = 0$ alle potentiellen Extremstellen von $N_f$ in sind.
+        \item IA: $x^{(0)}$ ist Wahrscheinlichkeitsvektor\\
+        IV: $x^{(k)}$ ist Wahrscheinlichkeitsvektor\\
+        IS: 
         \begin{align*}
-        N'_f &= 1-\frac{f'^2 - f\cdot f''}{f'^2} = \frac{f\cdot f''}{f'^2}\\ 
-        N'_f(x) = 0 &\implies f(x)=0\lor f''(x)=0
+            \forall_{i=1, \ldots, n}: \left(Wx^{(k)}\right)_i &= \sum\limits_{j=1}^{n} \underbrace{W_{i,j}}_{\geq 0} \underbrace{x^{(k)}_j}_{\geq 0} \geq 0\\
+            \sum\limits_{i=1}^n \left(Wx^{(k)}\right)_i &= \sum\limits_{i=1}^n \sum\limits_{j=1}^{n} W_{i,j} x^{(k)}_j = \sum\limits_{j=1}^n \sum\limits_{i=1}^{n} W_{i,j} x^{(k)}_j = \sum\limits_{i=1}^n x^{(k)}_j = 1
         \end{align*}
-        Fall $f(x)=0:\ N_f(x) = x - \frac{0}{\underbrace{f'(x)}_{\neq 0}} = x \in [a,b]$\\
-        Fall $f''(x)=0:\ f''(x) = 6x-6,\ f''(b)=0$\\
-        Außerdem: $N_f(a) =\frac{1}{2} - \frac{1 + \frac{1}{8} - \frac{3}{4}}{\frac{3}{4}-3} = \frac{1}{2} + \frac{1}{3} \in [a,b], N_f(b) = 1 - \frac{1 + 1 - 3}{3-6} = \frac{2}{3}\in [a,b]$\vspace{3mm}\\
-        Alle potentiellen Extremwerte von $N_f$ liegen in $[a,b]$ und $N_f$ ist stetig (da $f'(x)\neq 0$ in $[a,b]$ und $f$ stetig).\\
-        $\implies N_f:[a,b]\rightarrow [a,b]$
-        \item $N'_f = \begin{displaystyle} \frac{f\cdot f''}{f'^2} \end{displaystyle}$\vspace{3mm}\\
-        $f'(x) = 3x^2 - 6x = 3x(x-2)$ ist eine Parabel mit Scheitelpunkt bei $x=1$ und Nullstellen $x_1=0, x_2=2$ und somit monoton fallend in $[a,b]$. Also ist $\abs{f'(x)}$ ist monoton steigend in $[a,b]$.\vspace{3mm}\\
-        $f(x)$ ist monoton fallend in $[a,b]$, da $f'(x)<0$ in $[a,b]$.
-        \ndy\\
-        \textit{wird auch nicht mehr gemacht, bin müde}
-    \end{enumerate}
-\end{task}
-\newpage
-\begin{task}
-    \hfill\vspace{-5mm}
-    \begin{enumerate}[label={(\alph*)}]
-        \item $\phi'(x) = -2x e^{-x^2},\ \phi''(x) = -2e^{-x^2} + 4x^2 e^{-x^2} = (\underbrace{4x^2-2}_{\text{Nullstellen und Vorzeichenwechsel bei } \pm \sqrt{2}})\cdot \underbrace{e^{-x^2}}_{>0}\\\implies \abs{\phi(x)}\leq\phi(\sqrt{2}) = \frac{\sqrt{2}}{e^2} \leq 0.2 = L$
-        \item \textit{A-priori-Abschätzung:} $\abs{x_\nu-x^*}\leq\frac{L^\nu}{1-L}\abs{x_0-x_1} = \frac{5}{4}\cdot 2^\nu\cdot 10^{-\nu} = 2^{\nu-3}\cdot 10^{-\nu+1} < 10^{-5}$\\
-        erfüllt mit $\nu=7$
-        \item $N_f(x) = x - \frac{e^{-x^2}-x}{-2xe^{-x^2}-1}$
+        $\implies x^{(k+1)}$ ist Wahrscheinlichkeitsvektor $\hfill\qed$
+
+        \item $\forall_{i=1, \ldots, n}: y_i = 1 \implies \forall_{i=1, \ldots, n}: ((W^T - \1)y)_i = -1 + \sum\limits_{j=1}^{n} W^T_{i,j} y_j = -1 + \sum\limits_{j=1}^{n} W^T_{i,j} = 0$\\
+        $\implies (W^T - \1)y = 0 \iff W^Ty = y \iff y$ ist Eigenvektor von $W^T$ mit Eigenwert $1$\\
+        $\implies 1$ ist Eigenwert von $W$ $\hfill\qed$
+
+        \item $W x^{(\infty)} = W \lim\limits_{k\rightarrow\infty} x^{(k)} = \lim\limits_{k\rightarrow\infty} W x^{(k)} = \lim\limits_{k\rightarrow\infty} x^{(k+1)} = x^{(\infty)}\hfill\qed$
+        \item \hfill\vspace{-5mm}
         \begin{align*}
-            x_1 &= 1.000000 & y_1 &= 0.333333\\
-            x_2 &= 0.367879 & y_2 &= 0.534613\\
-            x_3 &= 0.873423 & y_3 &= 0.621232\\
-            x_4 &= 0.466327 & y_4 &= 0.646061
+            x^{(5)} &\approx \begin{pmatrix}
+                0.29884000\\
+                0.38248000\\
+                0.31868000
+            \end{pmatrix}\\
+            x^{(10)} &\approx \begin{pmatrix}
+                0.29824163\\
+                0.38598741\\
+                0.31577096
+            \end{pmatrix}\\
+            x^{(15)} &\approx \begin{pmatrix}
+                0.29824564\\
+                0.38596477\\
+                0.31578959
+            \end{pmatrix}
         \end{align*}
     \end{enumerate}
 \end{task}
