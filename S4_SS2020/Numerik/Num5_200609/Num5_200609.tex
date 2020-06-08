@@ -127,38 +127,36 @@ emphstyle={\color{Goldenrod}}
             \end{pmatrix}\\
             (R,\overline{z}) &= \left(\begin{array}{cc|c}
                 1.05 & 1.02 & 1\\
-                1.04 & 1.02 & 1.01
-            \end{array}\right)\rightarrow\left(\begin{array}{cc|c}
-                1.05 & 1.02 & 1\\
-                0 & 9.71\cdot 10^{-3} & 1.95\cdot 10^{-2}
+                0 & 9.71\cdot 10^{-3} & 1.01
             \end{array}\right)\\
             \implies \overline{x} &= \begin{pmatrix}
-                -9.90\cdot 10^{-1}\\
-                2
+                -100\\
+                104
             \end{pmatrix}
         \end{align*}
         \item \begin{align*}
             \Delta_3 &= \begin{pmatrix}
-                0\\
-                0.99
+                -8\cdot 10^{-2}\\
+                -8\cdot 10^{-2}
             \end{pmatrix}\\
             \Delta_6 &= \begin{pmatrix}
-                5\cdot 10^{-4}\\
-                9.896\cdot 10^{-1}
+                -8\cdot 10^{-2}\\
+                -8\cdot 10^{-2}
             \end{pmatrix}
         \end{align*}
+        Die Rechnungen mit beiden Mantissenlängen unterscheiden sich merklich!
         \item \hfill\vspace{-5mm}
         \begin{align*}
             (A;\Delta_6) &= \left(\begin{array}{cc|c}
-                1.05 & 1.02 & 5\cdot 10^{-4}\\
-                1.04 & 1.02 & 9.896\cdot 10^{-1}
+                1.05 & 1.02 & -8\cdot 10^{-2}\\
+                1.04 & 1.02 & -8\cdot 10^{-2}
             \end{array}\right) \rightarrow \left(\begin{array}{cc|c}
-                1.05 & 1.02 & 5\cdot 10^{-4}\\
-                0 & 9.71\cdot 10^{-3} & 9.90\cdot 10^{-1}
+                1.05 & 1.02 & -8\cdot 10^{-2}\\
+                0 & 9.71\cdot 10^{-3} & -7.62\cdot 10^{-4}
             \end{array}\right)\\
             \overline{y} &= \begin{pmatrix}
                 -99.1\\
-                102
+                -7.85 \cdot 10^{-2}
             \end{pmatrix}
         \end{align*}
     \end{enumerate}
@@ -199,6 +197,7 @@ emphstyle={\color{Goldenrod}}
                 0.31578959
             \end{pmatrix}
         \end{align*}
+        \item Nope, absolut gar keine Lust auf noch mehr Rechnen. Man müsste den Lösungraum für $(W-\1)x=0$ bestimmen (Gauß oder so) und dann so skalieren, dass $x_1 + x_2 + x_3$ = 1, falls das hilft.
     \end{enumerate}
 \end{task}
 \end{document}

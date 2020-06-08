@@ -20,8 +20,8 @@ z = np.array([
 ])
 
 x = np.array([
-    [-0.99],
-    [2]
+    [-100],
+    [104]
 ])
 
 Delta = b - A.dot(x)
