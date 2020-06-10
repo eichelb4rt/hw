@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.5.12)  10 JUN 2020 13:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.5.12)  10 JUN 2020 13:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -812,7 +812,7 @@ File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 7.
 ) (./files/1b.txt)
-(./files/1c.txt)
+(./files/1c.txt) (./files/1d.txt
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
 Make it at least 13.59999pt.
@@ -821,24 +821,28 @@ This may cause the page layout to be inconsistent, however.
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
-] (./files/1d.txt)
-(./files/2a.txt) 
+]) (./files/2a.txt)
+(./files/2b.txt) 
 AED: lastpage setting LastPage
-[2] (./DBS1_200611.aux) ) 
+[2] (./DBS1_200611.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 19660 strings out of 482429
- 386656 string characters out of 5948213
- 824047 words of memory out of 5000000
- 34983 multiletter control sequences out of 15000+600000
+ 19664 strings out of 482429
+ 386696 string characters out of 5948213
+ 828047 words of memory out of 5000000
+ 34984 multiletter control sequences out of 15000+600000
  534242 words of font info for 30 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 60i,11n,67p,822b,1752s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/user/.texlive2020/texmf-var/fonts/pk/ljfour/jk
-nappen/ec/tcrm1095.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on DBS1_200611.pdf (2 pages, 53827 bytes).
+ 60i,12n,67p,822b,1937s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/user/.texlive2020/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600p
+k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+Output written on DBS1_200611.pdf (2 pages, 54818 bytes).
 PDF statistics:
  35 PDF objects out of 1000 (max. 8388607)
  25 compressed objects within 1 object stream
