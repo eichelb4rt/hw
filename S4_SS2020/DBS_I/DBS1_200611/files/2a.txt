@@ -1,0 +1,15 @@
+with bolt as (
+   select *
+   from ZehnkampfD
+   where name ='Bolt'
+   )
+
+select distinct zehnkampfd.name
+from zehnkampfd, bolt
+where zehnkampfd.disziplin = bolt.disziplin
+and zehnkampfd.name != 'Bolt'
+and zehnkampfd.name not in (
+   select name
+   from zehnkampfd
+   where bolt.punkte >= zehnkampfd.punkte
+   )
