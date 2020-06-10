@@ -1,0 +1,8 @@
+select *
+from Studenten
+where MatrNr in (
+  select MatrNr
+  from hoeren
+  group by MatrNr
+  having count(*) >= 3
+  )

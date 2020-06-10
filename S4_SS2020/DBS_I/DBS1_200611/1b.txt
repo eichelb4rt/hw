@@ -1,0 +1,9 @@
+select *
+from vorlesungen
+where vorlnr in (
+  select vorgaenger
+  from voraussetzen
+  group by vorgaenger
+  having count(*) >= 2
+  )
+and SWS >= 4

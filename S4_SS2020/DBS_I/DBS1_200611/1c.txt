@@ -1,0 +1,13 @@
+with vorlSokrates as (
+  select vorlnr
+  from vorlesungen v join professoren p
+  on v.gelesenvon = p.persnr
+  where p.name = 'Sokrates'
+  )
+select avg(semester)
+from studenten
+where matrnr in (
+  select matrnr
+  from hoeren h, vorlSokrates v
+  where h.vorlnr = v.vorlnr
+  )

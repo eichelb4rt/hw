@@ -1,0 +1,105 @@
+Sry, hatte keine Lust mehr, das ganze Zeug zu texen. War zu müde. Falls es Probleme bei der Anzeige gibt, einfach rauskopieren. Wenn dann immer noch Kästchen statt der join-symbole etc. angezeigt werden, bitte melden.
+
+1a:
+(ρ Boss←PersNr (
+	ρ PersNr←gelesenVon (
+		(σ Name='Fichte' (Studenten)) ⋊ hoeren ⋊ Vorlesungen
+	) ⋊ Professoren
+) ) ⋊ Assistenten
+-----
+1b:
+
+ρ VorlNr←Vorgaenger (
+	π MatrNr,Name,Semester,Vorgaenger (
+		Studenten ⨝ hoeren ⨝ ρ VorlNr←Nachfolger (voraussetzen)
+	)
+) - Studenten ⨝ hoeren
+-----
+2a:
+
+select *
+from studenten join hoeren on studenten.matrnr = hoeren.matrnr
+where hoeren.vorlnr in (
+	select vorlnr
+	from professoren join vorlesungen on professoren.persnr = vorlesungen.gelesenvon
+	where professoren.name = 'Sokrates'
+  )
+-----
+2b:
+
+select s.matrnr, s.name, s.semester
+from studenten s join hoeren h on s.matrnr = h.matrnr
+where vorlnr in (
+  select h.vorlnr
+  from studenten s join hoeren h on s.matrnr = h.matrnr
+  where s.name = 'Fichte'
+  )
+-----
+2c:
+
+select *
+from professoren
+where persnr in (
+  select  gelesenVon
+  from studenten s, vorlesungen v, hoeren h
+  where s.matrnr = h.matrnr
+  and v.vorlnr = h.vorlnr
+  and s.name = 'Carnap'
+  )
+-----
+2d:
+
+select *
+from professoren
+where persnr in (
+  select gelesenVon
+  from studenten s, vorlesungen v, hoeren h
+  where s.matrnr = h.matrnr
+  and v.vorlnr = h.vorlnr
+  and s.name = 'Theophrastos'
+  )
+-----
+2e:
+
+select v.vorlnr, v.titel, v.sws, v.gelesenVon
+  from studenten s, vorlesungen v, hoeren h
+  where s.matrnr = h.matrnr
+  and v.vorlnr = h.vorlnr
+  and s.semester <= 6
+-----
+2f:
+
+select vorlnr, count(*) menge
+from vorlesungen
+where vorlnr NOT IN (
+  select vorlnr
+  from hoeren
+)
+group by vorlnr
+UNION
+select vorlnr, count(*) as menge
+from hoeren
+group by vorlnr
+order by menge desc
+-----
+3a:
+
+AnzahlGehoert = γ MatrNr, Semester; count(VorlNr)->Anzahl (Studenten ⨝ hoeren ⨝ (ρ VorlNr←VorlesungsNr StudienPlan))
+sollteGehoert = γ Semester; count(VorlesungsNr)->Anzahl (StudienPlan)
+AnzahlGehoert ⨝ sollteGehoert ⋊ Studenten
+-----
+3b:
+
+select *
+from Studenten
+where MatrNr not in (
+	select h.MatrNr
+	from (
+		select s.MatrNr, s.Semester, h.VorlNr from Studenten as s join hoeren as h on s.MatrNr =  h.MatrNr) as h
+	join StudienPlan as p on p.VorlesungsNr = h.VorlNr
+	where p.Semester <> h.Semester
+)
+and MatrNr in (
+	select s.MatrNr
+	from Studenten as s join hoeren as h
+)

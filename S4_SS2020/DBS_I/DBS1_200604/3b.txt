@@ -1,0 +1,13 @@
+select *
+from Studenten
+where MatrNr not in (
+	select h.MatrNr
+	from (
+		select s.MatrNr, s.Semester, h.VorlNr from Studenten as s join hoeren as h on s.MatrNr =  h.MatrNr) as h
+	join StudienPlan as p on p.VorlesungsNr = h.VorlNr
+	where p.Semester <> h.Semester
+)
+and MatrNr in (
+	select s.MatrNr
+	from Studenten as s join hoeren as h
+)

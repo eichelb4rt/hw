@@ -1,0 +1,5 @@
+ρ VorlNr←Vorgaenger (
+	π MatrNr,Name,Semester,Vorgaenger (
+		Studenten ⨝ hoeren ⨝ ρ VorlNr←Nachfolger (voraussetzen)
+	)
+) - Studenten ⨝ hoeren

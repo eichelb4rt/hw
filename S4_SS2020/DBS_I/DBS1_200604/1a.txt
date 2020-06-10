@@ -1,0 +1,5 @@
+(ρ Boss←PersNr (
+	ρ PersNr←gelesenVon (
+		(σ Name='Fichte' (Studenten)) ⋊ hoeren ⋊ Vorlesungen
+	) ⋊ Professoren
+) ) ⋊ Assistenten

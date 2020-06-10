@@ -1,0 +1,12 @@
+select vorlnr, count(*) menge
+from vorlesungen
+where vorlnr NOT IN (
+  select vorlnr
+  from hoeren
+)
+group by vorlnr
+UNION
+select vorlnr, count(*) as menge
+from hoeren
+group by vorlnr
+order by menge desc

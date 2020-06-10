@@ -1,0 +1,5 @@
+select v.vorlnr, v.titel, v.sws, v.gelesenVon
+  from studenten s, vorlesungen v, hoeren h
+  where s.matrnr = h.matrnr
+  and v.vorlnr = h.vorlnr
+  and s.semester <= 6

@@ -1,0 +1,9 @@
+select *
+from professoren
+where persnr in (
+  select gelesenVon
+  from studenten s, vorlesungen v, hoeren h
+  where s.matrnr = h.matrnr
+  and v.vorlnr = h.vorlnr
+  and s.name = 'Theophrastos'
+  )

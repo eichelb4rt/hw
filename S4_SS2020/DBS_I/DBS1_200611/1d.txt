@@ -1,0 +1,19 @@
+with hoerenCount as (
+  select matrnr, count(*) anzahl
+  from studenten
+  where matrnr not in (
+    select matrnr
+    from hoeren
+    )
+  group by matrnr
+  union
+  select matrnr, count(*) anzahl
+  from studenten
+  where matrnr in (
+    select matrnr
+    from hoeren
+    )
+  group by matrnr
+  )
+select avg(cast(anzahl as float))
+from hoerenCount 

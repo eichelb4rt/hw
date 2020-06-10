@@ -1,0 +1,3 @@
+AnzahlGehoert = γ MatrNr, Semester; count(VorlNr)->Anzahl (Studenten ⨝ hoeren ⨝ (ρ VorlNr←VorlesungsNr StudienPlan))
+sollteGehoert = γ Semester; count(VorlesungsNr)->Anzahl (StudienPlan)
+AnzahlGehoert ⨝ sollteGehoert ⋊ Studenten

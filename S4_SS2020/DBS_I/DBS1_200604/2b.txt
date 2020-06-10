@@ -1,0 +1,7 @@
+select s.matrnr, s.name, s.semester
+from studenten s join hoeren h on s.matrnr = h.matrnr
+where vorlnr in (
+  select h.vorlnr
+  from studenten s join hoeren h on s.matrnr = h.matrnr
+  where s.name = 'Fichte'
+  )

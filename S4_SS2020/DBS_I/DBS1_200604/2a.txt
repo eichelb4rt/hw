@@ -1,0 +1,7 @@
+select *
+from studenten join hoeren on studenten.matrnr = hoeren.matrnr
+where hoeren.vorlnr in (
+	select vorlnr
+	from professoren join vorlesungen on professoren.persnr = vorlesungen.gelesenvon
+	where professoren.name = 'Sokrates'
+  )
