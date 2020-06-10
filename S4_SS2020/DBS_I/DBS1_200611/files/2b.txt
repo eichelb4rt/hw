@@ -1,0 +1,14 @@
+with Bolt as (
+  select *
+  from ZehnkampfD
+  where name='Bolt'
+  )
+select all.Name, all.Disziplin, all.Punkte
+from ZehnkampfD all, Bolt
+where all.Disziplin = Bolt.Disziplin
+and all.Punkte >= Bolt.Punkte
+group by all.Name
+having count(all.Disziplin) = max(all.Disziplin)
+except
+select *
+from Bolt
