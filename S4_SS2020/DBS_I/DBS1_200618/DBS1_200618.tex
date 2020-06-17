@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, arrows}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[L]{Name: Maurice Wenig}
+\fancyhead[R]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\ndy}{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Datenbanksysteme I}\\
+\large{6. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item \hfill\lstinputlisting[language=sql]{code/1a.txt}
+        \item \hfill\lstinputlisting[language=sql]{code/1b.txt}
+    \end{enumerate}
+\end{task}
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={(\alph*)}]
+        \item \hfill\lstinputlisting[language=sql]{code/2a.txt}
+        \item \hfill\lstinputlisting[language=sql]{code/2b.txt}
+        \item \hfill\lstinputlisting[language=sql]{code/2c.txt}
+    \end{enumerate}
+\end{task}
+\begin{task}
+    \lstinputlisting[language=sql]{code/3.txt}
+\end{task}
+\end{document}
