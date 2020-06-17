@@ -1,0 +1,21 @@
+create table User (
+	id		varchar(15) primary key,
+  	name	varchar(50)
+);
+create table Tweet (
+	id		bigint primary key,
+  	user_id	varchar(15) references User(id) on delete set null,
+  	text	varchar(280) not null,
+  	date	timestamp not null
+);
+create table follows (
+	follower_id	varchar(15) references User(id) on delete cascade,
+  	follows_id	varchar(15) references User(id) on delete cascade,
+  	primary key (follower_id, follows_id)
+);
+create table likes (
+	user_id 	varchar(15) references User(id) on delete cascade,
+  	tweet_id	bigint references Tweet(id) on delete cascade,
+  	date 		timestamp,
+  	primary key (user_id, tweed_id)
+);

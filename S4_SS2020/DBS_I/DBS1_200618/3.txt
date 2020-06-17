@@ -1,0 +1,4 @@
+with factor as (values(1),(2),(3),(4),(5),(6),(7),(8),(9),(10))
+select *, factor1 * factor2 as product
+from factor as f1(factor1), factor as f2(factor2)
+order by factor1,factor2

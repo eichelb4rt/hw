@@ -1,0 +1,3 @@
+update Professoren
+set Rang = 'C4'
+where Rang = 'C3'
