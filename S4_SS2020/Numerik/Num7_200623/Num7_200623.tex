@@ -112,15 +112,46 @@ emphstyle={\color{Goldenrod}}
 \begin{task}
     \hfill\vspace{-5mm}
     \begin{enumerate}[label={(\alph*)}]
-        \item $v = \begin{pmatrix}
-            -0.78\\
-            1.07\\
-            1.07
-        \end{pmatrix},\ H_v = \begin{pmatrix}
-            0.580 & 0.576 & 0.576\\
-            0.576 & 0.213 & -0.787\\
-            0.576 & -0.787 & 0.213
-        \end{pmatrix}$
+        \item \begin{align*}
+            v &\approx \begin{pmatrix}
+                2.92\\
+                1.07\\
+                1.07
+            \end{pmatrix}& H_v &\approx \begin{pmatrix}
+                0.580 & 0.577 & 0.577\\
+                0.577 & 0.789 & -0.211\\
+                0.577 & -0.211 & 0.789
+            \end{pmatrix}& H_v\cdot A &\approx\begin{pmatrix}
+                1.85 & -1.94\\
+                0 & -0.00165\\
+                0 & -0.0383
+            \end{pmatrix}\\
+            w &\approx\begin{pmatrix}
+                -0.04\\
+                -0.0383
+            \end{pmatrix}& H_w &\approx \begin{pmatrix}
+                -0.04 & -1\\
+                -1 & 0.04
+            \end{pmatrix}& H_w\cdot A' &\approx \begin{pmatrix}
+                0.0383\\
+                0
+            \end{pmatrix}\\
+            &&Q = H_v\cdot\begin{pmatrix}
+                1 & 0\\
+                0 & H_w
+            \end{pmatrix} &\approx \begin{pmatrix}
+                -0.58 & 0.554 & 0.554\\
+                -0.577 & 0.243 & -0.797\\
+                -0.577 & -0.797 & 0.243
+            \end{pmatrix}\\
+            &&R&\approx \begin{pmatrix}
+                1.85 & -1.94\\
+                0 & 0.0383\\
+                0 & 0
+            \end{pmatrix}\\
+        \end{align*}
+        Anmerkung: Ich habe vergessen, bei den Normen / der Berechnung von $\alpha$ zu runden. Das habe ich allerdings zu spät bermerkt und jetzt will ich nicht alles nochmal umschreiben.
+        \item \ndy
     \end{enumerate}
 \end{task}
 \begin{task}

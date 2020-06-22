@@ -1,12 +1,7 @@
 import math
 import numpy as np
-import runden
-def r(A):
-    precision = 3
-    if isinstance(A, np.ndarray):
-        return runden.roundMatrix(A,precision)
-    else:
-        return runden.roundNumber(A,precision)
+from runden import r, multiplyRounded as mult
+
 A = np.array([
     [1.07, 1.10],
     [1.07, 1.11],
@@ -14,6 +9,15 @@ A = np.array([
 ])
 b = np.array([[1,-1,0]]).transpose()
 v = A.transpose()[0].reshape(3,1)
-v = r(v - r(np.linalg.norm(v)) * np.array([[1,0,0]]).transpose())
-H_v = r(np.identity(len(v)) - r(r(2/r(np.dot(v.transpose(), v))) * r(np.dot(v, v.transpose().reshape(1,3)))))
-print(r(H_v.dot(A)))
+v = r(v + r(np.linalg.norm(v)) * np.array([[1,0,0]]).transpose())
+H_v = r(np.identity(len(v)) - r(r(2/r(np.dot(v.transpose(), v))) * mult(v, v.transpose())))
+w = np.array([[-0.00165, -0.0383]]).transpose().reshape(2,1)
+w = r(w - r(np.linalg.norm(w)) * np.array([[1,0]]).transpose())
+H_w = r(np.identity(len(w)) - r(r(2/r(np.dot(w.transpose(), w))) * mult(w, w.transpose())))
+A_2 = np.array([[-0.00165, -0.0383]]).transpose().reshape(2,1)
+H_w_extra = np.array([
+    [1.0,0.0,0.0],
+    [0.0, 0.04, -1.0],
+    [0.0, -1.0, 0.04]
+]).reshape(3,3)
+print(mult(H_v, H_w_extra))
