@@ -150,8 +150,24 @@ emphstyle={\color{Goldenrod}}
                 0 & 0
             \end{pmatrix}\\
         \end{align*}
-        Anmerkung: Ich habe vergessen, bei den Normen / der Berechnung von $\alpha$ zu runden. Das habe ich allerdings zu spät bermerkt und jetzt will ich nicht alles nochmal umschreiben.
-        \item \ndy
+        Anmerkung: Ich habe vergessen, bei den Normen / der Berechnung von $\alpha$ zu runden. Das habe ich allerdings zu spät bermerkt und jetzt will ich nicht alles nochmal umschreiben. Außerdem haben wir am Anfang mal definiert, dass am Ende einer Gleitkommazahl nicht nur 9en sind. Deswegen wurde die ein oder andere $0.0399$ zu einer $0.04$ etc.
+        \item \begin{align*}
+            Q^T b &\approx \begin{pmatrix}
+                -0.003\\
+                0.311\\
+                1.35
+            \end{pmatrix}& R_1 &\approx \begin{pmatrix}
+                1.85 & -1.94\\
+                0 & 0.0383
+            \end{pmatrix}& (R_1;b_1) &\approx \left(\begin{array}{cc|c}
+                1.85 & -1.94 & -0.003\\
+                0 & 0.0383 & 0.311
+            \end{array}\right)\\
+            &&x&\approx\begin{pmatrix}
+                8.5\\
+                8.12
+            \end{pmatrix}
+        \end{align*}
     \end{enumerate}
 \end{task}
 \begin{task}
@@ -169,5 +185,8 @@ emphstyle={\color{Goldenrod}}
         \end{align*}
         \item Nach der Hauptachsentransformation gibt es für jede symmetrische Matrix $A\in M_n(\R)$ eine diagonalisierende Matrix $S\in SO_n$, sodass $S^T A S$ eine diagonale Matrix mit Eigenwerten $\lambda_1\ldots\lambda_n$ von $A$ auf der Diagonale ist. Nach (a) ist dann $\sum\limits_{i,j=1}^n \left(A_{i,j}\right)^2 = \sum\limits_{i,j=1}^n \left((S^T A S)_{i,j}\right)^2 = \sum\limits_{k=1}^n \lambda_{k}^2\qed$
     \end{enumerate}
+\end{task}
+\begin{task}
+    $f-g$ hat $n+1$ Nullstellen ($t_0,\dots,t_n$) in $\R$, ist aber maximal vom Grad $n$. Damit ist $\mathrm{deg}(f-g) < 1$ und damit $\mathrm{deg}(f-g) = 0$. Also sind $f$ und $g$ maximal um eine Konstante verschieden. Da aber $f$ und $g$ an mindestens einer Stelle gleich sind, ist $f=g$.
 \end{task}
 \end{document}

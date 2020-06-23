@@ -20,4 +20,5 @@ H_w_extra = np.array([
     [0.0, 0.04, -1.0],
     [0.0, -1.0, 0.04]
 ]).reshape(3,3)
-print(mult(H_v, H_w_extra))
+Q = mult(H_v, H_w_extra)
+print(mult(Q.transpose(), b))
