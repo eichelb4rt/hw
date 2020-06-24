@@ -1,0 +1,9 @@
+with Fahrraeder as (
+    select fahrrad_typ, fahrrad_farbe
+    from kinder_fahrraeder
+    where person = 'Thomas'
+)
+insert into kinder_fahrraeder (
+    select 'Thomas', 'Laura', '0', fahrrad_typ, fahrrad_farbe
+    from fahrraeder
+)

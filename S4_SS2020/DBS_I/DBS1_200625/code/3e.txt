@@ -1,0 +1,13 @@
+with Kinder as (
+    select distinct person, kind_name, kind_alter
+    from kinder_fahrraeder
+),
+Fahrraeder as (
+    select distinct person, fahrrad_typ, fahrrad_farbe
+    from kinder_fahrraeder
+)
+select f.person, k.kind_name, k.kind_alter, f.fahrrad_typ, f.fahrrad_farbe
+from Fahrraeder f, Kinder k
+except
+select *
+from kinder_fahrraeder

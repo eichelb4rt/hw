@@ -1,0 +1,4 @@
+select *
+from R
+group by A,B
+having count(distinct *) > 1

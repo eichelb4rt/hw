@@ -1,0 +1,4 @@
+select *
+from R
+group by D,E
+having count(distinct B) > 1
