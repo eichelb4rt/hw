@@ -8,6 +8,7 @@ Fahrraeder as (
 )
 select f.person, k.kind_name, k.kind_alter, f.fahrrad_typ, f.fahrrad_farbe
 from Fahrraeder f, Kinder k
+where f.person = k.person
 except
 select *
 from kinder_fahrraeder

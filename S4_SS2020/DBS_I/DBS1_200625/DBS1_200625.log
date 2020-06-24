@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.5.12)  24 JUN 2020 23:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.5.12)  24 JUN 2020 23:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -837,11 +837,7 @@ This may cause the page layout to be inconsistent, however.
 ])
 
 AED: lastpage setting LastPage
-[2] (./DBS1_200625.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[2] (./DBS1_200625.aux) ) 
 Here is how much of TeX's memory you used:
  19693 strings out of 482429
  387139 string characters out of 5948213
@@ -850,14 +846,14 @@ Here is how much of TeX's memory you used:
  538231 words of font info for 46 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  60i,12n,67p,822b,1933s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/user/.texlive2020/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600p
-k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on DBS1_200625.pdf (2 pages, 78303 bytes).
+ </home/user/.texlive2020/texmf-var/fonts/pk/ljfour/jk
+nappen/ec/tcrm1095.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on DBS1_200625.pdf (2 pages, 78360 bytes).
 PDF statistics:
  43 PDF objects out of 1000 (max. 8388607)
  31 compressed objects within 1 object stream
