@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: 1 (Di 10-12)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- listings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white}, 
+% choose the background color; you must add
+basicstyle=\footnotesize, 
+% the size of the fonts that are used for the code
+breakatwhitespace=false, 
+% sets if automatic breaks should only happen at whitespace
+breaklines=true,
+% sets automatic line breaking
+captionpos=b,
+% sets the caption-position to bottom
+commentstyle=\color{mygreen},
+% comment style
+deletekeywords={...},
+% if you want to delete keywords from the given language
+extendedchars=true,
+% lets you use non-ASCII characters; for 8-bits encodings only   
+% adds a frame around the code
+keepspaces=true, 
+% keeps spaces in text, useful for keeping indentation of code
+keywordstyle=\color{blue}, 
+% keyword style
+language=java, 
+% the language of the code
+otherkeywords={@Override},
+% if you want to add more keywords to the set
+numbers=left, 
+% where to put the line-numbers; possible values(none, left, right)
+numbersep=5pt, 
+% how far the line-numbers are from the code
+numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+% if not set, frame-color can change on line-breaks to text-color
+showspaces=false, 
+% show spaces everywhere adding particular underscores;
+showstringspaces=false, 
+% underline spaces within strings only
+showtabs=false, 
+% show tabs within strings adding particular underscores
+stepnumber=1, 
+% the step between two line-numbers.
+stringstyle=\color{mymauve}, 
+% string literal style
+tabsize=2,     
+% sets default tabsize to 2 spaces
+% show the filename of files included with \lstinputlisting;
+emph={@Override},
+emphstyle={\color{Goldenrod}}
+}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\script}[1]{
+    skripte/aufgabe#1.py
+    \lstinputlisting{skripte/aufgabe#1.py}
+}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{\mathbb{1}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%----- homework number
+\newcommand{\hw}{X}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Numerische Mathematik}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \ndy
+\end{task}
+
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{align*}
+        i=k \implies L_i(t_k) &= \prod\limits_{j=0, j\neq i}^{n}\frac{t_i-t_j}{t_i-t_j} = 1\\
+        i\neq k \implies L_i(t_k) &= \prod\limits_{j=0, j\neq i}^{n}\frac{t_k-t_j}{t_i-t_j} = \frac{t_k-t_k}{t_i-t_j} \prod\limits_{j=0, j\neq i, j\neq k}^{n}\frac{t_k-t_j}{t_i-t_j} = 0
+    \end{align*}
+\end{task}
+\end{document}
