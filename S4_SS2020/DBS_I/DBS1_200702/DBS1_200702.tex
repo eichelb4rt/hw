@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{scalerel}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, arrows}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[L]{Name: Maurice Wenig}
+\fancyhead[R]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\notiff}{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\ndy}{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Datenbanksysteme I}\\
+\large{8. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+	Es tut mir Leid.\\
+	1:\vspace{-3cm}
+	\begin{center}
+	\includegraphics[scale=1]{"files/tree_1"}
+	\end{center}
+	2:\vspace{-3cm}
+	\begin{center}
+	\includegraphics[scale=1]{"files/tree_2"}
+	\end{center}
+\end{task}
+
+\begin{task}
+	Schlüssel + Daten sind 108 Byte groß $\implies$ in einem Knoten können maximal $\lfloor\frac{2^{16}\,Byte}{108\,Byte}\rfloor \approx	 \lfloor 151.7 \rfloor = 151$ Elemente sein. $\implies k = \lfloor 151/2 \rfloor = \underline{\underline{75}}$ 
+\end{task}
+
+\begin{task}
+	\hfill\vspace{-5mm}
+	\begin{enumerate}[label={(\alph*)}]
+		\item 5
+		\item Eine Festplatte darf auf einmal ausfallen. Beim Hinzufügen von Festplatten verändert sich nichts: Bei der gleichen Anzahl an Blöcken spielt die Anzahl der Festplatten keine Rolle. Die Paritätsbits müssen dann entsprechend alle Festplatten beinhalten.
+		\item Ja, RAID6: Da benutzt man Striping mit mehreren verteilten Paritätsplatten
+(kann mehrere Ausfälle überleben)
+		\item \begin{align*}
+		C &= 1000\\
+		P_{D-F} &= 0101\\
+		H &= 1110
+		\end{align*}
+	\end{enumerate}
+\end{task}
+\end{document}
