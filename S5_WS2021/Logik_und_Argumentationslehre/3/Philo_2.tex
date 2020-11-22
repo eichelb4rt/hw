@@ -9,9 +9,6 @@
 \usepackage{lastpage}
 \usepackage{enumerate}
 \usepackage{enumitem}
-\usepackage{multicol}
-\usepackage{subcaption}
-\usepackage{ifthen}
 \usepackage{color}
 \usepackage{scalerel}
 \usepackage{tabularx}
@@ -28,16 +25,6 @@
 {\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
 \theoremstyle{break}
 \newtheorem{task}{Aufgabe}
-%----- new commands
-\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
-\newcommand{\set}[1]{\ensuremath{\{#1\}}}
-\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
-\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
-\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
-\newcommand{\script}[1]{
-    skripte/aufgabe#1.py
-    \lstinputlisting{skripte/aufgabe#1.py}
-}
 %----- new environments
 \newcounter{premises}
 \newenvironment{argument}
