@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{ifthen}
+\usepackage{color}
+\usepackage{scalerel}
+\usepackage{tabularx}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: B (Mo 10-12)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\set}[1]{\ensuremath{\{#1\}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[1]{\ensuremath{\left\| #1 \right\|}}
+\newcommand{\skal}[2]{\ensuremath{\left\langle #1 | #2 \right\rangle}}
+\newcommand{\script}[1]{
+    skripte/aufgabe#1.py
+    \lstinputlisting{skripte/aufgabe#1.py}
+}
+%----- new environments
+\newcounter{premises}
+\newenvironment{argument}
+{
+    \setcounter{premises}{1}    % set the counter to 1
+    \def\P{
+        $P_\arabic{premises}$ & 
+        \stepcounter{premises}
+    }
+    \def\S{\hline $S$ &}
+    \def\K{\hline $K$ &}
+    % begin of the actual environment
+    \flushleft
+    \tabularx{0.8\textwidth}{cX}
+}
+{
+    \endtabularx
+}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{\mathbb{1}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%----- homework number
+\newcommand{\hw}{2}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Logik und Argumentationslehre}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    Zwischenargument 1: nicht gültig
+    \begin{argument}
+        \P Es ist keine unfehlbare Erkenntnisquelle bekannt ("Welche sollte es denn sein?").\\
+        \K Wir verfügen nicht über eine unfehlbare Erkenntnisquelle.
+    \end{argument}\vspace*{3mm}\\
+    Zwischenargument 2: gültig, nicht schlüssig
+    \begin{argument}
+        \P Wenn wir sicheres Wissen über die Außenwelt haben, dann verfügen wir auch über eine unfehlbare Erkenntnisquelle.\\
+        \P Wir verfügen nicht über eine unfehlbare Erkenntnisquelle.\\
+        \S MT($P_1,P_2$)\\
+        \K Wir haben kein sicheres Wissen über die Außenwelt.
+    \end{argument}
+\end{task}
+\end{document}
