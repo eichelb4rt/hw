@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{scalerel}
+\usepackage{tabularx}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: B (Mo 10-12)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new environments
+\newcounter{premises}
+\newenvironment{argument}
+{
+    \setcounter{premises}{1}    % set the counter to 1
+    \def\P{
+        $P_\arabic{premises}$ & 
+        \stepcounter{premises}
+    }
+    \def\S{\hline $S$ &}
+    \def\K{\hline $K$ &}
+    % begin of the actual environment
+    \flushleft
+    \tabularx{0.8\textwidth}{cX}
+}
+{
+    \endtabularx
+}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{\mathbb{1}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%----- homework number
+\newcommand{\hw}{3}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Logik und Argumentationslehre}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    Zwischenargument 1: gültig
+    \begin{argument}
+        \P Lebewesen sind bis in ihre kleinsten Teile Maschinen.\\
+        \S de-morgansche Regeln\\
+        \K Lebewesen bestehen nicht aus Teilen, die selbst keine Maschinen sind.
+    \end{argument}\vspace{3mm}\\
+    Zwischenargument 2: gültig
+    \begin{argument}
+        \P Eine künstliche Maschine besteht aus Teilen, die selbst keine Maschinen sind.\\
+        \P Lebewesen bestehen nicht aus Teilen, die selbst keine Maschinen sind.\\
+        \S Spezialisierung, MP($P_1, P_2$)\\
+        \K Lebewesen sind keine künstlichen Maschinen.
+    \end{argument}
+\end{task}
+\end{document}
