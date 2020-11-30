@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.10.18)  30 NOV 2020 22:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.10.18)  30 NOV 2020 22:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -376,20 +376,20 @@ File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
 (./knn_1.aux)
 \openout1 = `knn_1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 105.
+LaTeX Font Info:    ... okay on input line 105.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -449,7 +449,7 @@ e
 ))
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 104.
+(lastpage)             ! on input line 105.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
@@ -457,37 +457,37 @@ Package caption Info: End \AtBeginDocument code.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
-Underfull \hbox (badness 10000) in paragraph at lines 134--134
+Underfull \hbox (badness 10000) in paragraph at lines 136--136
 []|\OT1/cmr/m/n/10.95 k^^?onnen mit un-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 134--134
+Underfull \hbox (badness 10000) in paragraph at lines 136--136
 \OT1/cmr/m/n/10.95 vollst^^?andigen
  []
 
 
-Underfull \hbox (badness 3792) in paragraph at lines 134--134
+Underfull \hbox (badness 3792) in paragraph at lines 136--136
 []|\OT1/cmr/m/n/10.95 robust bei Aus-fall des
  []
 
 
-Underfull \hbox (badness 4954) in paragraph at lines 145--145
+Underfull \hbox (badness 4954) in paragraph at lines 147--147
 []|\OT1/cmr/m/n/10.95 Probleme, die ein-fache
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 145--145
+Underfull \hbox (badness 10000) in paragraph at lines 147--147
 \OT1/cmr/m/n/10.95 k^^?urzer und brauchen
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 145--145
+Underfull \hbox (badness 10000) in paragraph at lines 147--147
 []|\OT1/cmr/m/n/10.95 deterministischer Pro-
  []
 
 
-Overfull \hbox (2.43333pt too wide) in paragraph at lines 124--148
+Overfull \hbox (2.43333pt too wide) in paragraph at lines 126--150
 [][] [] 
  []
 
@@ -503,17 +503,17 @@ This may cause the page layout to be inconsistent, however.
 
 ] (./knn_1.aux) ) 
 Here is how much of TeX's memory you used:
- 6817 strings out of 482697
- 99798 string characters out of 5952172
- 544470 words of memory out of 5000000
- 22138 multiletter control sequences out of 15000+600000
+ 6818 strings out of 482697
+ 99808 string characters out of 5952172
+ 544472 words of memory out of 5000000
+ 22139 multiletter control sequences out of 15000+600000
  540993 words of font info for 51 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  46i,11n,47p,820b,364s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on knn_1.pdf (1 page, 43998 bytes).
+Output written on knn_1.pdf (1 page, 44239 bytes).
 PDF statistics:
  20 PDF objects out of 1000 (max. 8388607)
  13 compressed objects within 1 object stream

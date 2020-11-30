@@ -24,7 +24,7 @@
 \pagestyle{fancy}
 %----- aufgaben
 \newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
-{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+{\textbf{\thmname{#1}\thmnumber{ \hw.\tasknumber.#2:} \thmnote{\textit{#3}}\newline}}
 \theoremstyle{break}
 \newtheorem{task}{Aufgabe}
 %----- listings
@@ -99,13 +99,15 @@ emphstyle={\color{Goldenrod}}
     \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
 }
 %----- homework number
-\newcommand{\hw}{1}
+\def\hw{1}
+\def\tasknumber{1}
 %------------------------------------------ main
 \begin{document}
 %----- title
 \begin{center}
 \Large{Einführung in die Theorie künstlicher neuronaler Netze}\\
 \large{\hw. Übungsserie}
+\large{\tasknumber. Aufgabe}
 \end{center}
 %----- tasks
 \begin{task}
