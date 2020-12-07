@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{scalerel}
+\usepackage{tabularx}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[R]{Übungsgruppe: B (Mo 10-12)}
+\fancyhead[C]{Name: Maurice Wenig}
+\fancyhead[L]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ \hw.#2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new environments
+\newcounter{premises}
+\newenvironment{argument}
+{
+    \setcounter{premises}{1}    % set the counter to 1
+    \def\P{
+        $P_\arabic{premises}$ & 
+        \stepcounter{premises}
+    }
+    \def\S{\hline $S$ &}
+    \def\K{\hline $K$ &}
+    % begin of the actual environment
+    \flushleft
+    \tabularx{0.8\textwidth}{cX}
+}
+{
+    \endtabularx
+}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{\mathbb{1}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%----- homework number
+\newcommand{\hw}{4}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Logik und Argumentationslehre}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    Zwischenargument 1: gültig
+    \begin{argument}
+        \P Wenn ich zweifle, dann muss ich anerkennen, dass ich existiere.\\
+        \P Folge ich der skeptischen Methode, dann zweifle ich stets.\\
+        \S KS($P_1, P_2$).\\
+        \K Folge ich der skeptischen Methode, dann muss ich stets anerkennen, dass ich selbst existiere.
+    \end{argument}\vspace{3mm}\\
+\end{task}
+\end{document}
