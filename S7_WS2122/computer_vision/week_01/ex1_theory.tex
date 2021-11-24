@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{color}
+\usepackage{scalerel}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[L]{Name: Maurice Wenig}
+\fancyhead[R]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+\newcommand{\skal}[2]{\left\langle #1 | #2 \right\rangle}
+\newcommand{\expected}[1]{\mathbb{E}\set{#1}}
+\newcommand{\variance}[1]{\text{Var}\set{#1}}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{\mathbb{1}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+%----- homework number
+\newcommand{\hw}{1}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+\Large{Rechnersehen Theorieaufgaben}\\
+\large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    Physik oder so? Fuck man \ndy
+\end{task}
+
+\begin{task}
+    $$\expected{\overline{g}(x, y)} = \expected{\frac{1}{K}\sum\limits_{i=1}^K f(x, y) + \eta_i(x, y)} = \expected{f(x, y)} + \frac{1}{K} \sum\limits_{i=1}^K \underbrace{\expected{\eta_i(x, y)}}_0 = f(x, y) \qed$$
+    Da $\eta_i(x, y)$ für $i = 1,\dots,K$ paarweise unkorreliert sind, gilt:
+    $$\sigma^2_{\overline{g}(x,y)} = \variance{\overline{g}(x,y) - \expected{\overline{g}(x,y)}} = \variance{\frac{1}{K} \sum\limits_{i=1}^K \eta_i(x, y)} = \frac{1}{K^2} \sum\limits_{i=1}^K \underbrace{\variance{\eta_i(x, y)}}_{\sigma^2_{\eta(x, y)}} = \frac{1}{K} \sigma^2_{\eta(x, y)} \qed$$
+\end{task}
+
+\begin{task}
+    $$\underbrace{\zeta (0 + 0, 1 + 5, 2 + 0)}_2 \neq \underbrace{\zeta (0, 1, 2)}_1 + \underbrace{\zeta (0, 5, 0)}_5 \qed$$
+\end{task}
+
+\begin{task}
+    Gegeben sei das Bild $f$, dann sieht die gewünschte Transformation $T$ wie folgt aus:
+    $$T(f) = (L - 1)\cdot \frac{f - b}{a - b}$$
+\end{task}
+\end{document}
