@@ -86,9 +86,14 @@
                                          & \quad + \mu \INT\INT g(x,y)e^{-i2\pi(ux + vy)}\, dxdy                \\
                                          & = \lambda \fourier(f)(u,v) + \mu \fourier(g)(u,v) \qed
     \end{align*}
+    \begin{align*}
+        \fourier^{-1}(\lambda f + \mu g)(u,v) & = \INT\INT (\lambda f(x, y) + \mu g(x, y))e^{i2\pi(ux + vy)}\, dxdy \\
+                                         & = \lambda \INT\INT f(x,y)e^{i2\pi(ux + vy)}\, dxdy                  \\
+                                         & \quad + \mu \INT\INT g(x,y)e^{i2\pi(ux + vy)}\, dxdy                \\
+                                         & = \lambda \fourier^{-1}(f)(u,v) + \mu \fourier^{-1}(g)(u,v) \qed
+    \end{align*}
 \end{task}
 
-\newpage
 \begin{task}
     \begin{gather*}
         A_{\text{avg}}(x) = \frac{1}{n} \text{box}(\frac{x}{n})\\
