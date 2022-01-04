@@ -61,8 +61,7 @@
             $$g(x, y) = f(x, y) \cdot (-1)^{x + y}$$
         }
         \fourier(g)(u, v) & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot (-1)^{x + y} e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N}\right)}              \\
-                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot e^(i\pi(x + y)) \cdot e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N}\right)}     \\
-                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N}\right) + i\pi(x + y)}                   \\
+                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot e^{i\pi(x + y)} \cdot e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N}\right)}     \\
                           & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N} - \frac{x + y}{2}\right)}               \\
                           & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-i2\pi\left(\frac{(u - \frac{M}{2})x}{M} + \frac{(v - \frac{N}{2})y}{N}\right)} \\
                           & = \fourier(f)(u - \frac{M}{2}, v - \frac{N}{2})\qed
