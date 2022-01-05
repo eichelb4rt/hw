@@ -60,10 +60,10 @@
         \shortintertext{
             $$g(x, y) = f(x, y) \cdot (-1)^{x + y}$$
         }
-        \fourier(g)(u, v) & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot (-1)^{x + y} e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N}\right)}              \\
-                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot e^{i\pi(x + y)} \cdot e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N}\right)}     \\
-                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-i2\pi\left(\frac{ux}{M} + \frac{vy}{N} - \frac{x + y}{2}\right)}               \\
-                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-i2\pi\left(\frac{(u - \frac{M}{2})x}{M} + \frac{(v - \frac{N}{2})y}{N}\right)} \\
+        \fourier(g)(u, v) & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot (-1)^{x + y} e^{-2\pi i\left(\frac{ux}{M} + \frac{vy}{N}\right)}              \\
+                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) \cdot e^{i\pi(x + y)} \cdot e^{-2\pi i\left(\frac{ux}{M} + \frac{vy}{N}\right)}     \\
+                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-2\pi i\left(\frac{ux}{M} + \frac{vy}{N} - \frac{x + y}{2}\right)}               \\
+                          & = \sum\limits_{x = 1}^{M}\sum\limits_{y = 1}^{N} f(x, y) e^{-2\pi i\left(\frac{(u - \frac{M}{2})x}{M} + \frac{(v - \frac{N}{2})y}{N}\right)} \\
                           & = \fourier(f)(u - \frac{M}{2}, v - \frac{N}{2})\qed
     \end{align*}
 \end{task}
@@ -71,33 +71,33 @@
 \begin{task}
     \begin{align*}
         (f * g) (x) & = \INT g(x') f(x - x')\, dx'                                                                                    \\
-                    & = \INT g(x') \left(\INT \fourier(f)(\omega) e^{i2\pi \omega (x - x')}\, d\omega)\right)\, dx'                   \\
-                    & = \INT g(x') \left(\INT \fourier(f)(\omega) e^{i2\pi \omega x}\cdot e^{-i2\pi \omega x}\, d\omega)\right)\, dx' \\
-                    & = \INT \fourier(f)(\omega) e^{i2\pi \omega x} \left(\INT g(x') e^{-i2\pi \omega x}\, dx')\right)\, d\omega\\
-                    & = \INT \fourier(f)(\omega)\fourier(g)(\omega) e^{i2\pi \omega x}\, d\omega\\
+                    & = \INT g(x') \left(\INT \fourier(f)(\omega) e^{2\pi i \omega (x - x')}\, d\omega)\right)\, dx'                   \\
+                    & = \INT g(x') \left(\INT \fourier(f)(\omega) e^{2\pi i \omega x}\cdot e^{-2\pi i \omega x}\, d\omega)\right)\, dx' \\
+                    & = \INT \fourier(f)(\omega) e^{2\pi i \omega x} \left(\INT g(x') e^{-2\pi i \omega x}\, dx')\right)\, d\omega\\
+                    & = \INT \fourier(f)(\omega)\fourier(g)(\omega) e^{2\pi i \omega x}\, d\omega\\
                     & = \fourier^{-1}(\fourier(F)\fourier(g))(x)\qed
     \end{align*}
 \end{task}
 
 \begin{task}
     \begin{align*}
-        \fourier(\lambda f + \mu g)(u,v) & = \INT\INT (\lambda f(x, y) + \mu g(x, y))e^{-i2\pi(ux + vy)}\, dxdy \\
-                                         & = \lambda \INT\INT f(x,y)e^{-i2\pi(ux + vy)}\, dxdy                  \\
-                                         & \quad + \mu \INT\INT g(x,y)e^{-i2\pi(ux + vy)}\, dxdy                \\
+        \fourier(\lambda f + \mu g)(u,v) & = \INT\INT (\lambda f(x, y) + \mu g(x, y))e^{-2\pi i(ux + vy)}\, dxdy \\
+                                         & = \lambda \INT\INT f(x,y)e^{-2\pi i(ux + vy)}\, dxdy                  \\
+                                         & \quad + \mu \INT\INT g(x,y)e^{-2\pi i(ux + vy)}\, dxdy                \\
                                          & = \lambda \fourier(f)(u,v) + \mu \fourier(g)(u,v) \qed
     \end{align*}
     \begin{align*}
-        \fourier^{-1}(\lambda f + \mu g)(u,v) & = \INT\INT (\lambda f(x, y) + \mu g(x, y))e^{i2\pi(ux + vy)}\, dxdy \\
-                                         & = \lambda \INT\INT f(x,y)e^{i2\pi(ux + vy)}\, dxdy                  \\
-                                         & \quad + \mu \INT\INT g(x,y)e^{i2\pi(ux + vy)}\, dxdy                \\
+        \fourier^{-1}(\lambda f + \mu g)(u,v) & = \INT\INT (\lambda f(x, y) + \mu g(x, y))e^{2\pi i(ux + vy)}\, dxdy \\
+                                         & = \lambda \INT\INT f(x,y)e^{2\pi i(ux + vy)}\, dxdy                  \\
+                                         & \quad + \mu \INT\INT g(x,y)e^{2\pi i(ux + vy)}\, dxdy                \\
                                          & = \lambda \fourier^{-1}(f)(u,v) + \mu \fourier^{-1}(g)(u,v) \qed
     \end{align*}
 \end{task}
 
 \begin{task}
     \begin{gather*}
-        A_{\text{avg}}(x) = \frac{1}{n} \text{box}(\frac{x}{n})\\
-        \fourier(A_{\text{avg}})(\omega) = \frac{1}{n}\fourier(\text{box}(\frac{x}{n})) = \text{sinc}(n\omega)
+        A_{\text{avg}}(x) = \frac{1}{n} \text{box}\left(\frac{x}{n}\right)\\
+        \fourier(A_{\text{avg}})(\omega) = \frac{1}{n}\fourier\left(\text{box}\left(\frac{x}{n}\right)\right) = \text{sinc}(n\omega)
     \end{gather*}
     Die $\text{sinc}$-Funktion wird mit steigender Frequenz immer geringer. Hohe Frequenzen (Kanten) werden also gestaucht, wodurch es zu einer Glättung des Bildes kommt.
 \end{task}
