@@ -100,8 +100,13 @@ int main(int argc, char** argv) {
 	MPI_Request* array_of_requests_ns = (MPI_Request*) malloc(n_requests_ns * sizeof(MPI_Request));
 	MPI_Status* array_of_status_ew = (MPI_Status*) malloc(n_requests_ew * sizeof(MPI_Status));
 	MPI_Status* array_of_status_ns = (MPI_Status*) malloc(n_requests_ns * sizeof(MPI_Status));
+
+	// define where communication is written from and to
+	int send_indices[N_NEIGHBOURS];
+	int recv_indices[N_DIMENSIONS];
+	set_comm_indices(send_indices, recv_indices, chunk_dimensions, g);
 	// request index that's dynamically adapted by the comm calls
-	int current_request_index = 0;
+	int current_request = 0;
 
 	// DEBUG
 	int coords[N_DIMENSIONS];
@@ -122,19 +127,19 @@ int main(int argc, char** argv) {
 		// only communicate every g iterations
 		if (i % g == 0) {
 			// communication between east and west
-			current_request_index = 0;
-			recv_east(neighbours[EAST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
-			recv_west(neighbours[WEST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
-			send_east(neighbours[EAST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
-			send_west(neighbours[WEST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
+			current_request = 0;
+			recv_ghosts(neighbours[EAST], l_chunk, recv_indices[EAST], vertical_border_t, array_of_requests_ew, &current_request);
+			recv_ghosts(neighbours[WEST], l_chunk, recv_indices[WEST], vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(neighbours[EAST], l_chunk, send_indices[EAST], vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(neighbours[WEST], l_chunk, send_indices[WEST], vertical_border_t, array_of_requests_ew, &current_request);
 			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
-			printf("rank %d still here, iteration %d, request index: %d\n", rank, i, current_request_index);
+			printf("rank %d still here, iteration %d, request index: %d\n", rank, i, current_request);
 			// communication between north and south
-			current_request_index = 0;
-			recv_north(neighbours[NORTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
-			recv_south(neighbours[SOUTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
-			send_north(neighbours[NORTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
-			send_south(neighbours[SOUTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
+			current_request = 0;
+			recv_ghosts(neighbours[NORTH], l_chunk, recv_indices[NORTH], horizontal_border_t, array_of_requests_ns, &current_request);
+			recv_ghosts(neighbours[SOUTH], l_chunk, recv_indices[SOUTH], horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(neighbours[NORTH], l_chunk, send_indices[NORTH], horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(neighbours[SOUTH], l_chunk, send_indices[SOUTH], horizontal_border_t, array_of_requests_ns, &current_request);
 			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
 		}
