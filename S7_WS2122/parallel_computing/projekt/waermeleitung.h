@@ -29,20 +29,21 @@
 
 // rank for printing and stuff
 #define MAIN_RANK 0
+#define UNDEFINED_RANK -1
 
 // coords [x, y] -> rank
 int get_rank(int* coords, int* n_processes) {
-    if (coords[X_AXIS] < 0) return -1;
-    if (coords[Y_AXIS] < 0) return -1;
-    if (coords[X_AXIS] >= n_processes[X_AXIS]) return -1;
-    if (coords[Y_AXIS] >= n_processes[Y_AXIS]) return -1;
-    return n_processes[X_AXIS] * coords[Y_AXIS] + coords[X_AXIS];
+    if (coords[X_AXIS] < 0) return UNDEFINED_RANK;
+    if (coords[Y_AXIS] < 0) return UNDEFINED_RANK;
+    if (coords[X_AXIS] >= n_processes[X_AXIS]) return UNDEFINED_RANK;
+    if (coords[Y_AXIS] >= n_processes[Y_AXIS]) return UNDEFINED_RANK;
+    return coords[Y_AXIS] * n_processes[X_AXIS] + coords[X_AXIS];
 }
 
 // rank -> coords [x, y]
 void get_coords(int rank, int* n_processes, int* coords) {
     coords[X_AXIS] = rank % n_processes[X_AXIS];
-    coords[Y_AXIS] = rank / n_processes[Y_AXIS];
+    coords[Y_AXIS] = rank / n_processes[X_AXIS];
 }
 
 void swap(double* pointer_0, double* pointer_1) {

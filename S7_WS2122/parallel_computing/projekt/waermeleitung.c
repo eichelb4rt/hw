@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
 	int n_printed_iterations = 5;
 	int printed_iterations[5] = { 0, 3, 5, 7, 10 };
 
-	//TODO: Übergabeparameter für [size iter g filename] einlesen
 	int num, rank;
 	MPI_Comm_size(MPI_COMM_WORLD, &num);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -70,9 +69,9 @@ int main(int argc, char** argv) {
 	MPI_Type_commit(&chunk_in_global_array_t);
 
 	// local chunk with ghost blocks
-	int* l_chunk = (double*) malloc((chunk_dimensions[X_AXIS] + 2 * g) * (chunk_dimensions[Y_AXIS] + 2 * g) * sizeof(double));
+	double* l_chunk = (double*) malloc((chunk_dimensions[X_AXIS] + 2 * g) * (chunk_dimensions[Y_AXIS] + 2 * g) * sizeof(double));
 	// buffer for local chunk
-	int* l_chunk_buf = (double*) malloc((chunk_dimensions[X_AXIS] + 2 * g) * (chunk_dimensions[Y_AXIS] + 2 * g) * sizeof(double));
+	double* l_chunk_buf = (double*) malloc((chunk_dimensions[X_AXIS] + 2 * g) * (chunk_dimensions[Y_AXIS] + 2 * g) * sizeof(double));
 	// fill the local chunk
 	fill_local_chunk(rank, n_processes, l_chunk, chunk_dimensions, u1, size, g);
 
@@ -87,25 +86,27 @@ int main(int argc, char** argv) {
 	int print_last_iteration = 0;
 	for (int i = 0; i < n_printed_iterations; ++i) {
 		int printed_iteration = printed_iterations[i];
-		if (printed_iteration < 0 || printed_iteration > iter) {
-			// bad bla bla
-		} else if (printed_iteration == iter) {
-			print_last_iteration = 1;
-		} else {
-			is_printed[printed_iteration] = 1;
+		// ignore printed iterations that are not among the actual iterations
+		if (printed_iteration < 0 || printed_iteration >= iter) {
+			continue;
 		}
+		is_printed[printed_iteration] = 1;
 	}
 
 	// we divide all the requests into requests between east and west, and requests between north and south (because we want to send the corners correctly)
-	int n_requests_ew = 4;
-	int n_requests_ns = 4;
+	int n_requests_ew = (neighbours[EAST] != UNDEFINED_RANK) + (neighbours[WEST] != UNDEFINED_RANK);
+	int n_requests_ns = (neighbours[NORTH] != UNDEFINED_RANK) + (neighbours[SOUTH] != UNDEFINED_RANK);
 	MPI_Request* array_of_requests_ew = (MPI_Request*) malloc(n_requests_ew * sizeof(MPI_Request));
 	MPI_Request* array_of_requests_ns = (MPI_Request*) malloc(n_requests_ns * sizeof(MPI_Request));
-	// init array of requests (so that we don't wait for neighbours that don't exist)
-	for (int i = 0; i < n_requests_ns; ++i) {
-		array_of_requests_ew[i] = MPI_REQUEST_NULL;
-		array_of_requests_ns[i] = MPI_REQUEST_NULL;
-	}
+	MPI_Status* array_of_status_ew = (MPI_Status*) malloc(n_requests_ew * sizeof(MPI_Status));
+	MPI_Status* array_of_status_ns = (MPI_Status*) malloc(n_requests_ns * sizeof(MPI_Status));
+	// request index that's dynamically adapted by the comm calls
+	int current_request_index = 0;
+
+	// DEBUG
+	int coords[N_DIMENSIONS];
+	get_coords(rank, n_processes, coords);
+	printf("rank %d here, coords: %d,%d, EAST: %d, WEST: %d, NORTH: %d, SOUTH: %d\n", rank, coords[X_AXIS], coords[Y_AXIS], neighbours[EAST], neighbours[WEST], neighbours[NORTH], neighbours[SOUTH]);
 
 	// border that narrows with the number of iterations that we have not communicated
 	int border;
@@ -114,21 +115,28 @@ int main(int argc, char** argv) {
 	// main loop
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
+		if (is_printed[i]) {
+			collect(u1, l_chunk, n_processes, chunk_inner_values_t, chunk_in_global_array_t);
+			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
+		}
 		// only communicate every g iterations
 		if (i % g == 0) {
 			// communication between east and west
-			recv_east(neighbours[EAST], l_chunk, chunk_dimensions, g, vertical_border_t, &array_of_requests_ew[0]);
-			recv_west(neighbours[WEST], l_chunk, chunk_dimensions, g, vertical_border_t, &array_of_requests_ew[1]);
-			send_east(neighbours[EAST], l_chunk, chunk_dimensions, g, vertical_border_t, &array_of_requests_ew[n_requests_ew + 0]);
-			send_west(neighbours[WEST], l_chunk, chunk_dimensions, g, vertical_border_t, &array_of_requests_ew[n_requests_ew + 1]);
-			MPI_Waitall(n_requests_ew, array_of_requests_ew, MPI_STATUS_IGNORE);
+			current_request_index = 0;
+			recv_east(neighbours[EAST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
+			recv_west(neighbours[WEST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
+			send_east(neighbours[EAST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
+			send_west(neighbours[WEST], l_chunk, chunk_dimensions, g, vertical_border_t, array_of_requests_ew, &current_request_index);
+			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
+			printf("rank %d still here, iteration %d, request index: %d\n", rank, i, current_request_index);
 			// communication between north and south
-			recv_north(neighbours[NORTH], l_chunk, chunk_dimensions, g, horizontal_border_t, &array_of_requests_ns[0]);
-			recv_south(neighbours[SOUTH], l_chunk, chunk_dimensions, g, horizontal_border_t, &array_of_requests_ns[1]);
-			send_north(neighbours[NORTH], l_chunk, chunk_dimensions, g, horizontal_border_t, &array_of_requests_ns[n_requests_ns + 0]);
-			send_south(neighbours[SOUTH], l_chunk, chunk_dimensions, g, horizontal_border_t, &array_of_requests_ns[n_requests_ns + 1]);
+			current_request_index = 0;
+			recv_north(neighbours[NORTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
+			recv_south(neighbours[SOUTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
+			send_north(neighbours[NORTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
+			send_south(neighbours[SOUTH], l_chunk, chunk_dimensions, g, horizontal_border_t, array_of_requests_ns, &current_request_index);
 			// TODO: does status ignore work like that?
-			MPI_Waitall(n_requests_ns, array_of_requests_ns, MPI_STATUS_IGNORE);
+			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
 		}
 
 		// narrow the border
@@ -143,8 +151,10 @@ int main(int argc, char** argv) {
 	}
 
 
+	// collect last state
+	collect(u1, l_chunk, n_processes, chunk_inner_values_t, chunk_in_global_array_t);
 	//Output last state into file
-	printResult(u1, size, filename, iter);
+	if (rank == MAIN_RANK) printResult(u1, size, filename, iter);
 	MPI_Finalize();
 	return 0;
 }

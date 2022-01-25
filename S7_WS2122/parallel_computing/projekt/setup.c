@@ -20,7 +20,7 @@ void init(double* t, int size) {
 void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* n_ghost_blocks, int* n_processes, char* output_filename, int* finalize) {
     *finalize = 0;
     if (argc < 6) {
-        if (!rank)
+        if (rank == MAIN_RANK)
             printf("usage: stencil_mpi <field_size> <iterations> <ghost_blocks> <px> <py> <out_file>\n");
         (*finalize) = 1;
         return;
@@ -33,7 +33,7 @@ void setup(int rank, int num, int argc, char** argv, int* field_length, int* ite
     (*n_ghost_blocks) = atoi(argv[3]); /* number of iterations */
     n_processes[X_AXIS] = atoi(argv[4]);     /* 1st dim processes */
     n_processes[Y_AXIS] = atoi(argv[5]);     /* 2nd dim processes */
-    (*output_filename) = argv[6];
+    output_filename = argv[6];
 
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
         MPI_Abort(MPI_COMM_WORLD, 1);  /* abort if px or py are wrong */
@@ -72,7 +72,7 @@ void split_up_domain(int rank, int size, int* n_processes, int* dimensions, int*
     neighbours[SOUTH] = get_rank(coords_neighbours[SOUTH], n_processes);
 }
 
-void fill_local_chunk(int rank, int* n_processes, int* l_chunk, int* chunk_dimensions, int* global_field, int size, int g) {
+void fill_local_chunk(int rank, int* n_processes, double* l_chunk, int* chunk_dimensions, double* global_field, int size, int g) {
     // distribute the workload
     int coords[N_DIMENSIONS];
     get_coords(rank, n_processes, coords);
