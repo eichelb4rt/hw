@@ -128,18 +128,18 @@ int main(int argc, char** argv) {
 		if (i % g == 0) {
 			// communication between east and west
 			current_request = 0;
-			recv_ghosts(neighbours[EAST], l_chunk, recv_indices[EAST], vertical_border_t, array_of_requests_ew, &current_request);
-			recv_ghosts(neighbours[WEST], l_chunk, recv_indices[WEST], vertical_border_t, array_of_requests_ew, &current_request);
-			send_ghosts(neighbours[EAST], l_chunk, send_indices[EAST], vertical_border_t, array_of_requests_ew, &current_request);
-			send_ghosts(neighbours[WEST], l_chunk, send_indices[WEST], vertical_border_t, array_of_requests_ew, &current_request);
+			recv_ghosts(EAST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			recv_ghosts(WEST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(EAST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(WEST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
 			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
 			printf("rank %d still here, iteration %d, request index: %d\n", rank, i, current_request);
 			// communication between north and south
 			current_request = 0;
-			recv_ghosts(neighbours[NORTH], l_chunk, recv_indices[NORTH], horizontal_border_t, array_of_requests_ns, &current_request);
-			recv_ghosts(neighbours[SOUTH], l_chunk, recv_indices[SOUTH], horizontal_border_t, array_of_requests_ns, &current_request);
-			send_ghosts(neighbours[NORTH], l_chunk, send_indices[NORTH], horizontal_border_t, array_of_requests_ns, &current_request);
-			send_ghosts(neighbours[SOUTH], l_chunk, send_indices[SOUTH], horizontal_border_t, array_of_requests_ns, &current_request);
+			recv_ghosts(NORTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			recv_ghosts(SOUTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(NORTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(SOUTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
 			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
 		}
