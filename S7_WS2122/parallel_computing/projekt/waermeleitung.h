@@ -12,8 +12,8 @@
 #define PADDING_TEMPERATURE 0
 
 // array access
-#define global_index(x,y) y * size + x
-#define chunk_index(x,y) y * (chunk_dimensions[X_AXIS] + 2 * g) + x
+#define global_index(x,y) (y) * size + (x)
+#define chunk_index(x,y) (y) * (chunk_dimensions[X_AXIS] + 2 * g) + (x)
 
 // neighbours
 #define N_NEIGHBOURS 4

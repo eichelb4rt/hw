@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	int n_processes[N_DIMENSIONS];
 	int finalize;
-	setup(rank, num, argc, argv, &size, &iter, &g, n_processes, filename, &finalize);
+	setup(rank, num, argc, argv, &size, &iter, &g, n_processes, &filename, &finalize);
 	if (finalize == 1) {
 		MPI_Finalize();
 		exit(0);
@@ -84,20 +84,7 @@ int main(int argc, char** argv) {
 
 	// iteration i is printed <=> is_printed[i] == 1
 	int* is_printed = (int*) malloc(iter * sizeof(int));
-	// init is_printed with 0
-	for (int i = 0; i < iter; ++i) {
-		is_printed[i] = 0;
-	}
-	// fill is_printed with 1s for every iteration that is printed
-	int print_last_iteration = 0;
-	for (int i = 0; i < n_printed_iterations; ++i) {
-		int printed_iteration = printed_iterations[i];
-		// ignore printed iterations that are not among the actual iterations
-		if (printed_iteration < 0 || printed_iteration >= iter) {
-			continue;
-		}
-		is_printed[printed_iteration] = 1;
-	}
+	get_printed_iterations(iter, n_printed_iterations, printed_iterations, is_printed);
 
 	// we divide all the requests into requests between east and west, and requests between north and south (because we want to send the corners correctly)
 	int n_requests_ew = (neighbours[EAST] != UNDEFINED_RANK) + (neighbours[WEST] != UNDEFINED_RANK);
@@ -122,8 +109,13 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
 		if (is_printed[i]) {
-			collect(u1, l_chunk, n_processes, chunk_inner_values_t, chunk_in_global_array_t);
+			// if (rank == MAIN_RANK) printResult(u1, size, filename, i);
+			collect(rank, u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
+			// DEBUG
+			char each_rank_file_name[64];
+			sprintf(each_rank_file_name, "out/small_output_rank_%d", rank);
+			printResult(l_chunk, chunk_dimensions[X_AXIS] + 2 * g, each_rank_file_name, i);
 		}
 		// only communicate every g iterations
 		if (i % g == 0) {
@@ -157,7 +149,7 @@ int main(int argc, char** argv) {
 
 
 	// collect last state
-	collect(u1, l_chunk, n_processes, chunk_inner_values_t, chunk_in_global_array_t);
+	collect(rank, u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 	//Output last state into file
 	if (rank == MAIN_RANK) printResult(u1, size, filename, iter);
 	MPI_Finalize();

@@ -17,7 +17,7 @@ void init(double* t, int size) {
     }
 }
 
-void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* n_ghost_blocks, int* n_processes, char* output_filename, int* finalize) {
+void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* n_ghost_blocks, int* n_processes, char** output_filename, int* finalize) {
     *finalize = 0;
     if (argc < 6) {
         if (rank == MAIN_RANK)
@@ -33,7 +33,7 @@ void setup(int rank, int num, int argc, char** argv, int* field_length, int* ite
     (*n_ghost_blocks) = atoi(argv[3]); /* number of iterations */
     n_processes[X_AXIS] = atoi(argv[4]);     /* 1st dim processes */
     n_processes[Y_AXIS] = atoi(argv[5]);     /* 2nd dim processes */
-    output_filename = argv[6];
+    *output_filename = argv[6];
 
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
         if (rank == MAIN_RANK)
@@ -98,9 +98,7 @@ void fill_local_chunk(int rank, int* n_processes, double* l_chunk, int* chunk_di
     // initialise inner chunk with respective values in the global field
     for (int y = 0; y < chunk_dimensions[Y_AXIS]; ++y) {
         for (int x = 0; x < chunk_dimensions[X_AXIS]; ++x) {
-            global_x = offset_x + x;
-            global_y = offset_y + y;
-            l_chunk[chunk_index(g + x, g + y)] = global_field[global_index(global_x, global_y)];
+            l_chunk[chunk_index(x + g, y + g)] = global_field[global_index(offset_x + x, offset_y + y)];
         }
     }
 }
@@ -116,4 +114,21 @@ void set_comm_indices(int* send_buffer_start, int* recv_buffer_start, int* chunk
     recv_buffer_start[WEST] = chunk_index(0, g);
     recv_buffer_start[NORTH] = chunk_index(0, 0);
     recv_buffer_start[SOUTH] = chunk_index(0, chunk_dimensions[Y_AXIS] + g);
+}
+
+void get_printed_iterations(int iter, int n_printed_iterations, int* printed_iterations, int* is_printed) {
+    // init is_printed with 0
+    for (int i = 0; i < iter; ++i) {
+        is_printed[i] = 0;
+    }
+    // fill is_printed with 1s for every iteration that is printed
+    int print_last_iteration = 0;
+    for (int i = 0; i < n_printed_iterations; ++i) {
+        int printed_iteration = printed_iterations[i];
+        // ignore printed iterations that are not among the actual iterations
+        if (printed_iteration < 0 || printed_iteration >= iter) {
+            continue;
+        }
+        is_printed[printed_iteration] = 1;
+    }
 }

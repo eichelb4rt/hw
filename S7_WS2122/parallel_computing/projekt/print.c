@@ -40,6 +40,18 @@ void printResult(double* t, int size, char* filename, int iter) {
     fclose(f);
 }
 
-void collect(double* global_grid, double* local_chunk, int* n_processes, MPI_Datatype chunk_inner_values_t, MPI_Datatype chunk_in_global_array_t) {
-    MPI_Gather(local_chunk, 1, chunk_inner_values_t, global_grid, n_processes[X_AXIS] * n_processes[Y_AXIS], chunk_in_global_array_t, MAIN_RANK, MPI_COMM_WORLD);
+void collect(int rank, double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g, MPI_Datatype chunk_inner_values_t, MPI_Datatype chunk_in_global_array_t) {
+    MPI_Gather(&local_chunk[chunk_index(g, g)], 1, chunk_inner_values_t, global_grid, n_processes[X_AXIS] * n_processes[Y_AXIS], chunk_in_global_array_t, MAIN_RANK, MPI_COMM_WORLD);
+    // // root rank somehow messes up the gather i guess, so let's fix it manually
+    // if (rank == MAIN_RANK) {
+    //     int coords[N_DIMENSIONS];
+    //     get_coords(rank, n_processes, coords);
+    //     int offset_x = coords[X_AXIS] * chunk_dimensions[X_AXIS];
+    //     int offset_y = coords[Y_AXIS] * chunk_dimensions[Y_AXIS];
+    //     for (int y = 0; y < chunk_dimensions[Y_AXIS]; ++y) {
+    //         for (int x = 0; x < chunk_dimensions[X_AXIS]; ++x) {
+    //             local_chunk[chunk_index(x + g, y + g)] = global_grid[global_index(offset_x + x, offset_y + y)];
+    //         }
+    //     }
+    // }
 }
