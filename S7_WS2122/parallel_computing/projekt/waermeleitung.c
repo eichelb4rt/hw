@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 
 	// define where communication is written from and to
 	int send_buffer_start[N_NEIGHBOURS];
-	int recv_buffer_start[N_DIMENSIONS];
+	int recv_buffer_start[N_NEIGHBOURS];
 	set_comm_indices(send_buffer_start, recv_buffer_start, chunk_dimensions, g);
 	// request index that's dynamically adapted by the comm calls
 	int current_request = 0;
@@ -109,13 +109,8 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
 		if (is_printed[i]) {
-			// if (rank == MAIN_RANK) printResult(u1, size, filename, i);
 			collect(rank, u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
-			// DEBUG
-			char each_rank_file_name[64];
-			sprintf(each_rank_file_name, "out/small_output_rank_%d", rank);
-			printResult(l_chunk, chunk_dimensions[X_AXIS] + 2 * g, each_rank_file_name, i);
 		}
 		// only communicate every g iterations
 		if (i % g == 0) {
@@ -134,6 +129,10 @@ int main(int argc, char** argv) {
 			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
 			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
+			// DEBUG
+			char each_rank_file_name[64];
+			sprintf(each_rank_file_name, "out/small_output_rank_%d", rank);
+			printResult(l_chunk, chunk_dimensions[X_AXIS] + 2 * g, each_rank_file_name, i);
 		}
 
 		// narrow the border

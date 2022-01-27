@@ -66,9 +66,9 @@ void split_up_domain(int rank, int size, int* n_processes, int* dimensions, int*
     int coords_neighbours[N_NEIGHBOURS][N_DIMENSIONS];
 
     get_coords(rank, n_processes, coords_self);
-    coords_neighbours[EAST][X_AXIS] = coords_self[X_AXIS] - 1;
+    coords_neighbours[EAST][X_AXIS] = coords_self[X_AXIS] + 1;
     coords_neighbours[EAST][Y_AXIS] = coords_self[Y_AXIS];
-    coords_neighbours[WEST][X_AXIS] = coords_self[X_AXIS] + 1;
+    coords_neighbours[WEST][X_AXIS] = coords_self[X_AXIS] - 1;
     coords_neighbours[WEST][Y_AXIS] = coords_self[Y_AXIS];
     coords_neighbours[NORTH][X_AXIS] = coords_self[X_AXIS];
     coords_neighbours[NORTH][Y_AXIS] = coords_self[Y_AXIS] - 1;
@@ -101,19 +101,6 @@ void fill_local_chunk(int rank, int* n_processes, double* l_chunk, int* chunk_di
             l_chunk[chunk_index(x + g, y + g)] = global_field[global_index(offset_x + x, offset_y + y)];
         }
     }
-}
-
-// start indices for ghost block buffers
-void set_comm_indices(int* send_buffer_start, int* recv_buffer_start, int* chunk_dimensions, int g) {
-    send_buffer_start[EAST] = chunk_index(chunk_dimensions[X_AXIS], g);
-    send_buffer_start[WEST] = chunk_index(g, g);
-    send_buffer_start[NORTH] = chunk_index(0, g);
-    send_buffer_start[SOUTH] = chunk_index(0, chunk_dimensions[Y_AXIS]);
-
-    recv_buffer_start[EAST] = chunk_index(chunk_dimensions[X_AXIS] + g, g);
-    recv_buffer_start[WEST] = chunk_index(0, g);
-    recv_buffer_start[NORTH] = chunk_index(0, 0);
-    recv_buffer_start[SOUTH] = chunk_index(0, chunk_dimensions[Y_AXIS] + g);
 }
 
 void get_printed_iterations(int iter, int n_printed_iterations, int* printed_iterations, int* is_printed) {
