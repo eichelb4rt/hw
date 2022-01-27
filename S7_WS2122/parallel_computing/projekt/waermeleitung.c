@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
 	u2 = (double*) malloc(mem);
 	//Initialisiere Speicher
 	init(u1, size);
+	printResult(u1, size, filename, 42);
 
 
 	//TODO: Implementieren Sie ein paralleles Programm, 
@@ -81,8 +82,13 @@ int main(int argc, char** argv) {
 	// rank 0 distributing and collecting?
 	// [x]? make asynchronous
 
-	// printed iterations
-	int* is_printed = (int*) calloc(iter, sizeof(int));
+	// iteration i is printed <=> is_printed[i] == 1
+	int* is_printed = (int*) malloc(iter * sizeof(int));
+	// init is_printed with 0
+	for (int i = 0; i < iter; ++i) {
+		is_printed[i] = 0;
+	}
+	// fill is_printed with 1s for every iteration that is printed
 	int print_last_iteration = 0;
 	for (int i = 0; i < n_printed_iterations; ++i) {
 		int printed_iteration = printed_iterations[i];
@@ -102,16 +108,11 @@ int main(int argc, char** argv) {
 	MPI_Status* array_of_status_ns = (MPI_Status*) malloc(n_requests_ns * sizeof(MPI_Status));
 
 	// define where communication is written from and to
-	int send_indices[N_NEIGHBOURS];
-	int recv_indices[N_DIMENSIONS];
-	set_comm_indices(send_indices, recv_indices, chunk_dimensions, g);
+	int send_buffer_start[N_NEIGHBOURS];
+	int recv_buffer_start[N_DIMENSIONS];
+	set_comm_indices(send_buffer_start, recv_buffer_start, chunk_dimensions, g);
 	// request index that's dynamically adapted by the comm calls
 	int current_request = 0;
-
-	// DEBUG
-	int coords[N_DIMENSIONS];
-	get_coords(rank, n_processes, coords);
-	printf("rank %d here, coords: %d,%d, EAST: %d, WEST: %d, NORTH: %d, SOUTH: %d\n", rank, coords[X_AXIS], coords[Y_AXIS], neighbours[EAST], neighbours[WEST], neighbours[NORTH], neighbours[SOUTH]);
 
 	// border that narrows with the number of iterations that we have not communicated
 	int border;
@@ -128,18 +129,17 @@ int main(int argc, char** argv) {
 		if (i % g == 0) {
 			// communication between east and west
 			current_request = 0;
-			recv_ghosts(EAST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
-			recv_ghosts(WEST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
-			send_ghosts(EAST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
-			send_ghosts(WEST, neighbours, recv_indices, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			recv_ghosts(WEST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(EAST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(WEST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
 			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
-			printf("rank %d still here, iteration %d, request index: %d\n", rank, i, current_request);
 			// communication between north and south
 			current_request = 0;
-			recv_ghosts(NORTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
-			recv_ghosts(SOUTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
-			send_ghosts(NORTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
-			send_ghosts(SOUTH, neighbours, recv_indices, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			recv_ghosts(NORTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
 			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
 		}

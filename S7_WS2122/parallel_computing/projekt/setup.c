@@ -36,14 +36,23 @@ void setup(int rank, int num, int argc, char** argv, int* field_length, int* ite
     output_filename = argv[6];
 
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
-        MPI_Abort(MPI_COMM_WORLD, 1);  /* abort if px or py are wrong */
+        if (rank == MAIN_RANK)
+            printf("Process dimensions (%d x %d) do not match number of processes (%d).\n", n_processes[X_AXIS], n_processes[Y_AXIS], num);
+        (*finalize) = 1;
+        return;
     }
     int rect_field_size = (*field_length) * (*field_length);
     if (rect_field_size % n_processes[X_AXIS] != 0) {
-        MPI_Abort(MPI_COMM_WORLD, 2);  /* abort px needs to divide n */
+        if (rank == MAIN_RANK)
+            printf("Number of processes in x dimension (%d) does not work with field length (%d).\n", n_processes[X_AXIS], *field_length);
+        (*finalize) = 1;
+        return;
     }
     if (rect_field_size % n_processes[Y_AXIS] != 0) {
-        MPI_Abort(MPI_COMM_WORLD, 3);  /* abort py needs to divide n */
+        if (rank == MAIN_RANK)
+            printf("Number of processes in y dimension (%d) does not work with field length (%d).\n", n_processes[Y_AXIS], *field_length);
+        (*finalize) = 1;
+        return;
     }
 }
 
@@ -94,4 +103,17 @@ void fill_local_chunk(int rank, int* n_processes, double* l_chunk, int* chunk_di
             l_chunk[chunk_index(g + x, g + y)] = global_field[global_index(global_x, global_y)];
         }
     }
+}
+
+// start indices for ghost block buffers
+void set_comm_indices(int* send_buffer_start, int* recv_buffer_start, int* chunk_dimensions, int g) {
+    send_buffer_start[EAST] = chunk_index(chunk_dimensions[X_AXIS], g);
+    send_buffer_start[WEST] = chunk_index(g, g);
+    send_buffer_start[NORTH] = chunk_index(0, g);
+    send_buffer_start[SOUTH] = chunk_index(0, chunk_dimensions[Y_AXIS]);
+
+    recv_buffer_start[EAST] = chunk_index(chunk_dimensions[X_AXIS] + g, g);
+    recv_buffer_start[WEST] = chunk_index(0, g);
+    recv_buffer_start[NORTH] = chunk_index(0, 0);
+    recv_buffer_start[SOUTH] = chunk_index(0, chunk_dimensions[Y_AXIS] + g);
 }
