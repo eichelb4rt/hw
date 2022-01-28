@@ -11,16 +11,12 @@
 #define PARAM_T 0.25
 #define PADDING_TEMPERATURE 0
 
+// special command-line-parameter values
+#define DONT_PRINT 0
+
 // array access
 #define global_index(x,y) (y) * size + (x)
 #define chunk_index(x,y) (y) * (chunk_dimensions[X_AXIS] + 2 * g) + (x)
-
-// neighbours
-#define N_NEIGHBOURS 4
-#define EAST 0
-#define WEST 1
-#define NORTH 2
-#define SOUTH 3
 
 // our problem is 2-dimensional
 #define N_DIMENSIONS 2
@@ -30,6 +26,25 @@
 // rank for printing and stuff
 #define MAIN_RANK 0
 #define UNDEFINED_RANK -1
+
+// neighbours
+#define N_NEIGHBOURS 4
+#define EAST 0
+#define WEST 1
+#define NORTH 2
+#define SOUTH 3
+
+// which directions are the directions actually?
+int diff_directions[N_NEIGHBOURS][N_DIMENSIONS] = {
+    // EAST (X,Y)
+    { 1, 0 },
+    // WEST (X,Y)
+    { -1, 0 },
+    // NORTH (X,Y)
+    { 0, -1 },
+    // SOUTH (X,Y)
+    { 0, 1 },
+};
 
 // coords [x, y] -> rank
 int get_rank(int* coords, int* n_processes) {
@@ -47,9 +62,9 @@ void get_coords(int rank, int* n_processes, int* coords) {
 }
 
 void swap(double** pointer_0, double** pointer_1) {
-	double* temp = *pointer_0;
-	*pointer_0 = *pointer_1;
-	*pointer_1 = temp;
+    double* temp = *pointer_0;
+    *pointer_0 = *pointer_1;
+    *pointer_1 = temp;
 }
 
 #endif // WAERMELEITUNG_H_

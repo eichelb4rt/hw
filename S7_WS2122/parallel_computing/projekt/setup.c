@@ -17,23 +17,25 @@ void init(double* t, int size) {
     }
 }
 
-void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* n_ghost_blocks, int* n_processes, char** output_filename, int* finalize) {
+void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* print_distance, int* n_ghost_blocks, int* n_processes, char** output_filename, int* finalize) {
     *finalize = 0;
     if (argc < 6) {
         if (rank == MAIN_RANK)
-            printf("usage: stencil_mpi <field_size> <iterations> <ghost_blocks> <px> <py> <out_file>\n");
+            printf("usage: stencil_mpi <field_size> <iterations> <print_distance> <ghost_blocks> <px> <py> <out_file>\n");
         (*finalize) = 1;
         return;
     }
 
     // read paramaters
     // TODO: better UI?
-    (*field_length) = atoi(argv[1]);      /* nxn grid */
-    (*iterations) = atoi(argv[2]);
-    (*n_ghost_blocks) = atoi(argv[3]); /* number of iterations */
-    n_processes[X_AXIS] = atoi(argv[4]);     /* 1st dim processes */
-    n_processes[Y_AXIS] = atoi(argv[5]);     /* 2nd dim processes */
-    *output_filename = argv[6];
+    int arg_counter = 1;
+    (*field_length) = atoi(argv[arg_counter++]);      /* nxn grid */
+    (*iterations) = atoi(argv[arg_counter++]);
+    (*print_distance) = atoi(argv[arg_counter++]);
+    (*n_ghost_blocks) = atoi(argv[arg_counter++]); /* number of iterations */
+    n_processes[X_AXIS] = atoi(argv[arg_counter++]);     /* 1st dim processes */
+    n_processes[Y_AXIS] = atoi(argv[arg_counter++]);     /* 2nd dim processes */
+    *output_filename = argv[arg_counter++];
 
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
         if (rank == MAIN_RANK)
@@ -66,19 +68,11 @@ void split_up_domain(int rank, int size, int* n_processes, int* dimensions, int*
     int coords_neighbours[N_NEIGHBOURS][N_DIMENSIONS];
 
     get_coords(rank, n_processes, coords_self);
-    coords_neighbours[EAST][X_AXIS] = coords_self[X_AXIS] + 1;
-    coords_neighbours[EAST][Y_AXIS] = coords_self[Y_AXIS];
-    coords_neighbours[WEST][X_AXIS] = coords_self[X_AXIS] - 1;
-    coords_neighbours[WEST][Y_AXIS] = coords_self[Y_AXIS];
-    coords_neighbours[NORTH][X_AXIS] = coords_self[X_AXIS];
-    coords_neighbours[NORTH][Y_AXIS] = coords_self[Y_AXIS] - 1;
-    coords_neighbours[SOUTH][X_AXIS] = coords_self[X_AXIS];
-    coords_neighbours[SOUTH][Y_AXIS] = coords_self[Y_AXIS] + 1;
-
-    neighbours[EAST] = get_rank(coords_neighbours[EAST], n_processes);
-    neighbours[WEST] = get_rank(coords_neighbours[WEST], n_processes);
-    neighbours[NORTH] = get_rank(coords_neighbours[NORTH], n_processes);
-    neighbours[SOUTH] = get_rank(coords_neighbours[SOUTH], n_processes);
+    for (int direction = 0; direction < N_NEIGHBOURS; ++direction) {
+        coords_neighbours[direction][X_AXIS] = coords_self[X_AXIS] + diff_directions[direction][X_AXIS];
+        coords_neighbours[direction][Y_AXIS] = coords_self[Y_AXIS] + diff_directions[direction][Y_AXIS];
+        neighbours[direction] = get_rank(coords_neighbours[direction], n_processes);
+    }
 }
 
 void fill_local_chunk(int rank, int* n_processes, double* l_chunk, int* chunk_dimensions, double* global_field, int size, int g) {

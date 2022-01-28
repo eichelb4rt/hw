@@ -14,15 +14,14 @@ int main(int argc, char** argv) {
 	//Ausgabedatei
 	char* filename = "output";
 	// printed iterations
-	int n_printed_iterations = 5;
-	int printed_iterations[5] = { 0, 3, 5, 7, 10 };
+	int print_distance = 5;
 
 	int num, rank;
 	MPI_Comm_size(MPI_COMM_WORLD, &num);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	int n_processes[N_DIMENSIONS];
 	int finalize;
-	setup(rank, num, argc, argv, &size, &iter, &g, n_processes, &filename, &finalize);
+	setup(rank, num, argc, argv, &size, &iter, &print_distance, &g, n_processes, &filename, &finalize);
 	if (finalize == 1) {
 		MPI_Finalize();
 		exit(0);
@@ -38,8 +37,6 @@ int main(int argc, char** argv) {
 	u2 = (double*) malloc(mem);
 	//Initialisiere Speicher
 	init(u1, size);
-	printResult(u1, size, filename, 42);
-
 
 	//TODO: Implementieren Sie ein paralleles Programm, 
 	//      das die Temperaturen u_k mit einer beliebigen 
@@ -52,13 +49,16 @@ int main(int argc, char** argv) {
 	split_up_domain(rank, size, n_processes, chunk_dimensions, neighbours);
 
 	// make the types for communication
+	int block_stride, block_count, block_length;
 	// exchange all known data across the vertical line, g wide. (stride is the whole horizontal dimension)
 	MPI_Datatype vertical_border_t;
-	MPI_Type_vector(chunk_dimensions[Y_AXIS], g, chunk_dimensions[X_AXIS] + 2 * g, MPI_DOUBLE, &vertical_border_t);
+	get_vector_properties(EAST, chunk_dimensions, g, &block_count, &block_length, &block_stride);
+	MPI_Type_vector(block_count, block_length, block_stride, MPI_DOUBLE, &vertical_border_t);
 	MPI_Type_commit(&vertical_border_t);
 	// exchange all data across the horizontal line, whole horizontal line wide, g blocks. (stride is the whole horizontal dimension)
 	MPI_Datatype horizontal_border_t;
-	MPI_Type_vector(g, chunk_dimensions[X_AXIS] + 2 * g, chunk_dimensions[X_AXIS] + 2 * g, MPI_DOUBLE, &horizontal_border_t);
+	get_vector_properties(NORTH, chunk_dimensions, g, &block_count, &block_length, &block_stride);
+	MPI_Type_vector(block_count, block_length, block_stride, MPI_DOUBLE, &horizontal_border_t);
 	MPI_Type_commit(&horizontal_border_t);
 	// type for all the inner values (non-ghost-blocks)
 	MPI_Datatype chunk_inner_values_t;
@@ -82,10 +82,6 @@ int main(int argc, char** argv) {
 	// rank 0 distributing and collecting?
 	// [x]? make asynchronous
 
-	// iteration i is printed <=> is_printed[i] == 1
-	int* is_printed = (int*) malloc(iter * sizeof(int));
-	get_printed_iterations(iter, n_printed_iterations, printed_iterations, is_printed);
-
 	// we divide all the requests into requests between east and west, and requests between north and south (because we want to send the corners correctly)
 	int n_requests_ew = (neighbours[EAST] != UNDEFINED_RANK) + (neighbours[WEST] != UNDEFINED_RANK);
 	int n_requests_ns = (neighbours[NORTH] != UNDEFINED_RANK) + (neighbours[SOUTH] != UNDEFINED_RANK);
@@ -108,7 +104,7 @@ int main(int argc, char** argv) {
 	// main loop
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
-		if (is_printed[i]) {
+		if (print_distance != DONT_PRINT && i % print_distance == 0) {
 			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
 		}
@@ -116,15 +112,15 @@ int main(int argc, char** argv) {
 		if (i % g == 0) {
 			// communication between east and west
 			current_request = 0;
-			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
-			recv_ghosts(WEST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, chunk_dimensions, g);
+			recv_ghosts(WEST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, chunk_dimensions, g);
 			send_ghosts(EAST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, ((rank * num + i) * N_DIMENSIONS) + EAST);
 			send_ghosts(WEST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, ((rank * num + i) * N_DIMENSIONS) + WEST);
 			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
 			// communication between north and south
 			current_request = 0;
-			recv_ghosts(NORTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
-			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			recv_ghosts(NORTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, chunk_dimensions, g);
+			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, chunk_dimensions, g);
 			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, ((rank * num + i) * N_DIMENSIONS) + NORTH);
 			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, ((rank * num + i) * N_DIMENSIONS) + SOUTH);
 			// TODO: does status ignore work like that?
@@ -142,10 +138,6 @@ int main(int argc, char** argv) {
 		swap(&l_chunk, &l_chunk_buf);
 	}
 
-	// DEBUG
-	char each_rank_file_name[64];
-	sprintf(each_rank_file_name, "out/small_output_rank_%d", rank);
-	printResult(l_chunk, chunk_dimensions[X_AXIS] + 2 * g, each_rank_file_name, 42);
 	// collect last state
 	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 	//Output last state into file
