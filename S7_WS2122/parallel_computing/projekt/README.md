@@ -3,5 +3,5 @@
 ## Beispiel
 
 ```bash
-mpirun ./waermeleitung -np 8 128 100 3 4 2 output
+mpirun -np 4 ./waermeleitung 32 100 3 2 2 out/output
 ```

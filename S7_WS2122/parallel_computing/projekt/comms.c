@@ -13,11 +13,10 @@ void set_comm_indices(int* send_buffer_start, int* recv_buffer_start, int* chunk
     recv_buffer_start[SOUTH] = chunk_index(0, chunk_dimensions[Y_AXIS] + g);
 }
 
-void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int* current_request) {
+void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int* current_request, int tag) {
     if (neighbours[direction] == UNDEFINED_RANK) return;
-    // send from non-ghost-zone-end - g = chunk_width + g - g
-    int TAG = *current_request;
-    MPI_Isend(&grid[send_buffer_start[direction]], 1, border_type, neighbours[direction], TAG,
+    // send from non-ghost-zone-end
+    MPI_Isend(&grid[send_buffer_start[direction]], 1, border_type, neighbours[direction], tag,
         MPI_COMM_WORLD, &array_of_requests[*current_request]);
     // update current index because communication was succesful
     ++(*current_request);

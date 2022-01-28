@@ -40,18 +40,32 @@ void printResult(double* t, int size, char* filename, int iter) {
     fclose(f);
 }
 
-void collect(int rank, double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g, MPI_Datatype chunk_inner_values_t, MPI_Datatype chunk_in_global_array_t) {
-    MPI_Gather(&local_chunk[chunk_index(g, g)], 1, chunk_inner_values_t, global_grid, n_processes[X_AXIS] * n_processes[Y_AXIS], chunk_in_global_array_t, MAIN_RANK, MPI_COMM_WORLD);
-    // // root rank somehow messes up the gather i guess, so let's fix it manually
-    // if (rank == MAIN_RANK) {
-    //     int coords[N_DIMENSIONS];
-    //     get_coords(rank, n_processes, coords);
-    //     int offset_x = coords[X_AXIS] * chunk_dimensions[X_AXIS];
-    //     int offset_y = coords[Y_AXIS] * chunk_dimensions[Y_AXIS];
-    //     for (int y = 0; y < chunk_dimensions[Y_AXIS]; ++y) {
-    //         for (int x = 0; x < chunk_dimensions[X_AXIS]; ++x) {
-    //             local_chunk[chunk_index(x + g, y + g)] = global_grid[global_index(offset_x + x, offset_y + y)];
-    //         }
-    //     }
-    // }
+void collect(double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g, MPI_Datatype chunk_inner_values_t, MPI_Datatype chunk_in_global_array_t) {
+    // first collect all the data from the chunks
+    double* recv_buf = (double*) malloc(size * size * sizeof(double));
+    MPI_Gather(&local_chunk[chunk_index(g, g)], 1, chunk_inner_values_t, recv_buf, chunk_dimensions[X_AXIS] * chunk_dimensions[Y_AXIS], MPI_DOUBLE, MAIN_RANK, MPI_COMM_WORLD);
+    // then arrange them correctly
+    int recv_buf_index, global_grid_index;
+    // number of all the processes
+    int total_ranks = n_processes[X_AXIS] * n_processes[Y_AXIS];
+    // coords of the current rank
+    int coords[N_DIMENSIONS];
+    // offset in the global grid of the chunk that the current rank is processing
+    int offset[N_DIMENSIONS];
+    for (int rank = 0; rank < total_ranks; ++rank) {
+        for (int chunk_y = 0; chunk_y < chunk_dimensions[Y_AXIS]; ++chunk_y) {
+            for (int chunk_x = 0; chunk_x < chunk_dimensions[X_AXIS]; ++chunk_x) {
+                // recv buf if now basically a 3-dimensional array with dimensions (rank, y, x)
+                recv_buf_index = chunk_dimensions[X_AXIS] * (chunk_dimensions[Y_AXIS] * rank + chunk_y) + chunk_x;
+                // index in the global array is defined by the coordinates that the chunk is written to
+                get_coords(rank, n_processes, coords);
+                // offset of the chunk in the global array
+                offset[X_AXIS] = coords[X_AXIS] * chunk_dimensions[X_AXIS];
+                offset[Y_AXIS] = coords[Y_AXIS] * chunk_dimensions[Y_AXIS];
+                global_grid_index = global_index(offset[X_AXIS] + chunk_x, offset[Y_AXIS] + chunk_y);
+                // now actually write it
+                global_grid[global_grid_index] = recv_buf[recv_buf_index];
+            }
+        }
+    }
 }

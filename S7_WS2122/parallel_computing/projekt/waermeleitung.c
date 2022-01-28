@@ -104,12 +104,12 @@ int main(int argc, char** argv) {
 	// border that narrows with the number of iterations that we have not communicated
 	int border;
 	// factor for thermal calculation stuff
-	const int FACTOR = PARAM_ALPHA * PARAM_T / (PARAM_H * PARAM_H);
+	const double FACTOR = PARAM_ALPHA * PARAM_T / (PARAM_H * PARAM_H);
 	// main loop
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
 		if (is_printed[i]) {
-			collect(rank, u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
+			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
 		}
 		// only communicate every g iterations
@@ -118,21 +118,17 @@ int main(int argc, char** argv) {
 			current_request = 0;
 			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
 			recv_ghosts(WEST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
-			send_ghosts(EAST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
-			send_ghosts(WEST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request);
+			send_ghosts(EAST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, ((rank * num + i) * N_DIMENSIONS) + EAST);
+			send_ghosts(WEST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, ((rank * num + i) * N_DIMENSIONS) + WEST);
 			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
 			// communication between north and south
 			current_request = 0;
 			recv_ghosts(NORTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
 			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
-			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
-			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request);
+			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, ((rank * num + i) * N_DIMENSIONS) + NORTH);
+			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, ((rank * num + i) * N_DIMENSIONS) + SOUTH);
 			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
-			// DEBUG
-			char each_rank_file_name[64];
-			sprintf(each_rank_file_name, "out/small_output_rank_%d", rank);
-			printResult(l_chunk, chunk_dimensions[X_AXIS] + 2 * g, each_rank_file_name, i);
 		}
 
 		// narrow the border
@@ -143,12 +139,15 @@ int main(int argc, char** argv) {
 				l_chunk_buf[chunk_index(x, y)] = l_chunk[chunk_index(x, y)] + FACTOR * (l_chunk[chunk_index(x + 1, y)] + l_chunk[chunk_index(x, y + 1)] + l_chunk[chunk_index(x - 1, y)] + l_chunk[chunk_index(x, y - 1)] - 4 * l_chunk[chunk_index(x, y)]);
 			}
 		}
-		swap(l_chunk, l_chunk_buf);
+		swap(&l_chunk, &l_chunk_buf);
 	}
 
-
+	// DEBUG
+	char each_rank_file_name[64];
+	sprintf(each_rank_file_name, "out/small_output_rank_%d", rank);
+	printResult(l_chunk, chunk_dimensions[X_AXIS] + 2 * g, each_rank_file_name, 42);
 	// collect last state
-	collect(rank, u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
+	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
 	//Output last state into file
 	if (rank == MAIN_RANK) printResult(u1, size, filename, iter);
 	MPI_Finalize();
