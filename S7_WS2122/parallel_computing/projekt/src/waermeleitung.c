@@ -64,10 +64,6 @@ int main(int argc, char** argv) {
 	MPI_Datatype chunk_inner_values_t;
 	MPI_Type_vector(chunk_dimensions[Y_AXIS], chunk_dimensions[X_AXIS], chunk_dimensions[X_AXIS] + 2 * g, MPI_DOUBLE, &chunk_inner_values_t);
 	MPI_Type_commit(&chunk_inner_values_t);
-	// type for a chunk placed in the global array
-	MPI_Datatype chunk_in_global_array_t;
-	MPI_Type_vector(chunk_dimensions[Y_AXIS], chunk_dimensions[X_AXIS], size, MPI_DOUBLE, &chunk_in_global_array_t);
-	MPI_Type_commit(&chunk_in_global_array_t);
 
 	// local chunk with ghost blocks
 	double* l_chunk = (double*) malloc((chunk_dimensions[X_AXIS] + 2 * g) * (chunk_dimensions[Y_AXIS] + 2 * g) * sizeof(double));
@@ -105,7 +101,7 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
 		if (print_distance != DONT_PRINT && i % print_distance == 0) {
-			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
+			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
 		}
 		// only communicate every g iterations
@@ -139,7 +135,7 @@ int main(int argc, char** argv) {
 	}
 
 	// collect last state
-	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t, chunk_in_global_array_t);
+	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t);
 	//Output last state into file
 	if (rank == MAIN_RANK) printResult(u1, size, filename, iter);
 	MPI_Finalize();

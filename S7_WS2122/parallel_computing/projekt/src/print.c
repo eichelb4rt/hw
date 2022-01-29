@@ -40,7 +40,7 @@ void printResult(double* t, int size, char* filename, int iter) {
     fclose(f);
 }
 
-void collect(double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g, MPI_Datatype chunk_inner_values_t, MPI_Datatype chunk_in_global_array_t) {
+void collect(double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g, MPI_Datatype chunk_inner_values_t) {
     // first collect all the data from the chunks
     double* recv_buf = (double*) malloc(size * size * sizeof(double));
     MPI_Gather(&local_chunk[chunk_index(g, g)], 1, chunk_inner_values_t, recv_buf, chunk_dimensions[X_AXIS] * chunk_dimensions[Y_AXIS], MPI_DOUBLE, MAIN_RANK, MPI_COMM_WORLD);

@@ -24,10 +24,6 @@
 #define X_AXIS 0
 #define Y_AXIS 1
 
-// rank for printing and stuff
-#define MAIN_RANK 0
-#define UNDEFINED_RANK -1
-
 // neighbours
 #define N_NEIGHBOURS 4
 #define EAST 0
@@ -46,6 +42,10 @@ int diff_directions[N_NEIGHBOURS][N_DIMENSIONS] = {
     // SOUTH (X,Y)
     { 0, 1 },
 };
+
+// rank for printing and stuff
+#define MAIN_RANK 0
+#define UNDEFINED_RANK -1
 
 // coords [x, y] -> rank
 int get_rank(int* coords, int* n_processes) {
