@@ -4,6 +4,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 // params for the specific problem
 #define PARAM_ALPHA 1

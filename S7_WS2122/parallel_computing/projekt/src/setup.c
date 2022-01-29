@@ -18,25 +18,67 @@ void init(double* t, int size) {
 }
 
 void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* print_distance, int* n_ghost_blocks, int* n_processes, char** output_filename, int* finalize) {
-    *finalize = 0;
-    if (argc < 6) {
+
+    // initial parameters
+    (*finalize) = 0;
+    (*output_filename) = "output";
+    (*n_ghost_blocks) = 1;
+    (*print_distance) = 5;
+
+    // read paramaters
+    int option;
+    int digit_optind = 0;
+
+    while (1) {
+        int this_option_optind = optind ? optind : 1;
+        int option_index = 0;
+        static struct option long_options[] = {
+            {"out",      required_argument, 0, 'o'},
+            {"ghost",    required_argument, 0, 'g'},
+            {"print",    required_argument, 0, 'p'},
+            {0,          0,                 0,  0 }
+        };
+
+        option = getopt_long(argc, argv, "o:g:p:",
+            long_options, &option_index);
+        if (option == -1)
+            break;
+
+        switch (option) {
+        case 'o':
+            *output_filename = optarg;
+            break;
+
+        case 'g':
+            (*n_ghost_blocks) = atoi(optarg);
+            break;
+
+        case 'p':
+            (*print_distance) = atoi(optarg);
+            break;
+
+        default:
+            if (rank == MAIN_RANK)
+                printf("usage: stencil_mpi [options] <field_size> <iterations> <px> <py>\n");
+            (*finalize) = 1;
+            return;
+        }
+    }
+
+    if (optind + 4 > argc) {
         if (rank == MAIN_RANK)
-            printf("usage: stencil_mpi <field_size> <iterations> <print_distance> <ghost_blocks> <px> <py> <out_file>\n");
+            printf("usage: stencil_mpi [options] <field_size> <iterations> <px> <py>\n");
         (*finalize) = 1;
         return;
     }
 
-    // read paramaters
-    // TODO: better UI?
-    int arg_counter = 1;
-    (*field_length) = atoi(argv[arg_counter++]);      /* nxn grid */
-    (*iterations) = atoi(argv[arg_counter++]);
-    (*print_distance) = atoi(argv[arg_counter++]);
-    (*n_ghost_blocks) = atoi(argv[arg_counter++]); /* number of iterations */
-    n_processes[X_AXIS] = atoi(argv[arg_counter++]);     /* 1st dim processes */
-    n_processes[Y_AXIS] = atoi(argv[arg_counter++]);     /* 2nd dim processes */
-    *output_filename = argv[arg_counter++];
+    (*field_length) = atoi(argv[optind++]);
+    (*iterations) = atoi(argv[optind++]);
+    n_processes[X_AXIS] = atoi(argv[optind++]);
+    n_processes[Y_AXIS] = atoi(argv[optind++]);
 
+
+    // check if arguments are valid
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
         if (rank == MAIN_RANK)
             printf("Process dimensions (%d x %d) do not match number of processes (%d).\n", n_processes[X_AXIS], n_processes[Y_AXIS], num);
