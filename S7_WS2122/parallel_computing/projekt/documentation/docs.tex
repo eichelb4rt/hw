@@ -1,0 +1,177 @@
+\documentclass[12pt]{article}
+
+% packages
+
+\usepackage{blindtext}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english, ngerman]{babel}
+
+\usepackage[top=30mm, bottom=30mm, left=20mm, right=20mm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\usepackage{graphicx}
+\usepackage[section]{placeins}
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{pdfpages}
+
+\usepackage{hyperref}
+\usepackage[labelfont=bf]{caption}
+
+\usepackage[round]{natbib}
+
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{adjustbox}
+
+\usepackage{amsmath}
+
+%%%%%%%%%%%%%%%%%%%%%% preamble %%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand*{\sectionmark}[1]{ \markright{\thesection\ ##1} }
+% \renewcommand*{\chaptermark}[1]{ \markboth{\chaptername\ \thechapter: ##1}{} }
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,RE]{}
+\fancyfoot{}
+\pagestyle{fancy}
+
+\definecolor{myblue}{RGB}{46, 59, 160}
+
+\graphicspath{{pics/}}
+
+\hypersetup{
+	pdfstartpage=7,
+    pdfstartview = FitB,
+	pdfpagelayout=SinglePage,
+	pdftitle={PC1-Projektarbeit},
+	pdfsubject={PC1-Projektarbeit},
+	pdfauthor={Maurice Wenig},
+	pdfcreator={Maurice Wenig},
+	pdfproducer={Maurice Wenig},
+	pdfkeywords={meta, information, pdf, hyperref, latex},
+	colorlinks=true,
+	linkcolor=myblue,
+	citecolor=myblue
+}
+
+\bibliographystyle{unsrtnat}
+
+\newcommand*\justify{%
+  \hyphenchar\font=`\-% allowing hyphenation
+}
+
+\definecolor{line_number_colour}{rgb}{0.5,0.5,0.5}
+\renewcommand\theFancyVerbLine{\color{line_number_colour}\tiny\arabic{FancyVerbLine}}
+\setminted[C]{
+	% linenos, 
+	breaklines,
+	fontsize=\footnotesize
+}
+
+\hyphenpenalty=5000
+\tolerance=5000
+
+% TODO: remove for digital version
+% \selectcolormodel{gray}
+
+%%%%%%%%%%%%%%%%%%%%%% main %%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+    \begin{LARGE}
+        \textbf{Projektarbeit PC1}
+    \end{LARGE}\vspace{3mm}\\
+    \begin{Large}
+        \textbf{Dokumentation}
+    \end{Large}\vspace{5mm}\\
+    \begin{large}
+        Maurice Wenig
+    \end{large}
+\end{center}
+% \setcounter{tocdepth}{1}
+\tableofcontents
+\clearpage
+
+% \input{chapters/Kurzfassung.tex}
+% im Anschluss an das Inhaltsverzeichnis gegebenenfalls ein Verzeichnis der Symbole (oder Abkürzungen u. ä.) anfügen.
+
+\fancyhead[LO,RE]{\itshape\nouppercase\leftmark}
+\section{Vorgehen}
+Das initiale Feld wird gleichmäßig auf alle Prozesse aufgeteilt. In jedem Prozess werden die neuen Temperaturen im lokalen $chunk$ berechnet. Dafür gibt es einen Austausch der aktuellen Werte mit den Nachbarprozessen. Diese Werte werden in den Ghost Cells in einem Halo der Breite $g$ um den lokalen $chunk$ gespeichert.
+Ab hier werden die Ghost Cells als Teil des lokalen Chunks angesehen. Der Teil des Chunks, der keine Ghost Cells beinhaltet, wird als innerer Chunk bezeichnet.
+Am Ende der Berechnung werden die innneren Chunks der einzelnen Prozesse wieder zusammengesetzt.
+
+\begin{algorithmic}[1]
+    \State split\_up\_domain()
+    \For{$i = 0 \rightarrow n\_iterations$}
+        \If{$i \% g == 0$}
+            \State exchange\_ghost\_cells()
+        \EndIf
+        \State calculate()
+    \EndFor
+    \State collect()
+\end{algorithmic}
+\subsection{Kommunikation}
+Die angewandten Techniken wurden größtenteils dem Paper ``Ghost Cell Pattern'' von \citeauthor{Kjolstad2010} entnommen.
+Es wird ein Deep Halo benutzt und die Corner Cells sollen auch effizient übertragen werden.
+Da die Ost-West-Kommunikation immer vor der Nord-Süd-Kommunikation passieren muss, damit die Ecken richtig übertragen werden, wird zwischen der Kommunikation von den beiden Richtungen gewartet.
+
+\begin{algorithmic}[1]
+    \State irecv\_east()
+    \State irecv\_west()
+    \State isend\_east()
+    \State isend\_west()
+    \State wait()
+    \State irecv\_north()
+    \State irecv\_south()
+    \State isend\_north()
+    \State isend\_south()
+    \State wait()
+\end{algorithmic}
+
+Falls ein Nachbar in eine Richtung nicht existiert, werden die Ghost Cells mit Padding gefüllt. Dabei wird immer der nächste Wert des inneren Chunks kopiert.
+
+\subsection{Berechnung}
+Es werden immer nur so viele Zellen berechnet, wie für den nächsten Schritt benötigt werden. Dafür wird eine $border$ eingeführt.
+Am Anfang umfasst die $border$ den ganzen Chunk, inklusive Halo, bis auf den äußersten Ring. Am Ende umfasst die $border$ nur noch den inneren Chunk.
+% TODO: fancy visualisation
+
+Um die neuen Werte zu berechnen werden zwei Arrays benutzt. Eines, das die alten Werte enthält und eines, das die Ergebnisse der Berechnung enthält. Als Vorbereitung für den nächsten Schritt werden am Ende der Berechnung die Arrays vertauscht.
+
+\begin{algorithmic}[1]
+    \State $border$ := adapt\_border()
+    \For{$x,y$ in the $border$}
+        \State results[$x,y$] := calculation\_step($x,y$) \Comment{calculation\_step uses old\_values}
+    \EndFor
+    \State swap(results, old\_values)
+\end{algorithmic}
+
+\section{Implementierung}
+
+
+\section{Benutzung}
+
+
+\typeout{}
+\clearpage
+\pagestyle{empty}
+\bibliography{literatur}
+\listoffigures
+\listoftables
+\appendix
+% \input{chapters/Anhang}
+
+\end{document}

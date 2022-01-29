@@ -1,0 +1,6 @@
+\babel@toc {ngerman}{}
+\contentsline {section}{\numberline {1}Vorgehen}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Kommunikation}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Berechnung}{2}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Implementierung}{3}{section.2}%
+\contentsline {section}{\numberline {3}Benutzung}{3}{section.3}%

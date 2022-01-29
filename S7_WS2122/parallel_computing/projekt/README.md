@@ -1,6 +1,6 @@
 # Waermeleitung
 
-```bash
+```plaintext
 usage: stencil_mpi [options] <field_size> <iterations> <px> <py>
 options:
     --out, -o <argument>: output file

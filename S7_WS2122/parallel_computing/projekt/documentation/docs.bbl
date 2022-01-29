@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Kjolstad and Snir(2010)]{Kjolstad2010}
+Fredrik~Berg Kjolstad and Marc Snir.
+\newblock Ghost cell pattern.
+\newblock In \emph{Proceedings of the 2010 Workshop on Parallel Programming
+  Patterns - {ParaPLoP} {\textquotesingle}10}. {ACM} Press, 2010.
+\newblock \doi{10.1145/1953611.1953615}.
+
+\end{thebibliography}
