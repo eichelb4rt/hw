@@ -11,6 +11,7 @@
 \usepackage[top=30mm, bottom=30mm, left=20mm, right=20mm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{setspace}
+\usepackage{parskip}
 
 \usepackage{graphicx}
 \usepackage[section]{placeins}
@@ -125,7 +126,7 @@ Am Ende der Berechnung werden die innneren Chunks der einzelnen Prozesse wieder 
     \State collect()
 \end{algorithmic}
 \subsection{Kommunikation}
-Die angewandten Techniken wurden größtenteils dem Paper ``Ghost Cell Pattern'' von \citeauthor{Kjolstad2010} entnommen.
+Die angewandten Techniken werden größtenteils dem Paper ``Ghost Cell Pattern'' von \citeauthor{Kjolstad2010} entnommen.
 Es wird ein Deep Halo benutzt und die Corner Cells sollen auch effizient übertragen werden.
 Da die Ost-West-Kommunikation immer vor der Nord-Süd-Kommunikation passieren muss, damit die Ecken richtig übertragen werden, wird zwischen der Kommunikation von den beiden Richtungen gewartet.
 
@@ -159,11 +160,52 @@ Um die neuen Werte zu berechnen werden zwei Arrays benutzt. Eines, das die alten
     \State swap(results, old\_values)
 \end{algorithmic}
 
+
+\clearpage
 \section{Implementierung}
+\subsection{Chunks}
+Zu dem inneren Chunk kommt noch das Ghost-Block-Halo dazu:
+\inputminted[fontsize=\scriptsize, firstline=68, lastline=73]{C}{../src/waermeleitung.c}
+
+\subsection{Kommunikation}
+\subsubsection{Ghost Cells}
+Für bessere Lesbarkeit werden die Axen \verb+X_AXIS,Y_AXIS+ und die Richtungen \verb+EAST,WEST,NORTH,SOUTH+ definiert. Den Richtungen werden relative Positionen im Gitter zugewiesen. Außerdem werden ein \verb+MAIN_RANK+ definiert, der alles sammelt und ausgibt, sowie ein undefinierter Rang \verb+UNDEFINED_RANK+, der für Nachbarn außerhalb des Gitters steht.
+\inputminted[fontsize=\scriptsize, firstline=22, lastline=48]{C}{../src/waermeleitung.h}
+Um die Blöcke von Ghost Cells effizient zu verschicken, werden Vektoren von MPI verwendet.
+\inputminted[fontsize=\scriptsize, firstline=51, lastline=62]{C}{../src/waermeleitung.c}
+\inputminted[fontsize=\scriptsize, firstline=3, lastline=16]{C}{../src/comms.c}
+Die Punkte, an denen Blöcke anfangen, werden hier definiert:
+\inputminted[fontsize=\scriptsize, firstline=18, lastline=29]{C}{../src/comms.c}
+Mit \verb+neighbours[direction]+ als Rang des Nachbars in der jeweiligen Richtung wird dann wie folgt kommuniziert:
+\inputminted[fontsize=\scriptsize, firstline=59, lastline=80]{C}{../src/comms.c}
+Padding:
+\inputminted[fontsize=\scriptsize, firstline=31, lastline=57]{C}{../src/comms.c}
+\subsubsection{Collect}
+Auch hier werden wieder Vektoren verwendet:
+\inputminted[fontsize=\scriptsize, firstline=63, lastline=66]{C}{../src/waermeleitung.c}
+Die inneren Chunks werden dann hintereinander in einen Buffer geschrieben. Die Werte im Buffer werden für das Ergebnis umgeordnet.
+\inputminted[fontsize=\scriptsize, firstline=43, lastline=71]{C}{../src/print.c}
+
+\subsection{Berechnung}
+Berechnung nach Aufgabenstellung mit \verb+FACTOR+ $= \alpha \cdot \frac{\Delta t}{h^2}$.
+\inputminted[fontsize=\scriptsize, firstline=126, lastline=134]{C}{../src/waermeleitung.c}
 
 
+\clearpage
 \section{Benutzung}
-
+Argumente, die übergeben werden müssen:
+\begin{itemize}
+    \item Größe des zu berechnenden Feldes
+    \item Anzahl der Iterationen
+    \item Anzahl der Prozesse in X-Richtung
+    \item Anzahl der Prozesse in Y-Richtung
+\end{itemize}
+Parameter, die angepasst werden können:
+\begin{itemize}
+    \item Ausgabedatei
+    \item Breite des Ghost Cell Halos
+    \item Abstand der Iterationen, in denen ein Zwischenstand gespeichert wird
+\end{itemize}
 
 \typeout{}
 \clearpage

@@ -1,0 +1,82 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}waermeleitung.h\PYGZdq{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}vector\PYGZus{}properties}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{direction}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{block\PYGZus{}length}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{block\PYGZus{}stride}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{direction}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{EAST}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{direction}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{WEST}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{o}{*}\PYG{n}{block\PYGZus{}count}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{];}
+\PYG{+w}{        }\PYG{o}{*}\PYG{n}{block\PYGZus{}length}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{        }\PYG{o}{*}\PYG{n}{block\PYGZus{}stride}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{direction}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{NORTH}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{direction}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{SOUTH}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{o}{*}\PYG{n}{block\PYGZus{}count}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{        }\PYG{o}{*}\PYG{n}{block\PYGZus{}length}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{        }\PYG{o}{*}\PYG{n}{block\PYGZus{}stride}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// start indices for ghost block buffers}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{set\PYGZus{}comm\PYGZus{}indices}\PYG{p}{(}\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{EAST}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{WEST}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{NORTH}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{SOUTH}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]);}
+
+\PYG{+w}{    }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{EAST}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{WEST}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{NORTH}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{SOUTH}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{pad}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{direction}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{grid}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// basically build the properties of the vector types again}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{block\PYGZus{}stride}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}length}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{get\PYGZus{}vector\PYGZus{}properties}\PYG{p}{(}\PYG{n}{direction}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}length}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}stride}\PYG{p}{);}
+\PYG{+w}{    }\PYG{c+c1}{// find out where the ghost blocks start}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}start\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}start\PYGZus{}y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{    }\PYG{c+c1}{// current coordinates in the chunk}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}y}\PYG{p}{;}
+\PYG{+w}{    }\PYG{c+c1}{// pixel that we take our vale from (reference)}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}y}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{block\PYGZus{}y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{block\PYGZus{}y}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{block\PYGZus{}count}\PYG{p}{;}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{block\PYGZus{}y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{block\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{block\PYGZus{}x}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{block\PYGZus{}length}\PYG{p}{;}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{block\PYGZus{}x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{chunk\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}start\PYGZus{}x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{block\PYGZus{}x}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{chunk\PYGZus{}y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}start\PYGZus{}y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{block\PYGZus{}y}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{ref\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}x}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{ref\PYGZus{}y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}y}\PYG{p}{;}
+\PYG{+w}{            }\PYG{c+c1}{// trim to inner field \PYGZhy{}\PYGZgt{} ref is going to be the nearest pixel in the field}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ref\PYGZus{}x}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ref\PYGZus{}x}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ref\PYGZus{}y}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ref\PYGZus{}y}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{            }\PYG{c+c1}{// now pad the ghost block with the nearest value in the field}
+\PYG{+w}{            }\PYG{n}{grid}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{chunk\PYGZus{}x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}y}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{grid}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{ref\PYGZus{}x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ref\PYGZus{}y}\PYG{p}{)];}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{send\PYGZus{}ghosts}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{direction}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{grid}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MPI\PYGZus{}Datatype}\PYG{+w}{ }\PYG{n}{border\PYGZus{}type}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{tag}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// do nothing if the neighbour does not exist}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{    }\PYG{c+c1}{// send from non\PYGZhy{}ghost\PYGZhy{}zone\PYGZhy{}end}
+\PYG{+w}{    }\PYG{n}{MPI\PYGZus{}Isend}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{grid}\PYG{p}{[}\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{]],}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{border\PYGZus{}type}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{tag}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{MPI\PYGZus{}COMM\PYGZus{}WORLD}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{array\PYGZus{}of\PYGZus{}requests}\PYG{p}{[}\PYG{o}{*}\PYG{n}{current\PYGZus{}request}\PYG{p}{]);}
+\PYG{+w}{    }\PYG{c+c1}{// update current index because communication was succesful}
+\PYG{+w}{    }\PYG{o}{++}\PYG{p}{(}\PYG{o}{*}\PYG{n}{current\PYGZus{}request}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{recv\PYGZus{}ghosts}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{direction}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{grid}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MPI\PYGZus{}Datatype}\PYG{+w}{ }\PYG{n}{border\PYGZus{}type}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// pad if the neighbour does not exist}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{pad}\PYG{p}{(}\PYG{n}{direction}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{grid}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{        }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{c+c1}{// receive in ghost\PYGZhy{}zone}
+\PYG{+w}{    }\PYG{n}{MPI\PYGZus{}Irecv}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{grid}\PYG{p}{[}\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{]],}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{border\PYGZus{}type}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{direction}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{MPI\PYGZus{}ANY\PYGZus{}TAG}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{MPI\PYGZus{}COMM\PYGZus{}WORLD}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{array\PYGZus{}of\PYGZus{}requests}\PYG{p}{[}\PYG{o}{*}\PYG{n}{current\PYGZus{}request}\PYG{p}{]);}
+\PYG{+w}{    }\PYG{c+c1}{// update current index because communication was succesful}
+\PYG{+w}{    }\PYG{o}{++}\PYG{p}{(}\PYG{o}{*}\PYG{n}{current\PYGZus{}request}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

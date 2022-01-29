@@ -1,0 +1,145 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}waermeleitung.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}comms.c\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}setup.c\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}print.c\PYGZdq{}}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{argc}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{char}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{argv}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Init}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{argc}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{argv}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{//Größe des Feldes}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{size}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{128}\PYG{p}{;}
+\PYG{+w}{	}\PYG{c+c1}{//Anzahl Iterationen}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{100}\PYG{p}{;}
+\PYG{+w}{	}\PYG{c+c1}{//Geisterzonenbreite}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{	}\PYG{c+c1}{//Ausgabedatei}
+\PYG{+w}{	}\PYG{k+kt}{char}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{filename}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}output\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{	}\PYG{c+c1}{// printed iterations}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{print\PYGZus{}distance}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{;}
+
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{rank}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Comm\PYGZus{}size}\PYG{p}{(}\PYG{n}{MPI\PYGZus{}COMM\PYGZus{}WORLD}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{num}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Comm\PYGZus{}rank}\PYG{p}{(}\PYG{n}{MPI\PYGZus{}COMM\PYGZus{}WORLD}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{rank}\PYG{p}{);}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{[}\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{p}{];}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{finalize}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{setup}\PYG{p}{(}\PYG{n}{rank}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{num}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{argc}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{argv}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{iter}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{print\PYGZus{}distance}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{filename}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{finalize}\PYG{p}{);}
+\PYG{+w}{	}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{finalize}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{		}\PYG{n}{MPI\PYGZus{}Finalize}\PYG{p}{();}
+\PYG{+w}{		}\PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{	}\PYG{c+c1}{//2 Speicherbereiche für das Wärmefeld}
+\PYG{+w}{	}\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{u2}\PYG{p}{;}
+
+\PYG{+w}{	}\PYG{c+c1}{//Größe des Speicherbereiches}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{mem}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{size}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{size}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{//Allokiere Speicher auf Host}
+\PYG{+w}{	}\PYG{n}{u1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{mem}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{u2}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{mem}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{//Initialisiere Speicher}
+\PYG{+w}{	}\PYG{n}{init}\PYG{p}{(}\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{);}
+
+\PYG{+w}{	}\PYG{c+c1}{//TODO: Implementieren Sie ein paralleles Programm, }
+\PYG{+w}{	}\PYG{c+c1}{//      das die Temperaturen u\PYGZus{}k mit einer beliebigen }
+\PYG{+w}{	}\PYG{c+c1}{//      Anzahl von p Prozessoren unter Verwendung von MPI berechnet.}
+\PYG{+w}{	}\PYG{c+c1}{//      Der Austausch der Randbereiche soll alle g Schritte passieren.}
+
+\PYG{+w}{	}\PYG{c+c1}{// split up domain}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{));}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{N\PYGZus{}NEIGHBOURS}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{));}
+\PYG{+w}{	}\PYG{n}{split\PYGZus{}up\PYGZus{}domain}\PYG{p}{(}\PYG{n}{rank}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{);}
+
+\PYG{+w}{	}\PYG{c+c1}{// make the types for communication}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{block\PYGZus{}stride}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}length}\PYG{p}{;}
+\PYG{+w}{	}\PYG{c+c1}{// exchange all known data across the vertical line, g wide. (stride is the whole horizontal dimension)}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Datatype}\PYG{+w}{ }\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{get\PYGZus{}vector\PYGZus{}properties}\PYG{p}{(}\PYG{n}{EAST}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}length}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}stride}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Type\PYGZus{}vector}\PYG{p}{(}\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}length}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}stride}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MPI\PYGZus{}DOUBLE}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Type\PYGZus{}commit}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{// exchange all data across the horizontal line, whole horizontal line wide, g blocks. (stride is the whole horizontal dimension)}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Datatype}\PYG{+w}{ }\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{get\PYGZus{}vector\PYGZus{}properties}\PYG{p}{(}\PYG{n}{NORTH}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}length}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{block\PYGZus{}stride}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Type\PYGZus{}vector}\PYG{p}{(}\PYG{n}{block\PYGZus{}count}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}length}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{block\PYGZus{}stride}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MPI\PYGZus{}DOUBLE}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Type\PYGZus{}commit}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{// type for all the inner values (non\PYGZhy{}ghost\PYGZhy{}blocks)}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Datatype}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}inner\PYGZus{}values\PYGZus{}t}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Type\PYGZus{}vector}\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MPI\PYGZus{}DOUBLE}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{chunk\PYGZus{}inner\PYGZus{}values\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Type\PYGZus{}commit}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{chunk\PYGZus{}inner\PYGZus{}values\PYGZus{}t}\PYG{p}{);}
+
+\PYG{+w}{	}\PYG{c+c1}{// local chunk with ghost blocks}
+\PYG{+w}{	}\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{((}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{));}
+\PYG{+w}{	}\PYG{c+c1}{// buffer for local chunk}
+\PYG{+w}{	}\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk\PYGZus{}buf}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{((}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{));}
+\PYG{+w}{	}\PYG{c+c1}{// fill the local chunk}
+\PYG{+w}{	}\PYG{n}{fill\PYGZus{}local\PYGZus{}chunk}\PYG{p}{(}\PYG{n}{rank}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+
+\PYG{+w}{	}\PYG{c+c1}{// TODO (actually):}
+\PYG{+w}{	}\PYG{c+c1}{// [x] update grid}
+\PYG{+w}{	}\PYG{c+c1}{// [x] exchanges}
+\PYG{+w}{	}\PYG{c+c1}{// rank 0 distributing and collecting?}
+\PYG{+w}{	}\PYG{c+c1}{// [x]? make asynchronous}
+
+\PYG{+w}{	}\PYG{c+c1}{// we divide all the requests into requests between east and west, and requests between north and south (because we want to send the corners correctly)}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n\PYGZus{}requests\PYGZus{}ew}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{EAST}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{WEST}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{);}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{n\PYGZus{}requests\PYGZus{}ns}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{NORTH}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{neighbours}\PYG{p}{[}\PYG{n}{SOUTH}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Request}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ew}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Request}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}requests\PYGZus{}ew}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Request}\PYG{p}{));}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Request}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ns}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Request}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}requests\PYGZus{}ns}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Request}\PYG{p}{));}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Status}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}status\PYGZus{}ew}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Status}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}requests\PYGZus{}ew}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Status}\PYG{p}{));}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Status}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}status\PYGZus{}ns}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Status}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{malloc}\PYG{p}{(}\PYG{n}{n\PYGZus{}requests\PYGZus{}ns}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{n}{MPI\PYGZus{}Status}\PYG{p}{));}
+
+\PYG{+w}{	}\PYG{c+c1}{// define where communication is written from and to}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{N\PYGZus{}NEIGHBOURS}\PYG{p}{];}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{[}\PYG{n}{N\PYGZus{}NEIGHBOURS}\PYG{p}{];}
+\PYG{+w}{	}\PYG{n}{set\PYGZus{}comm\PYGZus{}indices}\PYG{p}{(}\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{// request index that\PYGZsq{}s dynamically adapted by the comm calls}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{current\PYGZus{}request}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+
+\PYG{+w}{	}\PYG{c+c1}{// border that narrows with the number of iterations that we have not communicated}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{border}\PYG{p}{;}
+\PYG{+w}{	}\PYG{c+c1}{// factor for thermal calculation stuff}
+\PYG{+w}{	}\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{FACTOR}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{PARAM\PYGZus{}ALPHA}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{PARAM\PYGZus{}T}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PARAM\PYGZus{}H}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{PARAM\PYGZus{}H}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{// main loop}
+\PYG{+w}{	}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{iter}\PYG{p}{;}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{		}\PYG{c+c1}{// maybe print?}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{print\PYGZus{}distance}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{DONT\PYGZus{}PRINT}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{print\PYGZus{}distance}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{			}\PYG{n}{collect}\PYG{p}{(}\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}inner\PYGZus{}values\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{			}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{MAIN\PYGZus{}RANK}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{printResult}\PYG{p}{(}\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{filename}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{);}
+\PYG{+w}{		}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{c+c1}{// only communicate every g iterations}
+\PYG{+w}{		}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{			}\PYG{c+c1}{// communication between east and west}
+\PYG{+w}{			}\PYG{n}{current\PYGZus{}request}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{			}\PYG{n}{recv\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{EAST}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ew}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{recv\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{WEST}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ew}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{send\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{EAST}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ew}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{num}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{EAST}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{send\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{WEST}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{vertical\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ew}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{num}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{WEST}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{MPI\PYGZus{}Waitall}\PYG{p}{(}\PYG{n}{n\PYGZus{}requests\PYGZus{}ew}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ew}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}status\PYGZus{}ew}\PYG{p}{);}
+\PYG{+w}{			}\PYG{c+c1}{// communication between north and south}
+\PYG{+w}{			}\PYG{n}{current\PYGZus{}request}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{			}\PYG{n}{recv\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{NORTH}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ns}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{recv\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{SOUTH}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{recv\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ns}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{send\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{NORTH}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ns}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{num}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{NORTH}\PYG{p}{);}
+\PYG{+w}{			}\PYG{n}{send\PYGZus{}ghosts}\PYG{p}{(}\PYG{n}{SOUTH}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{neighbours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{send\PYGZus{}buffer\PYGZus{}start}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{horizontal\PYGZus{}border\PYGZus{}t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ns}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{current\PYGZus{}request}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{num}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{SOUTH}\PYG{p}{);}
+\PYG{+w}{			}\PYG{c+c1}{// TODO: does status ignore work like that?}
+\PYG{+w}{			}\PYG{n}{MPI\PYGZus{}Waitall}\PYG{p}{(}\PYG{n}{n\PYGZus{}requests\PYGZus{}ns}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}requests\PYGZus{}ns}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{array\PYGZus{}of\PYGZus{}status\PYGZus{}ns}\PYG{p}{);}
+\PYG{+w}{		}\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{		}\PYG{c+c1}{// narrow the border}
+\PYG{+w}{		}\PYG{n}{border}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{		}\PYG{c+c1}{// update the grid}
+\PYG{+w}{		}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{border}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{border}\PYG{p}{);}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{			}\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{border}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{g}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{border}\PYG{p}{);}\PYG{+w}{ }\PYG{o}{++}\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{				}\PYG{n}{l\PYGZus{}chunk\PYGZus{}buf}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{FACTOR}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{l\PYGZus{}chunk}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{[}\PYG{n}{chunk\PYGZus{}index}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)]);}
+\PYG{+w}{			}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{p}{\PYGZcb{}}
+\PYG{+w}{		}\PYG{n}{swap}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{n}{l\PYGZus{}chunk\PYGZus{}buf}\PYG{p}{);}
+\PYG{+w}{	}\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{	}\PYG{c+c1}{// collect last state}
+\PYG{+w}{	}\PYG{n}{collect}\PYG{p}{(}\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{l\PYGZus{}chunk}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}dimensions}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{g}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{chunk\PYGZus{}inner\PYGZus{}values\PYGZus{}t}\PYG{p}{);}
+\PYG{+w}{	}\PYG{c+c1}{//Output last state into file}
+\PYG{+w}{	}\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{MAIN\PYGZus{}RANK}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{printResult}\PYG{p}{(}\PYG{n}{u1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{filename}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{iter}\PYG{p}{);}
+\PYG{+w}{	}\PYG{n}{MPI\PYGZus{}Finalize}\PYG{p}{();}
+\PYG{+w}{	}\PYG{k}{return}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

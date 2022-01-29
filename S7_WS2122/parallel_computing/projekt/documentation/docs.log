@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.1.29)  29 JAN 2022 21:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.1.29)  29 JAN 2022 23:27
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -136,6 +136,22 @@ s
 (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty
+Package: parskip 2020-01-22 v2.0d non-zero parskip adjustments
+
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count198
+))
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 
@@ -183,7 +199,7 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 \everycr=\toks19
 \minrowclearance=\skip60
 )
-\rownum=\count198
+\rownum=\count199
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
 Package xcolor Info: Model `RGB' extended on input line 1364.
@@ -205,15 +221,15 @@ Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count199
-\calc@Bcount=\count266
+\calc@Acount=\count266
+\calc@Bcount=\count267
 \calc@Adimen=\dimen148
 \calc@Bdimen=\dimen149
 \calc@Askip=\skip61
 \calc@Bskip=\skip62
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count267
+\calc@Ccount=\count268
 \calc@Cskip=\skip63
 )
 (/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
@@ -224,9 +240,6 @@ Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
 
 (/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
-)
-(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
-Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
 )))
 \AM@pagewidth=\dimen150
 \AM@pageheight=\dimen151
@@ -236,9 +249,9 @@ File: pppdftex.def 2020/01/28 v0.5q Pdfpages driver for pdfTeX (AM)
 )
 \AM@pagebox=\box47
 \AM@global@opts=\toks20
-\AM@pagecnt=\count268
+\AM@pagecnt=\count269
 \AM@toc@title=\toks21
-\c@AM@survey=\count269
+\c@AM@survey=\count270
 \AM@templatesizebox=\box48
 )
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -250,9 +263,6 @@ Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-)
-(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
-Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 )
 (/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
@@ -269,12 +279,9 @@ Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
 (/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
-Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
-)
 \@linkdim=\dimen152
-\Hy@linkcounter=\count270
-\Hy@pagecounter=\count271
+\Hy@linkcounter=\count271
+\Hy@pagecounter=\count272
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2020/01/14 v7.00d Hyperref: PDFDocEncoding definition (HO)
@@ -287,8 +294,8 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count272
-\pdfmajorversion=\count273
+\Hy@SavedSpaceFactor=\count273
+\pdfmajorversion=\count274
 Package hyperref Info: Hyper figures OFF on input line 4547.
 Package hyperref Info: Link nesting OFF on input line 4552.
 Package hyperref Info: Hyper index ON on input line 4555.
@@ -296,7 +303,7 @@ Package hyperref Info: Plain pages OFF on input line 4562.
 Package hyperref Info: Backreferencing OFF on input line 4567.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4800.
-\c@Hy@tempcnt=\count274
+\c@Hy@tempcnt=\count275
 
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip16
@@ -312,7 +319,7 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count275
+\Fld@menulength=\count276
 \Field@Width=\dimen154
 \Fld@charsize=\dimen155
 Package hyperref Info: Hyper figures OFF on input line 6430.
@@ -324,9 +331,9 @@ Package hyperref Info: Link coloring with OCG OFF on input line 6455.
 Package hyperref Info: PDF/A mode OFF on input line 6460.
 LaTeX Info: Redefining \ref on input line 6500.
 LaTeX Info: Redefining \pageref on input line 6504.
-\Hy@abspage=\count276
-\c@Item=\count277
-\c@Hfootnote=\count278
+\Hy@abspage=\count277
+\c@Item=\count278
+\c@Hfootnote=\count279
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
@@ -335,10 +342,9 @@ File: hpdftex.def 2020/01/14 v7.00d Hyperref driver for pdfTeX
 
 (/usr/share/texlive/texmf-dist/tex/latex/atveryend/atveryend.sty
 Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
 )
-\Fld@listcount=\count279
-\c@bookmark@seq@number=\count280
+\Fld@listcount=\count280
+\c@bookmark@seq@number=\count281
 
 (/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
@@ -366,8 +372,8 @@ Package caption3 Info: TeX engine: e-TeX on input line 61.
 \caption@hangindent=\dimen162
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count281
-\c@continuedfloat=\count282
+\c@caption@flags=\count282
+\c@continuedfloat=\count283
 Package caption Info: hyperref package is loaded.
 )
 (/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
@@ -375,26 +381,26 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip65
 \bibsep=\skip66
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count283
+\c@NAT@ctr=\count284
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count284
+\lst@mode=\count285
 \lst@gtempboxa=\box49
 \lst@token=\toks22
-\lst@length=\count285
+\lst@length=\count286
 \lst@currlwidth=\dimen163
-\lst@column=\count286
-\lst@pos=\count287
+\lst@column=\count287
+\lst@pos=\count288
 \lst@lostspace=\dimen164
 \lst@width=\dimen165
-\lst@newlines=\count288
-\lst@lineno=\count289
+\lst@newlines=\count289
+\lst@lineno=\count290
 \lst@maxwidth=\dimen166
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
-\c@lstnumber=\count290
-\lst@skipnumbers=\count291
+\c@lstnumber=\count291
+\lst@skipnumbers=\count292
 \lst@framebox=\box50
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
@@ -408,10 +414,6 @@ Package: minted 2017/07/19 v2.5 Yet another Pygments shim for LaTeX
 (/usr/share/texlive/texmf-dist/tex/latex/fvextra/fvextra.sty
 Package: fvextra 2019/02/04 v1.4 fvextra - extensions and patches for fancyvrb
 
-(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count292
-)
 (/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2020/01/13 v3.5 verbatim text (tvz,hv)
 \FV@CodeLineNo=\count293
@@ -752,13 +754,13 @@ LaTeX Info: Redefining \] on input line 2860.
 )
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 44.
+less on input line 45.
 
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 45.
+less on input line 46.
 
-Package hyperref Info: Option `colorlinks' set `true' on input line 66.
+Package hyperref Info: Option `colorlinks' set `true' on input line 67.
 runsystem(which pygmentize && touch docs.aex)...executed.
 
 runsystem(rm docs.aex)...executed.
@@ -771,22 +773,22 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 (./docs.aux)
 \openout1 = `docs.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -862,7 +864,7 @@ Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 )
-Package hyperref Info: Link coloring ON on input line 90.
+Package hyperref Info: Link coloring ON on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
@@ -875,9 +877,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count364
 )
-LaTeX Info: Redefining \ref on input line 90.
-LaTeX Info: Redefining \pageref on input line 90.
-LaTeX Info: Redefining \nameref on input line 90.
+LaTeX Info: Redefining \ref on input line 91.
+LaTeX Info: Redefining \pageref on input line 91.
+LaTeX Info: Redefining \nameref on input line 91.
 
 (./docs.out) (./docs.out)
 \@outlinefile=\write5
@@ -897,7 +899,7 @@ Package caption Info: End \AtBeginDocument code.
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 111.
+less on input line 112.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -907,9 +909,49 @@ This may cause the page layout to be inconsistent, however.
 
 [2
 
-]
+] [3] (./_minted-docs/default-pyg-prefix.pygstyle)
+(./_minted-docs/default.pygstyle)
+(./_minted-docs/B520D115E8BE58BBB1ECAA9F6707426A28C60532114D1D4397107138269CA40
+0.pygtex
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
+.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 70.
+)
+(./_minted-docs/3C51260C88ADCB5FB494C4E9CD3CB170946E619B4DBE21E1CCB8A98221EE4BE
+9.pygtex
+Overfull \hbox (14.5349pt too wide) in paragraph at lines 172--1
+\T1/cmr/m/n/12 Für bes-se-re Les-bar-keit wer-den die Axen [][]\T1/cmtt/m/n/12 
+X_AXIS,Y_AXIS []\T1/cmr/m/n/12 und die Rich-tun-gen [][]\T1/cmtt/m/n/12 EAST,WE
+ST,NORTH,SOUTH
+ []
 
-[3] (./docs.bbl) (./docs.lof)
+)
+(./_minted-docs/B520D115E8BE58BBB1ECAA9F6707426A28C60532114D1D4397107138269CA40
+0.pygtex [4
+
+])
+(./_minted-docs/E704F88408674C74FB5FA71F357CB241D0933F33BB80CF734ED02BE350CA3B4
+2.pygtex)
+(./_minted-docs/E704F88408674C74FB5FA71F357CB241D0933F33BB80CF734ED02BE350CA3B4
+2.pygtex)
+(./_minted-docs/E704F88408674C74FB5FA71F357CB241D0933F33BB80CF734ED02BE350CA3B4
+2.pygtex [5])
+(./_minted-docs/E704F88408674C74FB5FA71F357CB241D0933F33BB80CF734ED02BE350CA3B4
+2.pygtex)
+(./_minted-docs/B520D115E8BE58BBB1ECAA9F6707426A28C60532114D1D4397107138269CA40
+0.pygtex)
+(./_minted-docs/3B2EE86EF57496711F4600AF8367A36B23448AD97C577071623886FCF938953
+6.pygtex [6])
+(./_minted-docs/B520D115E8BE58BBB1ECAA9F6707426A28C60532114D1D4397107138269CA40
+0.pygtex) [7]
+
+[8
+
+] (./docs.bbl) (./docs.lof)
 \tf@lof=\write7
 \openout7 = `docs.lof'.
 
@@ -917,44 +959,50 @@ This may cause the page layout to be inconsistent, however.
 \tf@lot=\write8
 \openout8 = `docs.lot'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 177.
- [4
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 219.
+ [9
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 177.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 219.
  (./docs.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 177.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 177.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 219.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 219.
 Package rerunfilecheck Info: File `docs.out' has not changed.
-(rerunfilecheck)             Checksum: 78CC118BE9B0B513C9E91CB0302B6EA7;258.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 177.
+(rerunfilecheck)             Checksum: 0E214FD82909587CB1D74CB0ED579FAD;571.
  ) 
 Here is how much of TeX's memory you used:
- 16337 strings out of 483057
- 261669 string characters out of 5962301
- 608765 words of memory out of 5000000
- 31015 multiletter control sequences out of 15000+600000
- 545280 words of font info for 49 fonts, out of 8000000 for 9000
+ 16646 strings out of 483057
+ 268564 string characters out of 5962301
+ 616246 words of memory out of 5000000
+ 31271 multiletter control sequences out of 15000+600000
+ 547098 words of font info for 55 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 41i,11n,45p,956b,483s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): Page 7 has been referenced but does not exist!
-
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcti1200.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
- </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2074.600pk>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on docs.pdf (4 pages, 98342 bytes).
+ 41i,11n,45p,1541b,680s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcti1200.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt0800.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecit0800.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600p
+k> </home/user/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2074.600p
+k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmsy6.pfb>
+Output written on docs.pdf (9 pages, 193412 bytes).
 PDF statistics:
- 314 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
- 15 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 581 PDF objects out of 1000 (max. 8388607)
+ 174 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

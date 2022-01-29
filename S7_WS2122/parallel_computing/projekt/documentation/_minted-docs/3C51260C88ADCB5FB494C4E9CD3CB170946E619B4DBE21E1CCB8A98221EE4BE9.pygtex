@@ -1,0 +1,73 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef WAERMELEITUNG\PYGZus{}H\PYGZus{}}
+\PYG{c+cp}{\PYGZsh{}define WAERMELEITUNG\PYGZus{}H\PYGZus{}}
+
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}mpi.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}stdio.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}getopt.h\PYGZgt{}}
+
+\PYG{c+c1}{// params for the specific problem}
+\PYG{c+cp}{\PYGZsh{}define PARAM\PYGZus{}ALPHA 1}
+\PYG{c+cp}{\PYGZsh{}define PARAM\PYGZus{}H 1}
+\PYG{c+cp}{\PYGZsh{}define PARAM\PYGZus{}T 0.25}
+\PYG{c+cp}{\PYGZsh{}define PADDING\PYGZus{}TEMPERATURE 0}
+
+\PYG{c+c1}{// special command\PYGZhy{}line\PYGZhy{}parameter values}
+\PYG{c+cp}{\PYGZsh{}define DONT\PYGZus{}PRINT 0}
+
+\PYG{c+c1}{// array access}
+\PYG{c+cp}{\PYGZsh{}define global\PYGZus{}index(x,y) (y) * size + (x)}
+\PYG{c+cp}{\PYGZsh{}define chunk\PYGZus{}index(x,y) (y) * (chunk\PYGZus{}dimensions[X\PYGZus{}AXIS] + 2 * g) + (x)}
+
+\PYG{c+c1}{// our problem is 2\PYGZhy{}dimensional}
+\PYG{c+cp}{\PYGZsh{}define N\PYGZus{}DIMENSIONS 2}
+\PYG{c+cp}{\PYGZsh{}define X\PYGZus{}AXIS 0}
+\PYG{c+cp}{\PYGZsh{}define Y\PYGZus{}AXIS 1}
+
+\PYG{c+c1}{// neighbours}
+\PYG{c+cp}{\PYGZsh{}define N\PYGZus{}NEIGHBOURS 4}
+\PYG{c+cp}{\PYGZsh{}define EAST 0}
+\PYG{c+cp}{\PYGZsh{}define WEST 1}
+\PYG{c+cp}{\PYGZsh{}define NORTH 2}
+\PYG{c+cp}{\PYGZsh{}define SOUTH 3}
+
+\PYG{c+c1}{// which directions are the directions actually?}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{diff\PYGZus{}directions}\PYG{p}{[}\PYG{n}{N\PYGZus{}NEIGHBOURS}\PYG{p}{][}\PYG{n}{N\PYGZus{}DIMENSIONS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// EAST (X,Y)}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{    }\PYG{c+c1}{// WEST (X,Y)}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{    }\PYG{c+c1}{// NORTH (X,Y)}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{\PYGZhy{}1}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{+w}{    }\PYG{c+c1}{// SOUTH (X,Y)}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{p}{\PYGZcb{},}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+c1}{// rank for printing and stuff}
+\PYG{c+cp}{\PYGZsh{}define MAIN\PYGZus{}RANK 0}
+\PYG{c+cp}{\PYGZsh{}define UNDEFINED\PYGZus{}RANK \PYGZhy{}1}
+
+\PYG{c+c1}{// coords [x, y] \PYGZhy{}\PYGZgt{} rank}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}rank}\PYG{p}{(}\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{coords}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{coords}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{coords}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{coords}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{])}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{coords}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{])}\PYG{+w}{ }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{UNDEFINED\PYGZus{}RANK}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{coords}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{coords}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{];}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// rank \PYGZhy{}\PYGZgt{} coords [x, y]}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}coords}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{rank}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{coords}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{coords}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{];}
+\PYG{+w}{    }\PYG{n}{coords}\PYG{p}{[}\PYG{n}{Y\PYGZus{}AXIS}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{rank}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{n\PYGZus{}processes}\PYG{p}{[}\PYG{n}{X\PYGZus{}AXIS}\PYG{p}{];}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{swap}\PYG{p}{(}\PYG{k+kt}{double}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{pointer\PYGZus{}0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{pointer\PYGZus{}1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{double}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{temp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{*}\PYG{n}{pointer\PYGZus{}0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{o}{*}\PYG{n}{pointer\PYGZus{}0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{o}{*}\PYG{n}{pointer\PYGZus{}1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{o}{*}\PYG{n}{pointer\PYGZus{}1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{temp}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif }\PYG{c+c1}{// WAERMELEITUNG\PYGZus{}H\PYGZus{}}
+\end{Verbatim}
