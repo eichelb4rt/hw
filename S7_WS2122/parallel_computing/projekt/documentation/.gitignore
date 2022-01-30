@@ -3,10 +3,10 @@
 !*.tex
 
 # library
-*.bib
+!*.bib
 
 # build file
-build.sh
+!build.sh
 
 # pdf
-*.pdf
+!*.pdf
