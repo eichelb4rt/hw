@@ -1,10 +1,15 @@
 #ifndef WAERMELEITUNG_H_
 #define WAERMELEITUNG_H_
 
+#include <iostream>
+#include <string>
+#include <sstream>
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+
+using namespace std;
 
 // params for the specific problem
 #define PARAM_ALPHA 1
@@ -62,10 +67,10 @@ void get_coords(int rank, int* n_processes, int* coords) {
     coords[Y_AXIS] = rank / n_processes[X_AXIS];
 }
 
-void swap(double** pointer_0, double** pointer_1) {
-    double* temp = *pointer_0;
-    *pointer_0 = *pointer_1;
-    *pointer_1 = temp;
+void swap(double*& pointer_0, double*& pointer_1) {
+    double* temp = pointer_0;
+    pointer_0 = pointer_1;
+    pointer_1 = temp;
 }
 
 #endif // WAERMELEITUNG_H_

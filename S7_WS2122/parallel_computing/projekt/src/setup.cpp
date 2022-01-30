@@ -17,13 +17,13 @@ void init(double* t, int size) {
     }
 }
 
-void setup(int rank, int num, int argc, char** argv, int* field_length, int* iterations, int* print_distance, int* n_ghost_blocks, int* n_processes, char** output_filename, int* finalize) {
+void setup(int rank, int num, int argc, char** argv, int& field_length, int& iterations, int& print_distance, int& n_ghost_blocks, int* n_processes, string& output_filename, int& finalize) {
 
     // initial parameters
-    (*finalize) = 0;
-    (*output_filename) = "output";
-    (*n_ghost_blocks) = 1;
-    (*print_distance) = 5;
+    finalize = 0;
+    output_filename = "output";
+    n_ghost_blocks = 1;
+    print_distance = 5;
 
     // read paramaters
     int option;
@@ -46,34 +46,34 @@ void setup(int rank, int num, int argc, char** argv, int* field_length, int* ite
 
         switch (option) {
         case 'o':
-            *output_filename = optarg;
+            output_filename = optarg;
             break;
 
         case 'g':
-            (*n_ghost_blocks) = atoi(optarg);
+            n_ghost_blocks = atoi(optarg);
             break;
 
         case 'p':
-            (*print_distance) = atoi(optarg);
+            print_distance = atoi(optarg);
             break;
 
         default:
             if (rank == MAIN_RANK)
-                printf("usage: stencil_mpi [options] <field_size> <iterations> <px> <py>\n");
-            (*finalize) = 1;
+                cout << "usage: stencil_mpi [options] <field_size> <iterations> <px> <py>" << endl;
+            finalize = 1;
             return;
         }
     }
 
     if (optind + 4 > argc) {
         if (rank == MAIN_RANK)
-            printf("usage: stencil_mpi [options] <field_size> <iterations> <px> <py>\n");
-        (*finalize) = 1;
+            cout << "usage: stencil_mpi [options] <field_size> <iterations> <px> <py>" << endl;
+        finalize = 1;
         return;
     }
 
-    (*field_length) = atoi(argv[optind++]);
-    (*iterations) = atoi(argv[optind++]);
+    field_length = atoi(argv[optind++]);
+    iterations = atoi(argv[optind++]);
     n_processes[X_AXIS] = atoi(argv[optind++]);
     n_processes[Y_AXIS] = atoi(argv[optind++]);
 
@@ -81,21 +81,21 @@ void setup(int rank, int num, int argc, char** argv, int* field_length, int* ite
     // check if arguments are valid
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
         if (rank == MAIN_RANK)
-            printf("Process dimensions (%d x %d) do not match number of processes (%d).\n", n_processes[X_AXIS], n_processes[Y_AXIS], num);
-        (*finalize) = 1;
+            cout << "Process dimensions (" << n_processes[X_AXIS] << " x " << n_processes[Y_AXIS] << ") do not match number of processes (" << num << ")." << endl;
+        finalize = 1;
         return;
     }
-    int rect_field_size = (*field_length) * (*field_length);
+    int rect_field_size = field_length * field_length;
     if (rect_field_size % n_processes[X_AXIS] != 0) {
         if (rank == MAIN_RANK)
-            printf("Number of processes in x dimension (%d) does not work with field length (%d).\n", n_processes[X_AXIS], *field_length);
-        (*finalize) = 1;
+            cout << "Number of processes in x dimension (" << n_processes[X_AXIS] << ") does not work with field length (" << field_length << ")." << endl;
+        finalize = 1;
         return;
     }
     if (rect_field_size % n_processes[Y_AXIS] != 0) {
         if (rank == MAIN_RANK)
-            printf("Number of processes in y dimension (%d) does not work with field length (%d).\n", n_processes[Y_AXIS], *field_length);
-        (*finalize) = 1;
+            cout << "Number of processes in y dimension (" << n_processes[Y_AXIS] << ") does not work with field length (" << field_length << ")." << endl;
+        finalize = 1;
         return;
     }
 }

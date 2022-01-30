@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.1.29)  29 JAN 2022 23:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.1.29)  29 JAN 2022 23:30
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -951,14 +951,7 @@ ST,NORTH,SOUTH
 
 [8
 
-] (./docs.bbl) (./docs.lof)
-\tf@lof=\write7
-\openout7 = `docs.lof'.
-
- (./docs.lot)
-\tf@lot=\write8
-\openout8 = `docs.lot'.
-
+] (./docs.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 219.
  [9
 
@@ -971,10 +964,10 @@ Package rerunfilecheck Info: File `docs.out' has not changed.
 (rerunfilecheck)             Checksum: 0E214FD82909587CB1D74CB0ED579FAD;571.
  ) 
 Here is how much of TeX's memory you used:
- 16646 strings out of 483057
- 268564 string characters out of 5962301
+ 16634 strings out of 483057
+ 268472 string characters out of 5962301
  616246 words of memory out of 5000000
- 31271 multiletter control sequences out of 15000+600000
+ 31267 multiletter control sequences out of 15000+600000
  547098 words of font info for 55 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  41i,11n,45p,1541b,680s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -999,10 +992,10 @@ e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf
 nts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmsy6.pfb>
-Output written on docs.pdf (9 pages, 193412 bytes).
+Output written on docs.pdf (9 pages, 191767 bytes).
 PDF statistics:
- 581 PDF objects out of 1000 (max. 8388607)
- 174 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
+ 574 PDF objects out of 1000 (max. 8388607)
+ 171 compressed objects within 2 object streams
+ 23 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

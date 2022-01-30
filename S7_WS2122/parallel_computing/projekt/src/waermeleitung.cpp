@@ -1,7 +1,7 @@
 #include "waermeleitung.h"
-#include "comms.c"
-#include "setup.c"
-#include "print.c"
+#include "comms.cpp"
+#include "setup.cpp"
+#include "print.cpp"
 
 int main(int argc, char** argv) {
 	MPI_Init(&argc, &argv);
@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 	//Geisterzonenbreite
 	int g = 1;
 	//Ausgabedatei
-	char* filename = "output";
+	string filename = "output";
 	// printed iterations
 	int print_distance = 5;
 
@@ -21,10 +21,10 @@ int main(int argc, char** argv) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	int n_processes[N_DIMENSIONS];
 	int finalize;
-	setup(rank, num, argc, argv, &size, &iter, &print_distance, &g, n_processes, &filename, &finalize);
+	setup(rank, num, argc, argv, size, iter, print_distance, g, n_processes, filename, finalize);
 	if (finalize == 1) {
 		MPI_Finalize();
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 
 	//2 Speicherbereiche für das Wärmefeld
@@ -52,12 +52,12 @@ int main(int argc, char** argv) {
 	int block_stride, block_count, block_length;
 	// exchange all known data across the vertical line, g wide. (stride is the whole horizontal dimension)
 	MPI_Datatype vertical_border_t;
-	get_vector_properties(EAST, chunk_dimensions, g, &block_count, &block_length, &block_stride);
+	get_vector_properties(EAST, chunk_dimensions, g, block_count, block_length, block_stride);
 	MPI_Type_vector(block_count, block_length, block_stride, MPI_DOUBLE, &vertical_border_t);
 	MPI_Type_commit(&vertical_border_t);
 	// exchange all data across the horizontal line, whole horizontal line wide, g blocks. (stride is the whole horizontal dimension)
 	MPI_Datatype horizontal_border_t;
-	get_vector_properties(NORTH, chunk_dimensions, g, &block_count, &block_length, &block_stride);
+	get_vector_properties(NORTH, chunk_dimensions, g, block_count, block_length, block_stride);
 	MPI_Type_vector(block_count, block_length, block_stride, MPI_DOUBLE, &horizontal_border_t);
 	MPI_Type_commit(&horizontal_border_t);
 	// type for all the inner values (non-ghost-blocks)
@@ -108,17 +108,17 @@ int main(int argc, char** argv) {
 		if (i % g == 0) {
 			// communication between east and west
 			current_request = 0;
-			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, chunk_dimensions, g);
-			recv_ghosts(WEST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, chunk_dimensions, g);
-			send_ghosts(EAST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, ((rank * num + i) * N_DIMENSIONS) + EAST);
-			send_ghosts(WEST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, &current_request, ((rank * num + i) * N_DIMENSIONS) + WEST);
+			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, current_request, chunk_dimensions, g);
+			recv_ghosts(WEST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, current_request, chunk_dimensions, g);
+			send_ghosts(EAST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, current_request, ((rank * num + i) * N_DIMENSIONS) + EAST);
+			send_ghosts(WEST, neighbours, send_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, current_request, ((rank * num + i) * N_DIMENSIONS) + WEST);
 			MPI_Waitall(n_requests_ew, array_of_requests_ew, array_of_status_ew);
 			// communication between north and south
 			current_request = 0;
-			recv_ghosts(NORTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, chunk_dimensions, g);
-			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, chunk_dimensions, g);
-			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, ((rank * num + i) * N_DIMENSIONS) + NORTH);
-			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, &current_request, ((rank * num + i) * N_DIMENSIONS) + SOUTH);
+			recv_ghosts(NORTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, chunk_dimensions, g);
+			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, chunk_dimensions, g);
+			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, ((rank * num + i) * N_DIMENSIONS) + NORTH);
+			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, ((rank * num + i) * N_DIMENSIONS) + SOUTH);
 			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
 		}
@@ -131,7 +131,7 @@ int main(int argc, char** argv) {
 				l_chunk_buf[chunk_index(x, y)] = l_chunk[chunk_index(x, y)] + FACTOR * (l_chunk[chunk_index(x + 1, y)] + l_chunk[chunk_index(x, y + 1)] + l_chunk[chunk_index(x - 1, y)] + l_chunk[chunk_index(x, y - 1)] - 4 * l_chunk[chunk_index(x, y)]);
 			}
 		}
-		swap(&l_chunk, &l_chunk_buf);
+		swap(l_chunk, l_chunk_buf);
 	}
 
 	// collect last state
@@ -139,5 +139,5 @@ int main(int argc, char** argv) {
 	//Output last state into file
 	if (rank == MAIN_RANK) printResult(u1, size, filename, iter);
 	MPI_Finalize();
-	return 0;
+	return EXIT_SUCCESS;
 }

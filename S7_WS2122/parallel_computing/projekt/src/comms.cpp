@@ -1,16 +1,16 @@
 #include "waermeleitung.h"
 
-void get_vector_properties(int direction, int* chunk_dimensions, int g, int* block_count, int* block_length, int* block_stride) {
+void get_vector_properties(int direction, int* chunk_dimensions, int g, int& block_count, int& block_length, int& block_stride) {
     if (direction == EAST || direction == WEST) {
-        *block_count = chunk_dimensions[Y_AXIS];
-        *block_length = g;
-        *block_stride = chunk_dimensions[X_AXIS] + 2 * g;
+        block_count = chunk_dimensions[Y_AXIS];
+        block_length = g;
+        block_stride = chunk_dimensions[X_AXIS] + 2 * g;
         return;
     }
     if (direction == NORTH || direction == SOUTH) {
-        *block_count = g;
-        *block_length = chunk_dimensions[X_AXIS] + 2 * g;
-        *block_stride = chunk_dimensions[X_AXIS] + 2 * g;
+        block_count = g;
+        block_length = chunk_dimensions[X_AXIS] + 2 * g;
+        block_stride = chunk_dimensions[X_AXIS] + 2 * g;
         return;
     }
 }
@@ -31,7 +31,7 @@ void set_comm_indices(int* send_buffer_start, int* recv_buffer_start, int* chunk
 void pad(int direction, int* recv_buffer_start, double* grid, int* chunk_dimensions, int g) {
     // basically build the properties of the vector types again
     int block_stride, block_count, block_length;
-    get_vector_properties(direction, chunk_dimensions, g, &block_count, &block_length, &block_stride);
+    get_vector_properties(direction, chunk_dimensions, g, block_count, block_length, block_stride);
     // find out where the ghost blocks start
     int chunk_start_x = recv_buffer_start[direction] % (chunk_dimensions[X_AXIS] + 2 * g);
     int chunk_start_y = recv_buffer_start[direction] / (chunk_dimensions[X_AXIS] + 2 * g);
@@ -56,17 +56,17 @@ void pad(int direction, int* recv_buffer_start, double* grid, int* chunk_dimensi
     }
 }
 
-void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int* current_request, int tag) {
+void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int& current_request, int tag) {
     // do nothing if the neighbour does not exist
     if (neighbours[direction] == UNDEFINED_RANK) return;
     // send from non-ghost-zone-end
     MPI_Isend(&grid[send_buffer_start[direction]], 1, border_type, neighbours[direction], tag,
-        MPI_COMM_WORLD, &array_of_requests[*current_request]);
+        MPI_COMM_WORLD, &array_of_requests[current_request]);
     // update current index because communication was succesful
-    ++(*current_request);
+    ++current_request;
 }
 
-void recv_ghosts(int direction, int* neighbours, int* recv_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int* current_request, int* chunk_dimensions, int g) {
+void recv_ghosts(int direction, int* neighbours, int* recv_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int& current_request, int* chunk_dimensions, int g) {
     // pad if the neighbour does not exist
     if (neighbours[direction] == UNDEFINED_RANK) {
         pad(direction, recv_buffer_start, grid, chunk_dimensions, g);
@@ -74,7 +74,7 @@ void recv_ghosts(int direction, int* neighbours, int* recv_buffer_start, double*
     }
     // receive in ghost-zone
     MPI_Irecv(&grid[recv_buffer_start[direction]], 1, border_type, neighbours[direction], MPI_ANY_TAG,
-        MPI_COMM_WORLD, &array_of_requests[*current_request]);
+        MPI_COMM_WORLD, &array_of_requests[current_request]);
     // update current index because communication was succesful
-    ++(*current_request);
+    ++current_request;
 }

@@ -1,0 +1,12 @@
+# ignore everything but:
+# source file
+!*.tex
+
+# library
+*.bib
+
+# build file
+build.sh
+
+# pdf
+*.pdf

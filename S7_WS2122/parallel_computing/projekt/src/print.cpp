@@ -2,10 +2,11 @@
 
 //Ausgabe des Feldes t als PPM (Portable Pix Map) in filename
 //mit schönen Farben
-void printResult(double* t, int size, char* filename, int iter) {
-    char buf[32];
-    sprintf(buf, "%s-%i.ppm", filename, iter);
-    FILE* f = fopen(buf, "w");
+void printResult(double* t, int size, string filename, int iter) {
+    stringstream ss;
+    ss << filename << "-" << iter << ".ppm";
+    string buf = ss.str();
+    FILE* f = fopen(buf.c_str(), "w");
     fprintf(f, "P3\n%i %i\n255\n", size, size);
     double tmax = 25.0;
     double tmin = -tmax;
