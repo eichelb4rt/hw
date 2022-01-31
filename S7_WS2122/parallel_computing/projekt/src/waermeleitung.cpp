@@ -1,10 +1,15 @@
 #include "waermeleitung.h"
+#include "benchmark.cpp"
 #include "comms.cpp"
 #include "setup.cpp"
 #include "print.cpp"
 
 int main(int argc, char** argv) {
-	MPI_Init(&argc, &argv);
+	int ret = MPI_Init(&argc, &argv);
+	if (ret != MPI_SUCCESS) {
+		MPI_Abort(MPI_COMM_WORLD, ret);
+	}
+
 	//Größe des Feldes
 	int size = 128;
 	//Anzahl Iterationen
@@ -15,17 +20,21 @@ int main(int argc, char** argv) {
 	string filename = "output";
 	// printed iterations
 	int print_distance = 5;
+	// should we benchmark?
+	bool benchmark = false;
 
 	int num, rank;
 	MPI_Comm_size(MPI_COMM_WORLD, &num);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	int n_processes[N_DIMENSIONS];
 	int finalize;
-	setup(rank, num, argc, argv, size, iter, print_distance, g, n_processes, filename, finalize);
+	setup(rank, num, argc, argv, size, iter, print_distance, g, n_processes, benchmark, filename, finalize);
 	if (finalize == 1) {
 		MPI_Finalize();
 		exit(EXIT_FAILURE);
 	}
+
+	SETUP_BENCHMARKS(true)
 
 	//2 Speicherbereiche für das Wärmefeld
 	double* u1, * u2;
@@ -98,14 +107,16 @@ int main(int argc, char** argv) {
 	// factor for thermal calculation stuff
 	const double FACTOR = PARAM_ALPHA * PARAM_T / (PARAM_H * PARAM_H);
 	// main loop
+	START_MEASURE(TIME_TOTAL)
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
-		if (print_distance != DONT_PRINT && i % print_distance == 0) {
+		if (!benchmark && print_distance != DONT_PRINT && i % print_distance == 0) {
 			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
 		}
 		// only communicate every g iterations
 		if (i % g == 0) {
+			START_MEASURE(TIME_COMMS)
 			// communication between east and west
 			current_request = 0;
 			recv_ghosts(EAST, neighbours, recv_buffer_start, l_chunk, vertical_border_t, array_of_requests_ew, current_request, chunk_dimensions, g);
@@ -119,10 +130,11 @@ int main(int argc, char** argv) {
 			recv_ghosts(SOUTH, neighbours, recv_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, chunk_dimensions, g);
 			send_ghosts(NORTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, ((rank * num + i) * N_DIMENSIONS) + NORTH);
 			send_ghosts(SOUTH, neighbours, send_buffer_start, l_chunk, horizontal_border_t, array_of_requests_ns, current_request, ((rank * num + i) * N_DIMENSIONS) + SOUTH);
-			// TODO: does status ignore work like that?
 			MPI_Waitall(n_requests_ns, array_of_requests_ns, array_of_status_ns);
+			END_MEASURE(TIME_COMMS)
 		}
 
+		START_MEASURE(TIME_CALC)
 		// narrow the border
 		border = i % g;
 		// update the grid
@@ -132,12 +144,17 @@ int main(int argc, char** argv) {
 			}
 		}
 		swap(l_chunk, l_chunk_buf);
+		END_MEASURE(TIME_CALC)
 	}
 
 	// collect last state
 	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t);
+	END_MEASURE(TIME_TOTAL)
 	//Output last state into file
-	if (rank == MAIN_RANK) printResult(u1, size, filename, iter);
+	if (!benchmark && rank == MAIN_RANK) printResult(u1, size, filename, iter);
+	
+	PROCESS_BENCHMARKS
+	PRINT_BENCHMARKS(cout)
 	MPI_Finalize();
 	return EXIT_SUCCESS;
 }

@@ -1,9 +1,12 @@
 #ifndef WAERMELEITUNG_H_
 #define WAERMELEITUNG_H_
 
-#include <iostream>
+#include <chrono>
 #include <string>
+#include <vector>
 #include <sstream>
+#include <numeric> 
+#include <iostream>
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +15,7 @@
 using namespace std;
 
 // params for the specific problem
+// TODO: (?) make cl-arguments
 #define PARAM_ALPHA 1
 #define PARAM_H 1
 #define PARAM_T 0.25

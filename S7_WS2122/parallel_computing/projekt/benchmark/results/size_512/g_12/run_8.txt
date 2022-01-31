@@ -1,0 +1,6 @@
+times in seconds
+avg calc time:	0.000149514
+tot calc time:	0.149514
+avg comm time:	0.0060778
+tot comm time:	0.510535
+total time:	0.664612

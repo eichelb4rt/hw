@@ -17,13 +17,14 @@ void init(double* t, int size) {
     }
 }
 
-void setup(int rank, int num, int argc, char** argv, int& field_length, int& iterations, int& print_distance, int& n_ghost_blocks, int* n_processes, string& output_filename, int& finalize) {
+void setup(int rank, int num, int argc, char** argv, int& field_length, int& iterations, int& print_distance, int& n_ghost_blocks, int* n_processes, bool& benchmark, string& output_filename, int& finalize) {
 
     // initial parameters
     finalize = 0;
     output_filename = "output";
     n_ghost_blocks = 1;
     print_distance = 5;
+    benchmark = false;
 
     // read paramaters
     int option;
@@ -33,13 +34,14 @@ void setup(int rank, int num, int argc, char** argv, int& field_length, int& ite
         int this_option_optind = optind ? optind : 1;
         int option_index = 0;
         static struct option long_options[] = {
-            {"out",      required_argument, 0, 'o'},
-            {"ghost",    required_argument, 0, 'g'},
-            {"print",    required_argument, 0, 'p'},
-            {0,          0,                 0,  0 }
+            {"out",       required_argument, 0, 'o'},
+            {"ghost",     required_argument, 0, 'g'},
+            {"print",     required_argument, 0, 'p'},
+            {"benchmark", no_argument,       0, 'b'},
+            {0,           0,                 0,  0 }
         };
 
-        option = getopt_long(argc, argv, "o:g:p:",
+        option = getopt_long(argc, argv, "o:g:p:b",
             long_options, &option_index);
         if (option == -1)
             break;
@@ -56,10 +58,14 @@ void setup(int rank, int num, int argc, char** argv, int& field_length, int& ite
         case 'p':
             print_distance = atoi(optarg);
             break;
+        
+        case 'b':
+            benchmark = true;
+            break;
 
         default:
             if (rank == MAIN_RANK)
-                cout << "usage: stencil_mpi [options] <field_size> <iterations> <px> <py>" << endl;
+                cerr << "usage: stencil_mpi [options] <field_size> <iterations> <px> <py>" << endl;
             finalize = 1;
             return;
         }
@@ -67,7 +73,7 @@ void setup(int rank, int num, int argc, char** argv, int& field_length, int& ite
 
     if (optind + 4 > argc) {
         if (rank == MAIN_RANK)
-            cout << "usage: stencil_mpi [options] <field_size> <iterations> <px> <py>" << endl;
+            cerr << "usage: stencil_mpi [options] <field_size> <iterations> <px> <py>" << endl;
         finalize = 1;
         return;
     }
@@ -81,20 +87,20 @@ void setup(int rank, int num, int argc, char** argv, int& field_length, int& ite
     // check if arguments are valid
     if (num != n_processes[X_AXIS] * n_processes[Y_AXIS]) {
         if (rank == MAIN_RANK)
-            cout << "Process dimensions (" << n_processes[X_AXIS] << " x " << n_processes[Y_AXIS] << ") do not match number of processes (" << num << ")." << endl;
+            cerr << "Process dimensions (" << n_processes[X_AXIS] << " x " << n_processes[Y_AXIS] << ") do not match number of processes (" << num << ")." << endl;
         finalize = 1;
         return;
     }
     int rect_field_size = field_length * field_length;
     if (rect_field_size % n_processes[X_AXIS] != 0) {
         if (rank == MAIN_RANK)
-            cout << "Number of processes in x dimension (" << n_processes[X_AXIS] << ") does not work with field length (" << field_length << ")." << endl;
+            cerr << "Number of processes in x dimension (" << n_processes[X_AXIS] << ") does not work with field length (" << field_length << ")." << endl;
         finalize = 1;
         return;
     }
     if (rect_field_size % n_processes[Y_AXIS] != 0) {
         if (rank == MAIN_RANK)
-            cout << "Number of processes in y dimension (" << n_processes[Y_AXIS] << ") does not work with field length (" << field_length << ")." << endl;
+            cerr << "Number of processes in y dimension (" << n_processes[Y_AXIS] << ") does not work with field length (" << field_length << ")." << endl;
         finalize = 1;
         return;
     }
