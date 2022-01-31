@@ -41,10 +41,20 @@ void printResult(double* t, int size, string filename, int iter) {
     fclose(f);
 }
 
-void collect(double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g, MPI_Datatype chunk_inner_values_t) {
+void collect(double* global_grid, int size, double* local_chunk, int* chunk_dimensions, int* n_processes, int g) {
+    // condense the inner values in an array
+    double* send_buf = (double*) malloc(chunk_dimensions[X_AXIS] * chunk_dimensions[Y_AXIS] * sizeof(double));
+    int local_chunk_index, send_buf_index;
+    for (int y = 0; y < chunk_dimensions[Y_AXIS]; ++y) {
+        for (int x = 0; x < chunk_dimensions[X_AXIS]; ++x) {
+            send_buf_index = y * chunk_dimensions[X_AXIS] + x;
+            local_chunk_index = chunk_index(g + x, g + y);
+            send_buf[send_buf_index] = local_chunk[local_chunk_index];
+        }
+    }
     // first collect all the data from the chunks
     double* recv_buf = (double*) malloc(size * size * sizeof(double));
-    MPI_Gather(&local_chunk[chunk_index(g, g)], 1, chunk_inner_values_t, recv_buf, chunk_dimensions[X_AXIS] * chunk_dimensions[Y_AXIS], MPI_DOUBLE, MAIN_RANK, MPI_COMM_WORLD);
+    MPI_Gather(send_buf, chunk_dimensions[X_AXIS] * chunk_dimensions[Y_AXIS], MPI_DOUBLE, recv_buf, chunk_dimensions[X_AXIS] * chunk_dimensions[Y_AXIS], MPI_DOUBLE, MAIN_RANK, MPI_COMM_WORLD);
     // then arrange them correctly
     int recv_buf_index, global_grid_index;
     // number of all the processes
@@ -69,4 +79,6 @@ void collect(double* global_grid, int size, double* local_chunk, int* chunk_dime
             }
         }
     }
+    free(send_buf);
+    free(recv_buf);
 }

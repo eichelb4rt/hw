@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	SETUP_BENCHMARKS(true)
+	SETUP_BENCHMARKS(benchmark)
 
 	//2 Speicherbereiche für das Wärmefeld
 	double* u1, * u2;
@@ -69,10 +69,6 @@ int main(int argc, char** argv) {
 	get_vector_properties(NORTH, chunk_dimensions, g, block_count, block_length, block_stride);
 	MPI_Type_vector(block_count, block_length, block_stride, MPI_DOUBLE, &horizontal_border_t);
 	MPI_Type_commit(&horizontal_border_t);
-	// type for all the inner values (non-ghost-blocks)
-	MPI_Datatype chunk_inner_values_t;
-	MPI_Type_vector(chunk_dimensions[Y_AXIS], chunk_dimensions[X_AXIS], chunk_dimensions[X_AXIS] + 2 * g, MPI_DOUBLE, &chunk_inner_values_t);
-	MPI_Type_commit(&chunk_inner_values_t);
 
 	// local chunk with ghost blocks
 	double* l_chunk = (double*) malloc((chunk_dimensions[X_AXIS] + 2 * g) * (chunk_dimensions[Y_AXIS] + 2 * g) * sizeof(double));
@@ -111,7 +107,7 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < iter; ++i) {
 		// maybe print?
 		if (!benchmark && print_distance != DONT_PRINT && i % print_distance == 0) {
-			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t);
+			collect(u1, size, l_chunk, chunk_dimensions, n_processes, g);
 			if (rank == MAIN_RANK) printResult(u1, size, filename, i);
 		}
 		// only communicate every g iterations
@@ -146,15 +142,17 @@ int main(int argc, char** argv) {
 		swap(l_chunk, l_chunk_buf);
 		END_MEASURE(TIME_CALC)
 	}
+	// clean up
+	free(l_chunk_buf);
 
 	// collect last state
-	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g, chunk_inner_values_t);
+	collect(u1, size, l_chunk, chunk_dimensions, n_processes, g);
 	END_MEASURE(TIME_TOTAL)
 	//Output last state into file
 	if (!benchmark && rank == MAIN_RANK) printResult(u1, size, filename, iter);
 	
 	PROCESS_BENCHMARKS
-	PRINT_BENCHMARKS(cout)
+	PRINT_BENCHMARKS
 	MPI_Finalize();
 	return EXIT_SUCCESS;
 }

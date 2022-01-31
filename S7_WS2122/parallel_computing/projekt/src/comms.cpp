@@ -56,7 +56,7 @@ void pad(int direction, int* recv_buffer_start, double* grid, int* chunk_dimensi
     }
 }
 
-void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int& current_request, int tag) {
+void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double* grid, MPI_Datatype border_type, MPI_Request* array_of_requests, int& current_request, int tag) {
     // do nothing if the neighbour does not exist
     if (neighbours[direction] == UNDEFINED_RANK) return;
     // send from non-ghost-zone-end
@@ -66,7 +66,7 @@ void send_ghosts(int direction, int* neighbours, int* send_buffer_start, double*
     ++current_request;
 }
 
-void recv_ghosts(int direction, int* neighbours, int* recv_buffer_start, double* grid, MPI_Datatype border_type, int* array_of_requests, int& current_request, int* chunk_dimensions, int g) {
+void recv_ghosts(int direction, int* neighbours, int* recv_buffer_start, double* grid, MPI_Datatype border_type, MPI_Request* array_of_requests, int& current_request, int* chunk_dimensions, int g) {
     // pad if the neighbour does not exist
     if (neighbours[direction] == UNDEFINED_RANK) {
         pad(direction, recv_buffer_start, grid, chunk_dimensions, g);
