@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm, left=10mm, right=10mm, bottom=20mm}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{color}
+\usepackage{scalerel}
+%------------------------------------------ preamble
+%----- fancyhdr
+\fancyhead[L]{Name: Maurice Wenig}
+\fancyhead[R]{Matrikelnummer: 178049}
+\fancyfoot{}
+\rfoot{Seite \thepage\ von \pageref{LastPage}}
+\pagestyle{fancy}
+%----- aufgaben
+\newtheoremstyle{break}{}{5mm}{}{}{\bfseries}{}{0mm}
+{\textbf{\thmname{#1}\thmnumber{ #2:} \thmnote{\textit{#3}}\newline}}
+\theoremstyle{break}
+\newtheorem{task}{Aufgabe}
+%----- new commands
+\newcommand{\Romannumeral}[1]{\MakeUppercase{\romannumeral #1}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+\newcommand{\skal}[2]{\left\langle #1 | #2 \right\rangle}
+\newcommand{\expected}[1]{\mathbb{E}\set{#1}}
+\newcommand{\variance}[1]{\text{Var}\set{#1}}
+%----- defs
+\def\notiff{\mathrel{{\ooalign{\hidewidth$\not\phantom{"}$\hidewidth\cr$\iff$}}}}
+\def\R{\ensuremath{\mathbb{R}}}
+\def\1{\ensuremath{\mathbb{1}}}
+\def\ndy{
+    \textcolor{red} {\hfill not done yet!}
+    \reversemarginpar
+    \marginpar{\raggedleft\textcolor{red}{\rule{2mm}{2mm}}}
+}
+\def\fourier{\mathcal{F}}
+\def\INT{\int_{-\infty}^{\infty}}
+%----- homework number
+\newcommand{\hw}{5}
+%------------------------------------------ main
+\begin{document}
+%----- title
+\begin{center}
+    \Large{Rechnersehen Theorieaufgaben}\\
+    \large{\hw. Übungsserie}
+\end{center}
+%----- tasks
+\begin{task}
+    \hfill\vspace{-5mm}
+    \begin{enumerate}[label={\alph*)}]
+        \item $C_p$ ist positiv semi-definit:
+        \begin{align*}
+            C_p &= \begin{pmatrix}
+                \sum\limits_{\omega \in \Omega(p)} I^2_x (\omega) & \sum\limits_{\omega \in \Omega(p)} I_x (\omega) I_y (\omega)\\
+                \sum\limits_{\omega \in \Omega(p)} I_y (\omega) I_x (\omega) & \sum\limits_{\omega \in \Omega(p)} I^2_y (\omega)
+            \end{pmatrix}\\
+            &= \sum\limits_{\omega \in \Omega(p)} \begin{pmatrix}
+                I^2_x (\omega) & I_x (\omega) I_y (\omega)\\
+                I_y (\omega) I_x (\omega) & I^2_y (\omega)
+            \end{pmatrix}\\
+            &= \sum\limits_{\omega \in \Omega(p)} I(\omega) I(\omega)^T,\quad I(\omega) = \begin{pmatrix}
+                I_x(\omega)\\
+                I_y(\omega)
+            \end{pmatrix}\\
+            u^T C_p u &= u^T \left( \sum\limits_{\omega \in \Omega(p)} I(\omega) I(\omega)^T \right) u\\
+            &= \sum\limits_{\omega \in \Omega(p)} u^T I(\omega) I(\omega)^T u\\
+            &= \sum\limits_{\omega \in \Omega(p)} \left(I(\omega)^T u\right)^2 \geq 0,\quad u \in \mathbb{R}^2 \qed
+        \end{align*}
+        und per Definition symmetrisch. Deshalb ist $C_p$ diagonalisierbar.
+        \item Die beiden Diagonaleinträge sind die Eigenwerte $\lambda_1, \lambda_2$ von $C_p$. Da $C_p$ positiv semi-definit ist, gilt mit Eigenvektor $v_i$ von $\lambda_i$:
+        \begin{align*}
+            C_p v_i &= \lambda_i v_i\\
+            \underbrace{v_i^T C_p v_i}_{\geq 0} &= \lambda_i v_i^T v_i = \lambda_i \underbrace{v_i^2}_{\geq 0}
+        \end{align*}
+        Dadurch gilt auch $\lambda_i \geq 0 \qed$
+        \item Die Eigenwerte sind die Nullstellen des Charakteristischen Polynoms. Mit 
+        \begin{align*}
+            a &= \sum\limits_{\omega \in \Omega(p)} I^2_x (\omega)\\
+            b &= \sum\limits_{\omega \in \Omega(p)} I_x (\omega) I_y (\omega) = \sum\limits_{\omega \in \Omega(p)} I_y (\omega) I_x (\omega)\\
+            c &= \sum\limits_{\omega \in \Omega(p)} I^2_y (\omega)
+        \end{align*}
+        soll gelten:
+        \begin{align*}
+            \det \begin{pmatrix}
+                a - \lambda & b\\
+                b & c - \lambda
+            \end{pmatrix} &\stackrel{!}{=} 0\\
+            (a - \lambda)(c - \lambda) - b^2 &\stackrel{!}{=} 0\\
+            \lambda^2 - (a + c)\lambda + ac - b^2 &\stackrel{!}{=} 0
+        \end{align*}
+        Somit gilt $\lambda_1, \lambda_2 = \frac{(a + c) \pm \sqrt{(a + c) - 4(ac - b^2)}}{2}$.
+        \item Die Eigenwerte geben in diesem Kontext an, wie schnell sich das Bild um das Zentrum in die Richtung der zugehörigen Eigenwerte verändert. So kann man feststellen, ob sich im beobachteten Bereich eine Ecke, eine Kante, oder ein homogener Bereich befindet.
+    \end{enumerate}
+\end{task}
+\end{document}

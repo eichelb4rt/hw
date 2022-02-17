@@ -60,9 +60,9 @@ def get_param_g(dir_name: str) -> int:
     return int(Path(dir_name).stem.split("_")[-1])
 
 
-def plot_field_size(field_size: int):
+def plot_field_size_total(field_size: int):
     directories_glob = f"./benchmark/results/size_{field_size}/*"
-    plot_save_file = f"./benchmark/plot_{field_size}.png"
+    plot_save_file = f"./benchmark/plots/plot_total_{field_size}.png"
     dir_paths = [(get_param_g(file), file)
                  for file in glob.glob(directories_glob)]
     dir_paths.sort(key=lambda tup: tup[0])
@@ -74,9 +74,37 @@ def plot_field_size(field_size: int):
     line_total_comm = [result.total_comm for result in avg_results]
     line_total = [result.total for result in avg_results]
 
-    plt.plot(x_axis, line_total_calc, label="T comp")
-    plt.plot(x_axis, line_total_comm, label="T comm")
-    plt.plot(x_axis, line_total, label="T all")
+    plt.plot(x_axis, line_total_calc, label="total T comp")
+    plt.plot(x_axis, line_total_comm, label="total T comm")
+    plt.plot(x_axis, line_total, label="total T all")
+
+    plt.xlabel('parameter g')
+    plt.ylabel('time in seconds')
+    plt.title(f"Waermeleitung Benchmark (size {field_size})")
+    # show a legend on the plot
+    plt.legend()
+    # function to show the plot
+    plt.savefig(plot_save_file)
+    plt.close()
+
+def plot_field_size_avg(field_size: int):
+    directories_glob = f"./benchmark/results/size_{field_size}/*"
+    plot_save_file = f"./benchmark/plots/plot_avg_{field_size}.png"
+    dir_paths = [(get_param_g(file), file)
+                 for file in glob.glob(directories_glob)]
+    dir_paths.sort(key=lambda tup: tup[0])
+    avg_results = [avg_result(read_results(
+        f"{dir_path}/*")) for _, dir_path in dir_paths]
+
+    x_axis = [param_g for param_g, _ in dir_paths]
+    line_avg_calc = [result.avg_calc for result in avg_results]
+    line_avg_comm = [result.avg_comm for result in avg_results]
+    # a single calculation was measured. let's scale it (we actually calcualte g times for every communication)
+    for i in range(len(x_axis)):
+        line_avg_calc[i] *= int(x_axis[i])
+
+    plt.plot(x_axis, line_avg_calc, label="average T comp")
+    plt.plot(x_axis, line_avg_comm, label="average T comm")
 
     plt.xlabel('parameter g')
     plt.ylabel('time in seconds')
@@ -90,7 +118,8 @@ def plot_field_size(field_size: int):
 
 def main():
     for field_size in FIELD_SIZES:
-        plot_field_size(field_size)
+        plot_field_size_total(field_size)
+        plot_field_size_avg(field_size)
 
 
 if __name__ == "__main__":

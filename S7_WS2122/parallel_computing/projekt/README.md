@@ -1,5 +1,11 @@
 # Waermeleitung
 
+## Disclaimer
+
+Die getesteten Werte sind vom lokalen Rechner. Beim ARA-Cluster kam es aus mir nicht ersichtlichen Gründen bei MPI_Finalize() (nicht vorher) zu Segmentation faults. Lokal funktioniert alles.
+
+## Usage
+
 ```plaintext
 usage: stencil_mpi [options] <field_size> <iterations> <px> <py>
 options:

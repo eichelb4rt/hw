@@ -166,30 +166,28 @@ Um die neuen Werte zu berechnen werden zwei Arrays benutzt. Eines, das die alten
 % TODO: update lines
 \subsection{Chunks}
 Zu dem inneren Chunk kommt noch das Ghost-Block-Halo dazu:
-\inputminted[fontsize=\scriptsize, firstline=68, lastline=73]{C}{../src/waermeleitung.c}
+\inputminted[fontsize=\scriptsize, firstline=73, lastline=78]{C}{../src/waermeleitung.cpp}
 
 \subsection{Kommunikation}
 \subsubsection{Ghost Cells}
 Für bessere Lesbarkeit werden die Axen \verb+X_AXIS,Y_AXIS+ und die Richtungen \verb+EAST,WEST,NORTH,SOUTH+ definiert. Den Richtungen werden relative Positionen im Gitter zugewiesen. Außerdem werden ein \verb+MAIN_RANK+ definiert, der alles sammelt und ausgibt, sowie ein undefinierter Rang \verb+UNDEFINED_RANK+, der für Nachbarn außerhalb des Gitters steht.
-\inputminted[fontsize=\scriptsize, firstline=22, lastline=48]{C}{../src/waermeleitung.h}
+\inputminted[fontsize=\scriptsize, firstline=31, lastline=57]{C}{../src/waermeleitung.h}
 Um die Blöcke von Ghost Cells effizient zu verschicken, werden Vektoren von MPI verwendet.
-\inputminted[fontsize=\scriptsize, firstline=51, lastline=62]{C}{../src/waermeleitung.c}
-\inputminted[fontsize=\scriptsize, firstline=3, lastline=16]{C}{../src/comms.c}
+\inputminted[fontsize=\scriptsize, firstline=60, lastline=71]{C}{../src/waermeleitung.cpp}
+\inputminted[fontsize=\scriptsize, firstline=3, lastline=16]{C}{../src/comms.cpp}
 Die Punkte, an denen Blöcke anfangen, werden hier definiert:
-\inputminted[fontsize=\scriptsize, firstline=18, lastline=29]{C}{../src/comms.c}
+\inputminted[fontsize=\scriptsize, firstline=18, lastline=29]{C}{../src/comms.cpp}
 Mit \verb+neighbours[direction]+ als Rang des Nachbars in der jeweiligen Richtung wird dann wie folgt kommuniziert:
-\inputminted[fontsize=\scriptsize, firstline=59, lastline=80]{C}{../src/comms.c}
+\inputminted[fontsize=\scriptsize, firstline=59, lastline=80]{C}{../src/comms.cpp}
 Padding:
-\inputminted[fontsize=\scriptsize, firstline=31, lastline=57]{C}{../src/comms.c}
+\inputminted[fontsize=\scriptsize, firstline=31, lastline=57]{C}{../src/comms.cpp}
 \subsubsection{Collect}
-Auch hier werden wieder Vektoren verwendet:
-\inputminted[fontsize=\scriptsize, firstline=63, lastline=66]{C}{../src/waermeleitung.c}
-Die inneren Chunks werden dann hintereinander in einen Buffer geschrieben. Die Werte im Buffer werden für das Ergebnis umgeordnet.
-\inputminted[fontsize=\scriptsize, firstline=43, lastline=71]{C}{../src/print.c}
+Die inneren Chunks werden dann konzentriert hintereinander in einen Buffer geschrieben. Die Werte im Buffer werden für das Ergebnis umgeordnet.
+\inputminted[fontsize=\scriptsize, firstline=44, lastline=48]{C}{../src/print.cpp}
 
 \subsection{Berechnung}
 Berechnung nach Aufgabenstellung mit \verb+FACTOR+ $= \alpha \cdot \frac{\Delta t}{h^2}$.
-\inputminted[fontsize=\scriptsize, firstline=126, lastline=134]{C}{../src/waermeleitung.c}
+\inputminted[fontsize=\scriptsize, firstline=135, lastline=142]{C}{../src/waermeleitung.cpp}
 
 
 \clearpage
@@ -207,6 +205,91 @@ Parameter, die angepasst werden können:
     \item Breite des Ghost Cell Halos
     \item Abstand der Iterationen, in denen ein Zwischenstand gespeichert wird
 \end{itemize}
+
+\clearpage
+\section{Auswertung}
+(Disclaimer:) Die Performance wurde auf meinem lokalen Rechner gemessen, da es auf dem ARA-Cluster zu fehlern kam (siehe \verb+README.md+).
+
+\begin{figure}[!htb]
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_total_128.png}
+        \caption{field size 128}\label{fig:plot_128_tot}
+    \end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_total_256.png}
+        \caption{field size 256}\label{fig:plot_256_tot}
+    \end{subfigure}
+    \newline
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_total_512.png}
+        \caption{field size 512}\label{fig:plot_512_tot}
+    \end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_total_1024.png}
+        \caption{field size 1024}\label{fig:plot_1024_tot}
+    \end{subfigure}
+    \begin{center}
+        \begin{subfigure}{0.5\textwidth}
+            \centering
+            \includegraphics[scale=0.5]{../benchmark/plots/plot_total_2048.png}
+            \caption{field size 2048}\label{fig:plot_2048_tot}
+        \end{subfigure}
+    \end{center}
+	\caption{Zeitverteilung gesamt}
+    \label{fig:all_time}
+\end{figure}
+
+\begin{figure}[!htb]
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_avg_128.png}
+        \caption{field size 128}\label{fig:plot_128_avg}
+    \end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_avg_256.png}
+        \caption{field size 256}\label{fig:plot_256_avg}
+    \end{subfigure}
+    \newline
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_avg_512.png}
+        \caption{field size 512}\label{fig:plot_512_avg}
+    \end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[scale=0.5]{../benchmark/plots/plot_avg_1024.png}
+        \caption{field size 1024}\label{fig:plot_1024_avg}
+    \end{subfigure}
+    \begin{center}
+        \begin{subfigure}{0.5\textwidth}
+            \centering
+            \includegraphics[scale=0.5]{../benchmark/plots/plot_avg_2048.png}
+            \caption{field size 2048}\label{fig:plot_2048_avg}
+        \end{subfigure}
+    \end{center}
+	\caption{Zeitverteilung einzelner Zeitschritt}
+    \label{fig:single_time}
+\end{figure}
+
+Jeder Prozess hat einzeln die Zeiten der Berechnungs- und Kommunikationszeiten für einzelne Schritte gemessen. Daraus wurden Gesamtzeiten und Durchschnittszeiten der einzelnen Prozesse berechnet. Über den Prozessen wurde dann der Durchschnitt gezogen.
+Die Gesamtzeit des Programms wurde nur vom main rank gemessen.
+
+Wie man in \autoref{fig:all_time} sieht, führt eine Erhöhung der Halobreite zuerst zu einer Verbesserung der Laufzeit, da der Aufbau der Kommunikation deutlich länger braucht als die Berechnung der inneren Werte. 
+Durch höhere Halobreite wird seltener kommuniziert und mehr berechnet. 
+Die zusätzliche Menge an übertragenen Daten sind erst nicht relevant, da der Kommunikationsaufbau länger braucht als die tatsächliche Übertragung der Daten.
+
+Die höhere Halobreite führt später allerdings zu einer Verlangsamung.
+In \autoref{fig:single_time} ist gut zu sehen, dass die Kommunikationszeiten schneller steigen als die Berechnungszeiten.
+Die Vermutung ist, dass ab dieser Halobreite die Übertragung länger dauert, als der Aufbau der Kommunikation.
+Die zunehmende Redundanz der Berechnungen ist sicherlich auch ein Grund für die Verlangsamung.
+
+Die Berechnung wäre sicherlich noch um einiges schneller, wenn die Kommunikation während der Berechnung ablaufen würde, und nicht nur halb-asynchron und vor der Berechnung.
+\FloatBarrier
 
 \typeout{}
 \clearpage
