@@ -2,7 +2,7 @@
 
 Implementiere
 
-- expilizizen
+- expiliziten
 - impliziten Euler
 
 auf
