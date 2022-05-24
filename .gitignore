@@ -2,7 +2,7 @@
 .vscode
 
 # this is important in the IDE
-!.vscode/c_cpp_properties.json
+!c_cpp_properties.json
 
 # pycache
 __pycache__
