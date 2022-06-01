@@ -64,7 +64,8 @@ def main():
         ax1.plot(T, approximation[:, 3], label="H", color='black')
         ax1.legend()
     ani = animation.FuncAnimation(fig, animate, frames=ANIMATION_STEPS, interval=10)
-    plt.show()
+    ani.save("animation.gif")
+    # plt.show()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,8 @@
+# IDE
+.vscode
+
+# this is important in the IDE (not working? bruh)
+!c_cpp_properties.json
+
+# pycache
+__pycache__
