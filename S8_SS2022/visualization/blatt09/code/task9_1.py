@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # Given is a vector field v(x,y) = (-y, x)^T.
 # Utility to sample a given position [x,y]:
-def v(pos, t):
+def v(pos):
     # time is not needed in our field, but i added it for convenience
     return np.array([-pos[1], pos[0]])
 
@@ -35,22 +35,22 @@ def generate(v, start, ts, step):
     x = [start]
     d_ts = ts[1:] - ts[:-1]
     for t, d_t in zip(ts[:-1], d_ts):
-        x.append(step(v, x[-1], t, d_t))
+        x.append(step(v, x[-1], d_t))
     return np.array(x)
 
-def euler_step(v, x, t, d_t):
-    return x + d_t * v(x, t)
+def euler_step(v, x, d_t):
+    return x + d_t * v(x)
 
-def midpoint_step(v, x, t, d_t):
-    d_v = d_t * v(x, t)
-    v_mid = v(x + d_v / 2, t + d_t / 2)
+def midpoint_step(v, x, d_t):
+    d_v = d_t * v(x)
+    v_mid = v(x + d_v / 2)
     return x + d_t * v_mid
 
-def rk_step(v, x, t, d_t):
-    k_1 = d_t * v(x, t)
-    k_2 = d_t * v(x + k_1 / 2, t + d_t / 2)
-    k_3 = d_t * v(x + k_2 / 2, t + d_t / 2)
-    k_4 = d_t * v(x + k_3, t + d_t)
+def rk_step(v, x, d_t):
+    k_1 = d_t * v(x)
+    k_2 = d_t * v(x + k_1 / 2)
+    k_3 = d_t * v(x + k_2 / 2)
+    k_4 = d_t * v(x + k_3)
     return x + (k_1 + 2 * k_2 + 2 * k_3 + k_4) / 6    
 
 euler = generate(v, start, ts, euler_step)
