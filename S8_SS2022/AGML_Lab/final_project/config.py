@@ -1,3 +1,6 @@
+INPUT_DIR = "input"
+OUTPUT_DIR = "output"
+
 MIN_RATING = 0
 MAX_RATING = 4
 MISSING_RATING = -1
