@@ -6,11 +6,11 @@ import distance
 
 class Recommender(ABC):
     @abstractmethod
-    def fit(self, X_train):
+    def fit(self, x_train):
         pass
 
     @abstractmethod
-    def recommend(self, X_qualify):
+    def recommend(self, x_qualify):
         pass
 
 
@@ -21,12 +21,12 @@ class MeanRecommender(Recommender):
     def __init__(self):
         self.mean = 0
 
-    def fit(self, X_train):
-        self.mean = np.mean(X_train[:, 2])
+    def fit(self, x_train):
+        self.mean = np.mean(x_train[:, 2])
         return self
 
-    def recommend(self, X_qualify):
-        return np.full((X_qualify.shape[0], 1), self.mean)
+    def recommend(self, x_qualify):
+        return np.full((x_qualify.shape[0], 1), self.mean)
 
 
 class RandomRecommender(Recommender):
@@ -41,11 +41,11 @@ class RandomRecommender(Recommender):
     def __init__(self, max_rating=5):
         self.max_rating = max_rating
 
-    def fit(self, X_train):
+    def fit(self, x_train):
         return self
 
-    def recommend(self, X_qualify):
-        return np.random.randint(self.max_rating, size=(X_qualify.shape[0], 1))
+    def recommend(self, x_qualify):
+        return np.random.randint(self.max_rating, size=(x_qualify.shape[0], 1))
 
 
 class SpecializedMeanRecommender(Recommender):
@@ -62,13 +62,13 @@ class SpecializedMeanRecommender(Recommender):
         self.radius = radius
         self.X_train = []
 
-    def fit(self, X_train):
-        self.X_train = X_train
+    def fit(self, x_train):
+        self.X_train = x_train
         return self
 
-    def recommend(self, X_qualify):
+    def recommend(self, x_qualify):
         recommendations = []
-        for user, item in X_qualify:
+        for user, item in x_qualify:
             similar_items = [train_item for _, train_item, _ in self.X_train if self.similar(item, train_item)]
             # TODO: recommend mean of similar items
             # recommendations.append(np.mean)
