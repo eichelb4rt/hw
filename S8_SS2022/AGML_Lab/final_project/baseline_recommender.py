@@ -1,5 +1,5 @@
 import numpy as np
-from recommender import *
+from recommender import MeanRecommender, RandomRecommender
 
 
 def append_recommendations(X_qualify, recommendations):
