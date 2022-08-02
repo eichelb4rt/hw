@@ -6,10 +6,22 @@ import matplotlib.pyplot as plt
 
 import config
 from recommender import Recommender
+import clock
+import ratings
 
 
 def read(filename: str) -> NDArray[np.int32]:
     return np.genfromtxt(os.path.join(config.INPUT_DIR, filename), delimiter=",", dtype=np.int32)
+
+
+def fit_and_save(recommender: Recommender, x_train: NDArray[np.int32], x_qualify: NDArray[np.int32]):
+    clock.start(f"{recommender.name} offline phase")
+    recommender.fit(x_train)
+    clock.stop(f"{recommender.name} offline phase")
+    clock.start(f"{recommender.name} online phase")
+    predictions = ratings.generate_ratings(recommender, x_qualify)
+    clock.stop(f"{recommender.name} online phase")
+    ratings.save(f"qualifying_{recommender.name}.csv", predictions)
 
 
 def save(filename: str, ratings: NDArray[np.int32]):
@@ -21,7 +33,8 @@ def generate_ratings(recommender: Recommender, x_qualify: NDArray[np.int32]) -> 
 
 
 def append_ratings(x_qualify: NDArray[np.int32], recommendations: NDArray[np.int32]):
-    return np.append(x_qualify, recommendations, axis=1)
+    recommendations_column = np.array([recommendations]).T
+    return np.append(x_qualify, recommendations_column, axis=1)
 
 
 def user_map(x_train: NDArray[np.int32]) -> dict[int, int]:
@@ -31,8 +44,9 @@ def user_map(x_train: NDArray[np.int32]) -> dict[int, int]:
     users = {}
     index = 0
     for user, _, _ in x_train:
-        users[user] = index
-        index += 1
+        if user not in users:
+            users[user] = index
+            index += 1
     return users
 
 
@@ -43,8 +57,9 @@ def item_map(x_train: NDArray[np.int32]) -> dict[int, int]:
     items = {}
     index = 0
     for _, item, _ in x_train:
-        items[item] = index
-        index += 1
+        if item not in items:
+            items[item] = index
+            index += 1
     return items
 
 
@@ -56,7 +71,7 @@ def ratings_matrix(x_train: NDArray[np.int32], user_map: dict[int, int], item_ma
     # fill ratings where found
     for user, item, rating in x_train:
         idx_user = user_map[user]
-        idx_item = user_map[item]
+        idx_item = item_map[item]
         ratings[idx_user, idx_item] = rating
     return ratings
 

@@ -11,6 +11,8 @@ from similarity import SimilarityMeasure
 
 
 class Recommender(ABC):
+    name: str
+
     @abstractmethod
     def fit(self, x_train):
         pass
@@ -24,6 +26,8 @@ class MeanRecommender(Recommender):
     """Takes the mean of all recommendations.
     """
 
+    name = "mean"
+
     def __init__(self):
         self.mean = 0
 
@@ -32,7 +36,7 @@ class MeanRecommender(Recommender):
         return self
 
     def rate(self, x_qualify):
-        return np.full((x_qualify.shape[0], 1), self.mean)
+        return np.full(x_qualify.shape[0], self.mean)
 
 
 class RandomRecommender(Recommender):
@@ -44,6 +48,8 @@ class RandomRecommender(Recommender):
         Ratings will be in range(max_rating).
     """
 
+    name = "random"
+
     def __init__(self, max_rating=5):
         self.max_rating = max_rating
 
@@ -51,7 +57,7 @@ class RandomRecommender(Recommender):
         return self
 
     def rate(self, x_qualify):
-        return np.random.randint(self.max_rating, size=(x_qualify.shape[0], 1))
+        return np.random.randint(self.max_rating, size=x_qualify.shape[0])
 
 
 class UserBasedNeighborhoodRecommender(Recommender):
@@ -65,6 +71,8 @@ class UserBasedNeighborhoodRecommender(Recommender):
     min_similarity: Optional[float]
         Users with similarity < min_similarity are not used for prediction.
     """
+
+    name = "user_based"
 
     def __init__(self, k, min_similarity=None, similarity_measure: SimilarityMeasure = SimilarityMeasure.PAIRWISE_PEASON):
         self.X_train = []
@@ -82,12 +90,10 @@ class UserBasedNeighborhoodRecommender(Recommender):
 
         # ratings_matix[user, item] = rating
         self.ratings_matix: NDArray[np.int8] = None
-        # rated_items[user, item] = has user rated item?
-        self.rated_items: NDArray[bool] = None
         # mean ratings of every user
         self.mean_ratings: NDArray[np.float32] = None
         # similarities[u, v] = how similar are u and v?
-        self.similarities = NDArray[np.float32] = None
+        self.similarities: NDArray[np.float32] = None
 
         # similarity_order[u] = users orderered by similarity to u
         self.similarity_order: NDArray[np.int32] = None
@@ -101,15 +107,21 @@ class UserBasedNeighborhoodRecommender(Recommender):
         self.n_items = len(self.items)
 
         self.ratings_matix = ratings.ratings_matrix(x_train, self.users, self.items)
-        self.rated_items = self.ratings_matix != config.MISSING_RATING
-        self.mean_ratings = np.mean(self.ratings_matix, axis=0)
+        self.mean_ratings = np.mean(self.ratings_matix, axis=1)
 
         # cache similarities so we don't have to calculate it every time
         self.similarities = np.empty((self.n_users, self.n_users))
+        rated_items = self.ratings_matix != config.MISSING_RATING
         for u in range(self.n_users):
             for v in range(u, self.n_users):
                 # items that were rated by both
-                common_items = self.rated_items[u] * self.rated_items[v]
+                common_items = rated_items[u] * rated_items[v]
+                # if there are no common items, - infinity similarity
+                if np.count_nonzero(common_items) == 0:
+                    uv_similarity = -np.infty
+                    self.similarities[u, v] = uv_similarity
+                    self.similarities[v, u] = uv_similarity
+                    continue
                 # ratings for the common items
                 u_ratings = self.ratings_matix[u][common_items]
                 v_ratings = self.ratings_matix[v][common_items]
@@ -131,7 +143,7 @@ class UserBasedNeighborhoodRecommender(Recommender):
         predictions = np.empty(n_queries)
         for i, (user, item) in enumerate(x_qualify):
             predictions[i] = self.rate_single(user, item)
-        return predictions
+        return np.clip(predictions, config.MIN_RATING, config.MAX_RATING)
 
     def rate_single(self, user, item):
         user_unknown = user not in self.users
@@ -177,16 +189,18 @@ class UserBasedNeighborhoodRecommender(Recommender):
         ordered_users = ordered_users[ordered_users != -1]
         # we use the top k of those ordered (by similarity) users (the user itself is already filtered out because his rating is missing)
         peer_group = ordered_users[-self.k:]
+        # if peer group is empty, just return mean rating of user
+        if len(peer_group == 0):
+            return self.mean_ratings[user_idx]
 
         # step 2: calculate rating based on peer group
         all_ratings = self.ratings_matix[:, item_idx]
         all_similarities = self.similarities[user_idx, :]
-        
+
         peer_ratings = all_ratings[peer_group]
         peer_means = self.mean_ratings[peer_group]
         peer_similarities = all_similarities[peer_group]
-        
+
         total_similarity = np.sum(np.abs(peer_similarities))
         weighted_ratings = peer_similarities * (peer_ratings - peer_means)
-        
         return self.mean_ratings[user_idx] + np.sum(weighted_ratings) / total_similarity

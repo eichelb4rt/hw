@@ -21,4 +21,6 @@ def given_mean_pearson(vector1, vector2, mean1, mean2):
     variance2 = np.sum(centered2**2)
     numerator = np.sum(centered1 * centered2)
     denominator = np.sqrt(variance1 * variance2)
+    if denominator == 0:
+        return 0
     return numerator / denominator

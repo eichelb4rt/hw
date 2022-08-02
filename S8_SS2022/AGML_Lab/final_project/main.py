@@ -1,7 +1,7 @@
+import numpy as np
 import config
 import ratings
-from recommender import MeanRecommender, RandomRecommender
-import clock
+from recommender import MeanRecommender, RandomRecommender, UserBasedNeighborhoodRecommender
 
 
 def main():
@@ -10,23 +10,14 @@ def main():
     # user, item, rating
     X_TRAIN = ratings.read("train.csv")
 
-    clock.start("mean_recommender")
-    mean_recommender = MeanRecommender().fit(X_TRAIN)
-    mean_ratings = ratings.generate_ratings(mean_recommender, X_QUALIFY)
-    ratings.save("qualifying_mean.csv", mean_ratings)
-    clock.stop("mean_recommender")
-
-    clock.start("random_recommender")
+    mean_recommender = MeanRecommender()
+    ratings.fit_and_save(mean_recommender, X_TRAIN, X_QUALIFY)
+    
     random_recommender = RandomRecommender(max_rating=config.MAX_RATING)
-    random_ratings = ratings.generate_ratings(random_recommender, X_QUALIFY)
-    ratings.save("qualifying_random.csv", random_ratings)
-    clock.stop("random_recommender")
-
-    clock.start("user_based_recommender")
-    user_based_recommender = RandomRecommender(max_rating=config.MAX_RATING)
-    user_based_ratings = ratings.generate_ratings(user_based_recommender, X_QUALIFY)
-    ratings.save("qualifying_user_based.csv", user_based_ratings)
-    clock.stop("user_based_recommender")
+    ratings.fit_and_save(random_recommender, X_TRAIN, X_QUALIFY)
+    
+    user_based_recommender = UserBasedNeighborhoodRecommender(k=10, min_similarity=-np.infty).fit(X_TRAIN)
+    ratings.fit_and_save(user_based_recommender, X_TRAIN, X_QUALIFY)
 
 
 if __name__ == "__main__":
