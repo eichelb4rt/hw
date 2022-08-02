@@ -13,7 +13,7 @@ def pairwise_pearson(vector1, vector2):
 
 
 # mean is calculated once for every user
-def given_mean_pearson(vector1, vector2, mean1, mean2):
+def given_mean_pearson(vector1, vector2, mean1, mean2) -> float:
     centered1 = (vector1 - mean1)
     centered2 = (vector2 - mean2)
     # (unscaled)

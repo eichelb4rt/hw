@@ -4,6 +4,11 @@ from numpy.typing import NDArray
 
 from recommender import Recommender
 import clock
+import distance
+
+
+def avg_miss(ratings, predicted_ratings):
+    return np.mean(np.abs(ratings - predicted_ratings))
 
 
 def rmse(ratings, predicted_ratings):
@@ -20,6 +25,8 @@ def cross_validate(recommender: Recommender, x: NDArray[np.int32], rotations=8, 
         x_test = x[test_samples, :]
         x_train = x[train_samples, :]
         errors[i] = test_recommender(recommender, x_train, x_test, error_function)
+    clock.avg(f"{recommender.name} offline phase")
+    clock.avg(f"{recommender.name} online phase")
     return np.mean(errors)
 
 
