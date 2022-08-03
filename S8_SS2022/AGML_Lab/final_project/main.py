@@ -16,7 +16,7 @@ def main():
     random_recommender = RandomRecommender(max_rating=config.MAX_RATING)
     ratings.fit_and_save(random_recommender, X_TRAIN, X_QUALIFY)
 
-    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.Z_SCORE, weight_items=False, beta=4)
+    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
     ratings.fit_and_save(user_based_recommender, X_TRAIN, X_QUALIFY)
 
 

@@ -28,7 +28,8 @@ def main():
     print(f"{random_recommender.name} error: {random_error}")
 
     # median number of common items is 4 -> discounted_similarity_threshold = 4
-    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.CENTERED, weight_items=False, beta=4)
+    # median similarity ~0.4
+    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
     clock.start(f"testing {user_based_recommender.name}")
     user_based_error = errors.cross_validate(user_based_recommender, X, ROTATIONS, error_function)
     clock.stop(f"testing {user_based_recommender.name}")

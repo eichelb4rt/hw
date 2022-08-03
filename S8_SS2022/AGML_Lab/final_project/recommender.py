@@ -10,6 +10,9 @@ import config
 import similarity
 
 
+REGULAR_STANDARD_DEVIATION = 1
+
+
 class Recommender(ABC):
     name: str
 
@@ -98,7 +101,7 @@ class UserBasedNeighborhoodRecommender(Recommender):
 
     name = "user_based"
 
-    def __init__(self, k, prediction_type=PredictionType.CENTERED, similarity_measure=similarity.pearson, min_similarity=None, pairwise_mean=False, weight_items=True, alpha=1, beta=None):
+    def __init__(self, k, prediction_type=PredictionType.CENTERED, similarity_measure=similarity.pearson, min_similarity=None, pairwise_mean=True, weight_items=True, alpha=1, beta=None):
         self.k = k
         self.prediction_type = prediction_type
         self.similarity_measure = similarity_measure
@@ -140,7 +143,7 @@ class UserBasedNeighborhoodRecommender(Recommender):
 
         self.ratings_matix = ratings.ratings_matrix(x_train, self.users, self.items)
         self.rated_items = self.ratings_matix != config.MISSING_RATING
-        self.mean_ratings = np.mean(self.ratings_matix, axis=1)
+        self.mean_ratings = np.mean(self.ratings_matix, axis=1, where=self.rated_items)
         if self.prediction_type == PredictionType.Z_SCORE:
             self.std_dev = self.calc_std_dev()
         if self.weight_items:
@@ -274,8 +277,10 @@ class UserBasedNeighborhoodRecommender(Recommender):
         mean_column = np.array([self.mean_ratings[to_be_computed]]).T
         centered = self.ratings_matix[to_be_computed, :] - mean_column
         # only include those items that have been rated
-        condition = self.rated_items[to_be_computed, :]
-        std_dev[to_be_computed] = np.sum(centered**2, axis=1, where=condition)
+        have_been_rated = self.rated_items[to_be_computed, :]
+        std_dev[to_be_computed] = np.sum(centered**2, axis=1, where=have_been_rated) / n_rated_items[to_be_computed]
+        # standard value for std_dev as 1
+        std_dev[std_dev == 0] = REGULAR_STANDARD_DEVIATION
         return std_dev
 
     def calc_item_weights(self):
