@@ -70,7 +70,7 @@ def rating_frequency(samples, save_file=None):
 def main():
     x_train = ratings.read("train.csv")
     rating_frequency(x_train, "train_frequency.png")
-    predictions = np.round(ratings.read_output("qualifying_cluster_users.csv"))
+    predictions = np.round(ratings.read_output("qualifying_item_based.csv"))
     rating_frequency(predictions, "prediction_frequency.png")
     # x_qualify = ratings.read("qualifying_blanc.csv")
     # recommender = UserBasedNeighborhoodRecommender(k=50, min_similarity=-np.infty).fit(x_train)
