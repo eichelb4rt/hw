@@ -248,7 +248,7 @@ class UserBasedNeighborhoodRecommender(Recommender):
             v_mean = np.mean(v_ratings)
         else:
             u_mean = self.mean_ratings[u]
-            v_mean = self.mean_ratings[u]
+            v_mean = self.mean_ratings[v]
         # item weights used for similarity
         if self.weight_items:
             weights = self.item_weights[common_items]
