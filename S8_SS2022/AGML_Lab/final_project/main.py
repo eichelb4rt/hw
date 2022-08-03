@@ -1,7 +1,7 @@
 import numpy as np
 import config
 import ratings
-from recommender import MeanRecommender, RandomRecommender, UserBasedNeighborhoodRecommender, PredictionType
+from recommender import ClusterUsersRecommender, MeanRecommender, RandomRecommender, UserBasedNeighborhoodRecommender, PredictionType
 
 
 def main():
@@ -16,8 +16,11 @@ def main():
     random_recommender = RandomRecommender(max_rating=config.MAX_RATING)
     ratings.fit_and_save(random_recommender, X_TRAIN, X_QUALIFY)
 
-    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
-    ratings.fit_and_save(user_based_recommender, X_TRAIN, X_QUALIFY)
+    # user_based_recommender = UserBasedNeighborhoodRecommender(k_neighbours=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
+    # ratings.fit_and_save(user_based_recommender, X_TRAIN, X_QUALIFY)
+
+    cluster_users_recommender = ClusterUsersRecommender(k_neighbours=50, n_clusters=8, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
+    ratings.fit_and_save(cluster_users_recommender, X_TRAIN, X_QUALIFY)
 
 
 if __name__ == "__main__":

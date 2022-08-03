@@ -1,7 +1,7 @@
 import numpy as np
 import config
 import ratings
-from recommender import MeanRecommender, PredictionType, RandomRecommender, UserBasedNeighborhoodRecommender
+from recommender import ClusterUsersRecommender, MeanRecommender, PredictionType, RandomRecommender, UserBasedNeighborhoodRecommender
 import clock
 import errors
 
@@ -29,12 +29,18 @@ def main():
 
     # median number of common items is 4 -> discounted_similarity_threshold = 4
     # median similarity ~0.4
-    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
-    clock.start(f"testing {user_based_recommender.name}")
-    user_based_error = errors.cross_validate(user_based_recommender, X, ROTATIONS, error_function)
-    clock.stop(f"testing {user_based_recommender.name}")
-    print(f"{user_based_recommender.name} error: {user_based_error}")
-    
+    # user_based_recommender = UserBasedNeighborhoodRecommender(k_neighbours=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
+    # clock.start(f"testing {user_based_recommender.name}")
+    # user_based_error = errors.cross_validate(user_based_recommender, X, ROTATIONS, error_function)
+    # clock.stop(f"testing {user_based_recommender.name}")
+    # print(f"{user_based_recommender.name} error: {user_based_error}")
+
+    cluster_users_recommender = ClusterUsersRecommender(k_neighbours=50, n_clusters=8, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
+    clock.start(f"testing {cluster_users_recommender.name}")
+    user_based_error = errors.cross_validate(cluster_users_recommender, X, ROTATIONS, error_function)
+    clock.stop(f"testing {cluster_users_recommender.name}")
+    print(f"{cluster_users_recommender.name} error: {user_based_error}")
+
     clock.stop("all testing", print_time=True)
 
 
