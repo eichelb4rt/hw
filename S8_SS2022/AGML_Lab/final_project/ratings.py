@@ -11,6 +11,9 @@ import ratings
 def read(filename: str) -> NDArray[np.int32]:
     return np.genfromtxt(os.path.join(config.INPUT_DIR, filename), delimiter=",", dtype=np.int32)
 
+def read_output(filename: str) -> NDArray[np.int32]:
+    return np.genfromtxt(os.path.join(config.OUTPUT_DIR, filename), delimiter=",", dtype=np.int32)
+
 
 def fit_and_save(recommender: Recommender, x_train: NDArray[np.int32], x_qualify: NDArray[np.int32]):
     clock.start(f"{recommender.name} offline phase")

@@ -8,7 +8,6 @@ import distance
 import ratings
 import config
 import similarity
-from similarity import SimilarityMeasure
 
 
 class Recommender(ABC):
@@ -75,23 +74,39 @@ class UserBasedNeighborhoodRecommender(Recommender):
     k: int
         Number of closest users being used for prediction.
 
+    similarity_measure: (vectors, means, weights) => float
+        A similarity measure for two users.
+
+    prediction_type: PredictionType
+        The algorithm used for prediction of ratings.
+
     min_similarity: Optional[float]
         Users with similarity < min_similarity are not used for prediction.
 
-    dicounted_similarity_threshold: int
-        If not None, will be used to calculate the discounted similarity instead of the similarity.
+    pairwise_mean: bool
+        True: Mean will be calculated pairwise on common items for prediction. False: Mean will be calculated once for every user.
+
+    weight_items: bool
+        True: Items will be weighted to counter long tail impact. False: All items have weight 1.
+
+    alpha: float
+        Similarity Amplifier: This is used to amplify the importance of similarity.
+
+    beta: Optional[int]
+        Discounted Similarity Threshold: If not None, this will be used to calculate the discounted similarity instead of the similarity.
     """
 
     name = "user_based"
 
-    def __init__(self, k, min_similarity=None, similarity_measure=SimilarityMeasure.PAIRWISE_PEASON, prediction_type=PredictionType.CENTERED, discounted_similarity_threshold=None):
+    def __init__(self, k, prediction_type=PredictionType.CENTERED, similarity_measure=similarity.pearson, min_similarity=None, pairwise_mean=False, weight_items=True, alpha=1, beta=None):
         self.k = k
-        self.min_similarity = min_similarity
-        self.similarity_measure = similarity_measure
         self.prediction_type = prediction_type
-        self.discounted_similarity_threshold = discounted_similarity_threshold
-        
-        # TODO: similarity hoch alpha
+        self.similarity_measure = similarity_measure
+        self.min_similarity = min_similarity
+        self.pairwise_mean = pairwise_mean
+        self.weight_items = weight_items
+        self.alpha = alpha
+        self.beta = beta
 
         # user -> index
         self.n_users = 0
@@ -107,6 +122,8 @@ class UserBasedNeighborhoodRecommender(Recommender):
         self.mean_ratings: NDArray[np.float32] = None
         # std dev of ratings of every user
         self.std_dev: NDArray[np.float32] = None
+        # weights of items used for similarity
+        self.item_weights: NDArray[np.float32] = None
         # similarities[u, v] = how similar are u and v?
         self.similarities: NDArray[np.float32] = None
         # rated_items[user, item] = has user rated item?
@@ -126,58 +143,14 @@ class UserBasedNeighborhoodRecommender(Recommender):
         self.mean_ratings = np.mean(self.ratings_matix, axis=1)
         if self.prediction_type == PredictionType.Z_SCORE:
             self.std_dev = self.calc_std_dev()
+        if self.weight_items:
+            self.item_weights = self.calc_item_weights()
 
         # cache similarities so we don't have to calculate it every time
         self.similarities = self.calc_similarities()
+
         self.similarity_order = np.argsort(self.similarities, axis=1)
         return self
-
-    def calc_similarities(self):
-        """Calculate all the similarities between Users."""
-        similarities = np.empty((self.n_users, self.n_users))
-        for u in range(self.n_users):
-            for v in range(u, self.n_users):
-                uv_similarity = self.calc_similarity(u, v)
-                # similarity is symmetric
-                similarities[u, v] = uv_similarity
-                similarities[v, u] = uv_similarity
-        return similarities
-
-    def calc_similarity(self, u, v) -> float:
-        """Calculate the similarity between users u, v."""
-        # items that were rated by both
-        common_items = self.rated_items[u] * self.rated_items[v]
-        # if there are no common items, 0 similarity
-        n_common_items = np.count_nonzero(common_items)
-        if n_common_items == 0:
-            return 0
-        # ratings for the common items
-        u_ratings = self.ratings_matix[u][common_items]
-        v_ratings = self.ratings_matix[v][common_items]
-        # similarity of common ratings
-        # sorry, this was necessary because of the different runtime arguments of the different methods
-        if self.similarity_measure == SimilarityMeasure.GIVEN_MEAN_PEASON:
-            uv_similarity = similarity.given_mean_pearson(u_ratings, v_ratings, self.mean_ratings[u], self.mean_ratings[v])
-        elif self.similarity_measure == SimilarityMeasure.PAIRWISE_PEASON:
-            uv_similarity = similarity.pairwise_pearson(u_ratings, v_ratings)
-        # discounted similarity if wanted
-        if self.discounted_similarity_threshold is not None:
-            uv_similarity *= min(n_common_items, self.discounted_similarity_threshold) / self.discounted_similarity_threshold
-        return uv_similarity
-
-    def calc_std_dev(self):
-        std_dev = np.empty(self.n_users)
-        n_rated_items = np.count_nonzero(self.rated_items, axis=1)
-        # std dev of items with 1 or less item are set to 0
-        std_dev[n_rated_items <= 1] = 0
-        # all others are computed
-        to_be_computed = n_rated_items > 1
-        mean_column = np.array([self.mean_ratings[to_be_computed]]).T
-        centered = self.ratings_matix[to_be_computed, :] - mean_column
-        # only include those items that have been rated
-        condition = self.rated_items[to_be_computed, :]
-        std_dev[to_be_computed] = np.sum(centered**2, axis=1, where=condition)
-        return std_dev
 
     def rate(self, x_qualify):
         n_queries = len(x_qualify)
@@ -246,6 +219,68 @@ class UserBasedNeighborhoodRecommender(Recommender):
             peer_std_dev = self.std_dev[peer_group]
             weighted_ratings = peer_similarities * (peer_ratings - peer_means) / peer_std_dev
             return self.mean_ratings[user_idx] + self.std_dev[user_idx] * np.sum(weighted_ratings) / total_similarity
+
+    def calc_similarities(self):
+        """Calculate all the similarities between Users."""
+        similarities = np.empty((self.n_users, self.n_users))
+        for u in range(self.n_users):
+            for v in range(u, self.n_users):
+                uv_similarity = self.single_similarity(u, v)
+                # similarity is symmetric
+                similarities[u, v] = uv_similarity
+                similarities[v, u] = uv_similarity
+        return similarities
+
+    def single_similarity(self, u, v) -> float:
+        """Calculate the similarity between users u, v."""
+        # items that were rated by both
+        common_items = self.rated_items[u] * self.rated_items[v]
+        # if there are no common items, 0 similarity
+        n_common_items = np.count_nonzero(common_items)
+        if n_common_items == 0:
+            return 0
+        # ratings for the common items
+        u_ratings = self.ratings_matix[u][common_items]
+        v_ratings = self.ratings_matix[v][common_items]
+        # means used for similarity
+        if self.pairwise_mean:
+            u_mean = np.mean(u_ratings)
+            v_mean = np.mean(v_ratings)
+        else:
+            u_mean = self.mean_ratings[u]
+            v_mean = self.mean_ratings[u]
+        # item weights used for similarity
+        if self.weight_items:
+            weights = self.item_weights[common_items]
+        else:
+            weights = np.ones(n_common_items)
+        # similarity of common ratings
+        uv_similarity = self.similarity_measure(u_ratings, v_ratings, u_mean, v_mean, weights)
+        # discounted similarity if wanted
+        if self.beta is not None:
+            uv_similarity *= min(n_common_items, self.beta) / self.beta
+        # amplify similarity
+        if self.alpha != 1:
+            uv_similarity = np.sign(uv_similarity) * np.abs(uv_similarity) ** self.alpha
+        return uv_similarity
+
+    def calc_std_dev(self):
+        std_dev = np.empty(self.n_users)
+        n_rated_items = np.count_nonzero(self.rated_items, axis=1)
+        # std dev of items with 1 or less item are set to 0
+        std_dev[n_rated_items <= 1] = 0
+        # all others are computed
+        to_be_computed = n_rated_items > 1
+        mean_column = np.array([self.mean_ratings[to_be_computed]]).T
+        centered = self.ratings_matix[to_be_computed, :] - mean_column
+        # only include those items that have been rated
+        condition = self.rated_items[to_be_computed, :]
+        std_dev[to_be_computed] = np.sum(centered**2, axis=1, where=condition)
+        return std_dev
+
+    def calc_item_weights(self):
+        item_ratings = np.count_nonzero(self.rated_items, axis=0)
+        return np.log(self.n_items / item_ratings)
 
     def get_peers(self, user_idx, item_idx):
         # determine top k allowed users

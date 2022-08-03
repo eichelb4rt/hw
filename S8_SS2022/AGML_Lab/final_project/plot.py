@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import Counter
@@ -20,7 +21,7 @@ def frequency(rating_counts: Counter, x_name="item", save_file=None):
     plt.xlabel(f"{x_name} index")
     plt.ylabel("number of ratings")
     if save_file is not None:
-        plt.savefig(save_file)
+        plt.savefig(os.path.join(config.PLOT_DIR, save_file))
     else:
         plt.show()
 
@@ -61,7 +62,7 @@ def rating_frequency(samples, save_file=None):
     plt.xlabel(f"ratings")
     plt.ylabel("number of ratings")
     if save_file is not None:
-        plt.savefig(save_file)
+        plt.savefig(os.path.join(config.PLOT_DIR, save_file))
     else:
         plt.show()
 
@@ -69,10 +70,12 @@ def rating_frequency(samples, save_file=None):
 def main():
     x_train = ratings.read("train.csv")
     rating_frequency(x_train, "train_frequency.png")
-    x_qualify = ratings.read("qualifying_blanc.csv")
-    recommender = UserBasedNeighborhoodRecommender(k=50, min_similarity=-np.infty).fit(x_train)
-    predictions = np.round(ratings.generate_ratings(recommender, x_qualify))
+    predictions = np.round(ratings.read_output("qualifying_user_based.csv"))
     rating_frequency(predictions, "prediction_frequency.png")
+    # x_qualify = ratings.read("qualifying_blanc.csv")
+    # recommender = UserBasedNeighborhoodRecommender(k=50, min_similarity=-np.infty).fit(x_train)
+    # predictions = np.round(ratings.generate_ratings(recommender, x_qualify))
+    # rating_frequency(predictions, "prediction_frequency.png")
 
 
 if __name__ == "__main__":

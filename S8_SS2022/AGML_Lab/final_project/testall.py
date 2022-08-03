@@ -1,7 +1,7 @@
 import numpy as np
 import config
 import ratings
-from recommender import MeanRecommender, RandomRecommender, UserBasedNeighborhoodRecommender
+from recommender import MeanRecommender, PredictionType, RandomRecommender, UserBasedNeighborhoodRecommender
 import clock
 import errors
 
@@ -10,6 +10,7 @@ error_function = errors.avg_miss
 
 
 def main():
+    clock.start("all testing")
     # user, item, rating
     X = ratings.read("train.csv")
     np.random.shuffle(X)
@@ -27,11 +28,13 @@ def main():
     print(f"{random_recommender.name} error: {random_error}")
 
     # median number of common items is 4 -> discounted_similarity_threshold = 4
-    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, discounted_similarity_threshold=4)
+    user_based_recommender = UserBasedNeighborhoodRecommender(k=50, prediction_type=PredictionType.CENTERED, weight_items=False, beta=4)
     clock.start(f"testing {user_based_recommender.name}")
     user_based_error = errors.cross_validate(user_based_recommender, X, ROTATIONS, error_function)
     clock.stop(f"testing {user_based_recommender.name}")
     print(f"{user_based_recommender.name} error: {user_based_error}")
+    
+    clock.stop("all testing", print_time=True)
 
 
 if __name__ == "__main__":
