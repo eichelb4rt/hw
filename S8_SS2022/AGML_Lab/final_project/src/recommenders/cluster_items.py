@@ -13,7 +13,7 @@ from recommenders.item_based import ItemBasedNeighborhoodRecommender
 class ClusterItemsRecommender(ItemBasedNeighborhoodRecommender):
     name = "cluster_items"
 
-    def __init__(self, k_neighbours, n_clusters, distance_measure=distance.manhattan, epsilon=0.05, max_iterations=20, similarity_measure=similarity.pearson, min_similarity=None, weight_items=True, alpha=1, beta=None):
+    def __init__(self, k_neighbours, n_clusters, distance_measure=distance.rating_manhattan, epsilon=0.05, max_iterations=20, similarity_measure=similarity.pearson, min_similarity=None, weight_items=True, alpha=1, beta=None):
         self.kmeans = KMeans(n_clusters, distance_measure, epsilon, max_iterations)
         self.labels: NDArray[np.int8] = None
         super().__init__(k_neighbours, similarity_measure, min_similarity, weight_items, alpha, beta)

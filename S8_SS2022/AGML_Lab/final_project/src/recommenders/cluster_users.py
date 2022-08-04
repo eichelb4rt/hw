@@ -13,7 +13,7 @@ from recommenders.user_based import UserBasedNeighborhoodRecommender, Prediction
 class ClusterUsersRecommender(UserBasedNeighborhoodRecommender):
     name = "cluster_users"
 
-    def __init__(self, k_neighbours, n_clusters, distance_measure=distance.manhattan, epsilon=0.05, max_iterations=20, prediction_type=PredictionType.CENTERED, similarity_measure=similarity.pearson, min_similarity=None, pairwise_mean=True, weight_items=True, alpha=1, beta=None):
+    def __init__(self, k_neighbours, n_clusters, distance_measure=distance.rating_manhattan, epsilon=0.05, max_iterations=20, prediction_type=PredictionType.CENTERED, similarity_measure=similarity.pearson, min_similarity=None, pairwise_mean=True, weight_items=True, alpha=1, beta=None):
         self.kmeans = KMeans(n_clusters, distance_measure, epsilon, max_iterations)
         self.labels: NDArray[np.int8] = None
         super().__init__(k_neighbours, prediction_type, similarity_measure, min_similarity, pairwise_mean, weight_items, alpha, beta)
