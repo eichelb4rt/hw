@@ -3,9 +3,9 @@ import numpy as np
 from numpy.typing import NDArray
 
 import config
-from recommender import Recommender
-import clock
-import ratings
+from recommenders.recommender import Recommender
+import func.clock as clock
+import func.ratings as ratings
 
 
 def read(filename: str) -> NDArray[np.int32]:

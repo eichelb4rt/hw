@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 from collections import Counter
 
 import config
-import ratings
-from recommender import UserBasedNeighborhoodRecommender
-import errors
+import func.ratings as ratings
 
 
 def frequency(rating_counts: Counter, x_name="item", save_file=None):

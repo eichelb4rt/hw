@@ -2,9 +2,9 @@ from __future__ import annotations
 from numpy.typing import NDArray
 import numpy as np
 
-import clock
+import func.clock as clock
 import config
-import distance
+import func.distance as distance
 
 
 class KMeans:
@@ -21,7 +21,7 @@ class KMeans:
 
     def fit(self, vectors: NDArray[np.int8]) -> KMeans:
         self.n_dims = vectors.shape[1]
-        self.init_prototypes(vectors)
+        self.init_prototypes()
         changes = np.full(self.k, np.infty)
         iteration = 0
         while np.sum(changes) >= self.epsilon and iteration < self.max_iterations:
@@ -32,8 +32,7 @@ class KMeans:
             iteration += 1
         return self
 
-    def init_prototypes(self, vectors: NDArray[np.int8]):
-        # one could make deterministic initializations, depending on the given vectors. But i don't wanna do that so i'm leaving the vectors unused.
+    def init_prototypes(self):
         self.prototypes = np.random.randint(config.MIN_RATING, config.MAX_RATING + 1, size=(self.k, self.n_dims), dtype=np.int8)
 
     def label_all(self, vectors: NDArray[np.int8]) -> NDArray[np.int8]:

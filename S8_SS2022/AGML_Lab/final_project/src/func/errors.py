@@ -2,9 +2,8 @@ import numpy as np
 from typing import Tuple
 from numpy.typing import NDArray
 
-from recommender import Recommender
-import clock
-import distance
+from recommenders.recommender import Recommender
+import func.clock as clock
 
 
 def avg_miss(ratings, predicted_ratings):

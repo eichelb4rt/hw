@@ -1,12 +1,20 @@
 import numpy as np
+
 import config
-import ratings
-from recommender import ClusterItemsRecommender, ClusterUsersRecommender, ItemBasedNeighborhoodRecommender, MeanRecommender, PredictionType, RandomRecommender, Recommender, UserBasedNeighborhoodRecommender
-import clock
-import errors
+import func.ratings as ratings
+import func.clock as clock
+import func.errors as errors
+
+from recommenders.recommender import Recommender
+from recommenders.simple import MeanRecommender, RandomRecommender
+from recommenders.user_based import UserBasedNeighborhoodRecommender
+from recommenders.item_based import ItemBasedNeighborhoodRecommender
+from recommenders.cluster_users import ClusterUsersRecommender
+from recommenders.cluster_items import ClusterItemsRecommender
 
 ROTATIONS = 8
 error_function = errors.avg_miss
+
 
 def test(recommender: Recommender, X):
     clock.start(f"testing {recommender.name}")
@@ -34,12 +42,12 @@ def main():
 
     # cluster_users_recommender = ClusterUsersRecommender(k_neighbours=50, n_clusters=8, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
     # test(cluster_users_recommender, X)
-    
+
     # (min_simlarity, error): (0.3, 0.276), (0.4, 0.259), (0.5, 0.250), (0.6, 0.262), (0.7, 0.308)
     # (beta, error): (4, 0.250), (6, 0.250), (8, 0.249), (10, 0.2489), (12, 0.250), (14, 0.249), (16, 0.249)
     item_based_recommender = ItemBasedNeighborhoodRecommender(k_neighbours=50, weight_items=True, min_similarity=0.5, beta=6)
     test(item_based_recommender, X)
-    
+
     # NOTE: Clustering items lead to incredibly worse results (0.25 -> 0.3) and didn't make it much faster (44s -> 30s)
     # cluster_items_recommender = ClusterItemsRecommender(k_neighbours=50, n_clusters=4, weight_items=True, min_similarity=0.4, beta=4)
     # test(cluster_items_recommender, X)

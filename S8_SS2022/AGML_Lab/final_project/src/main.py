@@ -1,7 +1,11 @@
 import numpy as np
 import config
-import ratings
-from recommender import ClusterUsersRecommender, ItemBasedNeighborhoodRecommender, MeanRecommender, RandomRecommender, UserBasedNeighborhoodRecommender, PredictionType
+import func.ratings as ratings
+from recommenders.simple import MeanRecommender, RandomRecommender
+from recommenders.user_based import UserBasedNeighborhoodRecommender
+from recommenders.item_based import ItemBasedNeighborhoodRecommender
+from recommenders.cluster_users import ClusterUsersRecommender
+from recommenders.cluster_items import ClusterItemsRecommender
 
 
 def main():

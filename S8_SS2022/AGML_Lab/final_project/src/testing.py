@@ -1,7 +1,7 @@
 import numpy as np
 
 import config
-import ratings
+import func.ratings as ratings
 
 
 def main():
