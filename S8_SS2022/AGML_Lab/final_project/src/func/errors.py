@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Tuple
 from numpy.typing import NDArray
+from func.dynamic_line import Progress
 
 from recommenders.recommender import Recommender
 import func.clock as clock
@@ -14,16 +15,18 @@ def rmse(ratings, predicted_ratings):
     return np.sqrt(np.mean(np.square(ratings - predicted_ratings)))
 
 
-def cross_validate(recommender: Recommender, x: NDArray[np.int32], rotations=8, error_function=rmse):
+def cross_validate(recommender: Recommender, x: NDArray[np.int32], rotations=8, error_function=rmse, round_predictions=False):
     n_samples = len(x)
     errors = [None] * rotations
+    progress = Progress(rotations, name=recommender.name)
     for i in range(rotations):
         test_mask = gen_test_mask(n_samples, rotations, i)
         test_samples = np.where(test_mask)[0]
         train_samples = np.where(1 - test_mask)[0]
         x_test = x[test_samples, :]
         x_train = x[train_samples, :]
-        errors[i] = test_recommender(recommender, x_train, x_test, error_function)
+        errors[i] = test_recommender(recommender, x_train, x_test, error_function, round_predictions)
+        progress.update(i + 1)
     clock.avg(f"{recommender.name} offline phase")
     clock.avg(f"{recommender.name} online phase")
     return np.mean(errors)
@@ -43,7 +46,7 @@ def gen_test_mask(n_samples, rotations, iteration):
     return mask
 
 
-def test_recommender(recommender: Recommender, x_train: NDArray[np.int32], x_test: NDArray[np.int32], error_function=rmse):
+def test_recommender(recommender: Recommender, x_train: NDArray[np.int32], x_test: NDArray[np.int32], error_function=rmse, round_predictions=False):
     clock.start(f"{recommender.name} offline phase")
     recommender.fit(x_train)
     clock.stop(f"{recommender.name} offline phase")
@@ -51,6 +54,8 @@ def test_recommender(recommender: Recommender, x_train: NDArray[np.int32], x_tes
     clock.start(f"{recommender.name} online phase")
     predictions = recommender.rate(test_qualify)
     clock.stop(f"{recommender.name} online phase")
+    if round_predictions:
+        predictions = np.round(predictions)
     return error_function(test_ratings, predictions)
 
 

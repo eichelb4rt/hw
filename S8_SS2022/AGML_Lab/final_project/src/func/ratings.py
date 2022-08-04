@@ -11,25 +11,29 @@ import func.ratings as ratings
 def read(filename: str) -> NDArray[np.int32]:
     return np.genfromtxt(os.path.join(config.INPUT_DIR, filename), delimiter=",", dtype=np.int32)
 
+
 def read_output(filename: str) -> NDArray[np.int32]:
     return np.genfromtxt(os.path.join(config.OUTPUT_DIR, filename), delimiter=",", dtype=np.int32)
 
 
-def fit_and_save(recommender: Recommender, x_train: NDArray[np.int32], x_qualify: NDArray[np.int32]):
+def fit_and_save(recommender: Recommender, x_train: NDArray[np.int32], x_qualify: NDArray[np.int32], round_predictions=False):
     clock.start(f"{recommender.name} offline phase")
     recommender.fit(x_train)
     clock.stop(f"{recommender.name} offline phase", print_time=True)
     clock.start(f"{recommender.name} online phase")
     predictions = ratings.generate_ratings(recommender, x_qualify)
     clock.stop(f"{recommender.name} online phase", print_time=True)
-    ratings.save(f"qualifying_{recommender.name}.csv", predictions)
+    if round_predictions:
+        predictions = np.round(predictions)
+    ratings.save(f"qualifying_{recommender.name}.csv", predictions, int_predictions=round_predictions)
 
 
-def save(filename: str, ratings: NDArray[np.int32]):
-    np.savetxt(os.path.join(config.OUTPUT_DIR, filename), ratings, fmt=["%d", "%d", "%.2f"], delimiter=",", newline="\n", encoding="utf-8")
+def save(filename: str, ratings: NDArray[np.float32], int_predictions=False):
+    fmt = ["%d", "%d", "%d"] if int_predictions else ["%d", "%d", "%.2f"]
+    np.savetxt(os.path.join(config.OUTPUT_DIR, filename), ratings, fmt=fmt, delimiter=",", newline="\n", encoding="utf-8")
 
 
-def generate_ratings(recommender: Recommender, x_qualify: NDArray[np.int32]) -> NDArray[np.int32]:
+def generate_ratings(recommender: Recommender, x_qualify: NDArray[np.int32]) -> NDArray[np.float32]:
     return append_ratings(x_qualify, recommender.rate(x_qualify))
 
 

@@ -55,8 +55,6 @@ class ALS(Recommender):
             p_change = np.max(distance.euclidean(self.p, old_p, axis=1))
             q_change = np.max(distance.euclidean(self.q, old_q, axis=1))
             change = p_change + q_change
-            print(f"iterations: {iteration}")
-            print(f"change: {change}")
 
         return self
 
