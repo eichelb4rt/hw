@@ -13,7 +13,7 @@ class ALS(Recommender):
     """Uses factorization to predict. (Learngin with Alternating Least Squares)
     """
 
-    name = "als"
+    name = "als_factorization"
 
     def __init__(self, latent_dimensions=20, regularization_factor=5, epsilon=1e-1, max_iterations=10):
         self.latent_dimensions = latent_dimensions

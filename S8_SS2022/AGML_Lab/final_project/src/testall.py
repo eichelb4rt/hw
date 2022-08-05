@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 
 import config
@@ -15,14 +16,23 @@ from recommenders.factorization import ALS
 
 ROTATIONS = 8
 ROUND_PREDICTIONS = True
-error_function = errors.rmse
+error_functions = [errors.rmse, errors.avg_miss]
+error_names = ["rmse", "avg_miss"]
+
+assert len(error_functions) == len(error_names)
+n_errors = len(error_functions)
+
+np.set_printoptions(suppress=True)
 
 
 def test(recommender: Recommender, x):
     clock.start(f"testing {recommender.name}")
-    mean_error = errors.cross_validate(recommender, x, ROTATIONS, error_function, round_predictions=ROUND_PREDICTIONS)
+    mean_errors = errors.cross_validate(recommender, x, ROTATIONS, error_functions, round_predictions=ROUND_PREDICTIONS)
     clock.stop(f"testing {recommender.name}")
-    print(f"{recommender.name} error: {mean_error}\n")
+    for i in range(n_errors):
+        mean_err_str = "{:0.3f}".format(mean_errors[i])
+        print(f"{recommender.name} error: {error_names[i]} = {mean_err_str}")
+    sys.stdout.write('\n')
 
 
 def main():

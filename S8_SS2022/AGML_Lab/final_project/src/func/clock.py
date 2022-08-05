@@ -30,4 +30,4 @@ def avg(clock_name: str):
     if clock_name not in measured:
         raise LookupError(f"The clock \"{clock_name}\" hasn't been measured!")
     mean_time = np.mean(measured[clock_name])
-    print(f"avg time for {clock_name}: {round(mean_time, 2)}s")
+    print(f"{clock_name}: avg time {round(mean_time, 2)}s")
