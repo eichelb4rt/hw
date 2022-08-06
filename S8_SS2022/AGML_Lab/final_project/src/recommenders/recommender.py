@@ -6,9 +6,9 @@ class Recommender(ABC):
     name: str
 
     @abstractmethod
-    def fit(self, x_train):
+    def fit(self, x_train) -> Recommender:
         pass
 
     @abstractmethod
-    def rate(self, x_qualify) -> Recommender:
+    def rate(self, x_qualify):
         pass

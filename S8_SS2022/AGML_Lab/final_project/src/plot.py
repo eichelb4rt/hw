@@ -57,8 +57,21 @@ def rating_frequency(samples, save_file=None):
     # plot them
     plt.bar(possible_ratings, sorted_counts)
     plt.ylim(ymin=0)
-    plt.xlabel(f"ratings")
+    plt.xlabel("ratings")
     plt.ylabel("number of ratings")
+    if save_file is not None:
+        plt.savefig(os.path.join(config.PLOT_DIR, save_file))
+    else:
+        plt.show()
+
+
+def error_history(error_hist, save_file=None):
+    plt.clf()
+    n_iterations = len(error_hist)
+    plt.plot(range(n_iterations), error_hist)
+    # plt.ylim(ymin=0)
+    plt.xlabel("iteration")
+    plt.ylabel("error")
     if save_file is not None:
         plt.savefig(os.path.join(config.PLOT_DIR, save_file))
     else:
@@ -68,7 +81,7 @@ def rating_frequency(samples, save_file=None):
 def main():
     x_train = ratings.read("train.csv")
     rating_frequency(x_train, "train_frequency.png")
-    predictions = np.round(ratings.read_output("qualifying_als.csv"))
+    predictions = np.round(ratings.read_output("qualifying_hybrid.csv"))
     rating_frequency(predictions, "prediction_frequency.png")
     # x_qualify = ratings.read("qualifying_blanc.csv")
     # recommender = UserBasedNeighborhoodRecommender(k=50, min_similarity=-np.infty).fit(x_train)

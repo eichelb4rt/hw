@@ -42,5 +42,8 @@ als_factorization online phase: avg time 0.21s
 als_factorization error: rmse = 0.559
 als_factorization error: avg_miss = 0.234
 
-timed all testing: 1480.15s
+hybrid offline phase: avg time 145.24s
+hybrid online phase: avg time 5.76s
+hybrid error: rmse = 0.525
+hybrid error: avg_miss = 0.203
 ```

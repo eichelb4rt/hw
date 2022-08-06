@@ -4,6 +4,7 @@ from enum import Enum
 from nptyping import NDArray
 
 import config
+import func.clock as clock
 import func.ratings as ratings
 import func.similarity as similarity
 from recommenders.recommender import Recommender

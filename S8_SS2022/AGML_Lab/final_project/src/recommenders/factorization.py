@@ -139,4 +139,4 @@ class ALS(Recommender):
             return self.total_mean + self.biases[u]
 
         b_ui = self.biases[u] + self.intercepts[i] + self.total_mean
-        return b_ui + np.inner(self.p[u], self.q[i])
+        return b_ui + self.p[u] @ self.q[i]
