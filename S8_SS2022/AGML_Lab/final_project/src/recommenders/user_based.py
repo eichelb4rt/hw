@@ -11,6 +11,7 @@ from recommenders.recommender import Recommender
 
 
 REGULAR_STANDARD_DEVIATION = 1
+REMOVED_USER = -1
 
 
 class PredictionType(Enum):
@@ -151,11 +152,8 @@ class UserBasedNeighborhoodRecommender(Recommender):
             return self.mean_ratings[user_idx]
 
         # calculate rating based on peer group
-        all_ratings = self.ratings_matix[:, item_idx]
-        all_similarities = self.similarities[user_idx, :]
-
-        peer_ratings = all_ratings[peer_group]
-        peer_similarities = all_similarities[peer_group]
+        peer_ratings = self.ratings_matix[peer_group, item_idx]
+        peer_similarities = self.similarities[user_idx, peer_group]
 
         total_similarity = np.sum(np.abs(peer_similarities))
         if total_similarity == 0:
@@ -235,7 +233,7 @@ class UserBasedNeighborhoodRecommender(Recommender):
 
     def calc_item_weights(self):
         item_ratings = np.count_nonzero(self.rated_items, axis=0)
-        return np.log(self.n_items / item_ratings)
+        return np.log(self.n_users / item_ratings)
 
     def get_peers(self, user_idx, item_idx):
         # determine top k allowed users
@@ -246,8 +244,8 @@ class UserBasedNeighborhoodRecommender(Recommender):
         # removed = not (have rated and similar enough)
         removed_users = ~(have_rated & similar_enough)
         # mark the removed users with -1, apply order, remove marked users
-        allowed_users[removed_users] = -1
+        allowed_users[removed_users] = REMOVED_USER
         ordered_users = allowed_users[self.similarity_order[user_idx]]
-        ordered_users = ordered_users[ordered_users != -1]
+        ordered_users = ordered_users[ordered_users != REMOVED_USER]
         # we use the top k of those ordered (by similarity) users (the user itself is already filtered out because his rating is missing)
         return ordered_users[-self.k_neighbours:]

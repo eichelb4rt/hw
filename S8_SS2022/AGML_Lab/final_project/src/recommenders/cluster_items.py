@@ -7,7 +7,7 @@ import func.distance as distance
 import func.similarity as similarity
 
 from func.cluster import KMeans
-from recommenders.item_based import ItemBasedNeighborhoodRecommender
+from recommenders.item_based import REMOVED_ITEM, ItemBasedNeighborhoodRecommender
 
 
 class ClusterItemsRecommender(ItemBasedNeighborhoodRecommender):
@@ -47,8 +47,8 @@ class ClusterItemsRecommender(ItemBasedNeighborhoodRecommender):
         # removed = not (have rated and similar enough)
         removed_items = ~(have_rated & similar_enough & same_class)
         # mark the removed items with -1, apply order, remove marked items
-        allowed_items[removed_items] = -1
+        allowed_items[removed_items] = REMOVED_ITEM
         ordered_items = allowed_items[self.similarity_order[item_idx]]
-        ordered_items = ordered_items[ordered_items != -1]
+        ordered_items = ordered_items[ordered_items != REMOVED_ITEM]
         # we use the top k of those ordered (by similarity) items (the user itself is already filtered out because his rating is missing)
         return ordered_items[-self.k_neighbours:]

@@ -7,7 +7,7 @@ import func.distance as distance
 import func.similarity as similarity
 
 from func.cluster import KMeans
-from recommenders.user_based import UserBasedNeighborhoodRecommender, PredictionType
+from recommenders.user_based import REMOVED_USER, UserBasedNeighborhoodRecommender, PredictionType
 
 
 class ClusterUsersRecommender(UserBasedNeighborhoodRecommender):
@@ -47,8 +47,8 @@ class ClusterUsersRecommender(UserBasedNeighborhoodRecommender):
         # removed = not (have rated and similar enough)
         removed_users = ~(have_rated & similar_enough & same_class)
         # mark the removed users with -1, apply order, remove marked users
-        allowed_users[removed_users] = -1
+        allowed_users[removed_users] = REMOVED_USER
         ordered_users = allowed_users[self.similarity_order[user_idx]]
-        ordered_users = ordered_users[ordered_users != -1]
+        ordered_users = ordered_users[ordered_users != REMOVED_USER]
         # we use the top k of those ordered (by similarity) users (the user itself is already filtered out because his rating is missing)
         return ordered_users[-self.k_neighbours:]

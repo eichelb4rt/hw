@@ -1,10 +1,11 @@
 from __future__ import annotations
-from nptyping import NDArray
+import os
 import numpy as np
 from enum import Enum
+from nptyping import NDArray
 import matplotlib.pyplot as plt
 
-import plot
+import config
 import func.errors as errors
 import func.ratings as ratings
 from recommenders.recommender import Recommender
@@ -74,11 +75,11 @@ class Hybrid(Recommender):
             iteration += 1
 
         if self.plot_descent:
-            plot.error_history(error_history, save_file="descent.png")
+            plot_error_history(error_history, save_file="descent.png")
         return alpha
 
     def rate(self, x_qualify) -> Recommender:
-        return self.alpha @ self.single_ratings(x_qualify)
+        return np.clip(self.alpha @ self.single_ratings(x_qualify), config.MIN_RATING, config.MAX_RATING)
 
     def single_ratings(self, x_qualify):
         return np.array([recommender.rate(x_qualify) for recommender in self.recommenders])
@@ -94,3 +95,16 @@ class Hybrid(Recommender):
             return (single_predictions @ np.sign(combined_prediction - y_held_out)) / len(y_held_out)
         if self.min_goal == MinimizationGoal.MEAN_SQUARED_ERROR:
             return (single_predictions @ (combined_prediction - y_held_out)) / len(y_held_out)
+
+
+def plot_error_history(error_hist, save_file=None):
+    plt.clf()
+    n_iterations = len(error_hist)
+    plt.plot(range(n_iterations), error_hist)
+    # plt.ylim(ymin=0)
+    plt.xlabel("iteration")
+    plt.ylabel("error")
+    if save_file is not None:
+        plt.savefig(os.path.join(config.PLOT_DIR, save_file))
+    else:
+        plt.show()

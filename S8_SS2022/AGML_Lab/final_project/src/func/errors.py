@@ -22,6 +22,7 @@ def mse(ratings, predicted_ratings):
     return np.mean(np.square(ratings - predicted_ratings))
 
 
+# NOTE: i wrote my own cross validation so that i could use different error functions
 def cross_validate(recommender: Recommender, x: NDArray[np.int32], rotations=8, error_functions=[rmse, mae], round_predictions=False) -> NDArray[np.float32]:
     n_error_functions = len(error_functions)
     errors = np.empty((rotations, n_error_functions))

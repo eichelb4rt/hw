@@ -8,6 +8,9 @@ import func.similarity as similarity
 from recommenders.recommender import Recommender
 
 
+REMOVED_ITEM = -1
+
+
 class ItemBasedNeighborhoodRecommender(Recommender):
     """Recommends based on similar items.
 
@@ -141,11 +144,8 @@ class ItemBasedNeighborhoodRecommender(Recommender):
             return np.mean(all_ratings)
 
         # calculate rating based on peer group
-        all_ratings = self.ratings_matix[user_idx, :]
-        all_similarities = self.similarities[item_idx, :]
-
-        peer_ratings = all_ratings[peer_group]
-        peer_similarities = all_similarities[peer_group]
+        peer_ratings = self.ratings_matix[user_idx, peer_group]
+        peer_similarities = self.similarities[peer_group, item_idx]
 
         total_similarity = np.sum(np.abs(peer_similarities))
         if total_similarity == 0:
@@ -206,8 +206,8 @@ class ItemBasedNeighborhoodRecommender(Recommender):
         # removed = not (have rated and similar enough)
         removed_items = ~(have_rated & similar_enough)
         # mark the removed items with -1, apply order, remove marked items
-        allowed_items[removed_items] = -1
+        allowed_items[removed_items] = REMOVED_ITEM
         ordered_items = allowed_items[self.similarity_order[item_idx]]
-        ordered_items = ordered_items[ordered_items != -1]
+        ordered_items = ordered_items[ordered_items != REMOVED_ITEM]
         # we use the top k of those ordered (by similarity) items (the user itself is already filtered out because his rating is missing)
         return ordered_items[-self.k_neighbours:]
