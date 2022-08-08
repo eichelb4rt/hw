@@ -1,4 +1,4 @@
-\documentclass[12pt]{scrartcl}
+\documentclass[11pt]{scrartcl}
 
 % packages
 
@@ -36,7 +36,7 @@
 \usepackage{subcaption}
 \usepackage{adjustbox}
 
-\usepackage{amsmath}
+\usepackage{amsmath, amssymb}
 
 %%%%%%%%%%%%%%%%%%%%%% preamble %%%%%%%%%%%%%%%%%%%%%%
 
@@ -153,10 +153,10 @@ $$\text{Sim}(u, v) \gets \text{Sim}(u, v) \cdot \frac{\min\set{\abs{I_{uv}}, \be
 The hyper parameter $\alpha$ can be used to amplify the importance of similarity.
 $$\text{Sim}(u, v) \gets \text{Sim}(u, v)^\alpha$$
 
-Based on these similarities, a peer group $P_u(i)$ of users can be determined. For this, the users are sorted by similarity.
+Based on these similarities, a peer group $P_u(i)$ of users is determined. For this, the users are sorted by similarity.
 To improve efficiency in the online phase, the sorting is done in the offline phase.
 For this, the similarities between every user $u, v$ are saved in the similarity matrix.
-The order of peers for a specific user can then be determined by sorting the respective row vector.
+The order of peers for a specific user is then determined by sorting the respective row vector.
 
 In the online phase, this order is simply applied. Users are then removed, if they have not rated them item $i$, or their similarity to user $u$ is below a certain threshold $S_{min}$.
 The top $k$ remaining users are then the peer group $P_u(i)$.
@@ -169,12 +169,12 @@ If the user has only ever given one distinct rating, the variance is set to an a
 
 \hypertarget{special_cases}{}
 In special cases where the user or the item has never been seen before, similarities can not be calculated. In those special cases, the ratings were predicted in a different way:
-
 \begin{itemize}
 	\item user and item unknown: predict average between minimum and maximum possible rating
 	\item user unknown, item known: predict average rating of that item
 	\item user known, item unknown: predict average rating of that user
 \end{itemize}
+Also, if the original item rating of the user is known, this original rating can be predicted.
 
 \subsubsection[Item-Based]{Item-Based Recommender}
 The item-based recommender compares items based on their user ratings. An item rating from a user is then predicted based on ratings of similar items from that user.
@@ -195,10 +195,10 @@ The result is then divided by the number of common dimensions to get a distance 
 \subsection[Factorization]{Factorization-Based Recommender}
 In the factorization-based recommender, the users and items are assumed to be in a common latent factor space $R^f$ of user preferences $q_i$ and item characteristics $p_u$.
 The rating $r_{ui}$ is then modelled as the user's interest in the item's characteristics. User and item biases are also taken into account.
-$$\hat{r}_{ui} = q_i^\T p_u + \mu + b_i + b_u$$
+$$\hat{r}_{ui} = q_i^\T p_u + \mu + b_i + b'_u$$
 
 The goal is then to learn the factors $q_i, p_u$, such that the squared error function on the ratings of the training set is minimal.
-$$\min\limits_{p, q, b} \sum\limits_{(u, i) \in \kappa} (r_{ui} - \hat{r}_{ui})^2 + \lambda \left(\norm{q_i}^2 + \norm{p_u}^2 + b_i^2 + b_u^2\right)$$
+$$\min\limits_{p, q, b} \sum\limits_{(u, i) \in \kappa} (r_{ui} - \hat{r}_{ui})^2 + \lambda \left(\norm{q_i}^2 + \norm{p_u}^2 + b_i^2 + {b'_u}^2\right)$$
 with $\kappa$ as the set of $(u, i)$ pairs in the training set, $\lambda$ as the regularization parameter.
 
 To achieve this minimzation, alternating least squares is used.
@@ -209,13 +209,35 @@ This is done until the change of the vectors in $q, p$ is below a threshold $\ep
 To optimally solve the minimization at each step, ridge regression is used.
 Because they are independent, each of the summands are optimized individually.
 \begin{gather*}
-	\min\limits_{p_u, b_u} \sum\limits_{i \in \kappa_u} \left((r_{ui} - b_i - \mu) - (q_i^\T p_u + b_u)\right)^2 + \lambda \left(\norm{p_u}^2 + b_u^2\right)\\
-	\min\limits_{q_i, b_i} \sum\limits_{u \in \kappa_i} \left((r_{ui} - b_u - \mu) - (q_i^\T p_u + b_i)\right)^2 + \lambda \left(\norm{q_i}^2 + b_i^2\right)
+	\min\limits_{p_u, b'_u} \sum\limits_{i \in \kappa_u} \left((r_{ui} - b_i - \mu) - (q_i^\T p_u + b'_u)\right)^2 + \lambda \left(\norm{p_u}^2 + {b'_u}^2\right)\\
+	\min\limits_{q_i, b_i} \sum\limits_{u \in \kappa_i} \left((r_{ui} - b'_u - \mu) - (q_i^\T p_u + b_i)\right)^2 + \lambda \left(\norm{q_i}^2 + b_i^2\right)
 \end{gather*}
 with $\kappa_u$ as the set of items that have been rated by $u$, $\kappa_i$ as the set of user that have rated $i$.
 
+The ridge regression the boils down to solving the regularized normal equations:
+\begin{gather*}
+	\left(Q_{\kappa_u} {Q_{\kappa_u}}^\T + \lambda\bbone\right) p_u = Q_{\kappa_u} y_{\kappa_u}\\
+	\left(P_{\kappa_i} {P_{\kappa_i}}^\T + \lambda\bbone\right) q_i = P_{\kappa_i} y_{\kappa_i}
+\end{gather*}
+with
+\begin{align*}
+	Q_{\kappa_u}  & = (q_{i_1}, \dots, q_{i_n})                                  \\
+	y_{\kappa_u}  & = \vec{r}_{\kappa_u} - \vec{b}                               \\
+	              & = (r_{ui_1}, \dots, r_{ui_n})^\T - (b_{i_1}, \dots, b_{i_n}) \\
+	i, \dots, i_n & \in \kappa_u
+\end{align*}
+for determining $p_u$ and
+\begin{align*}
+	P_{\kappa_i}    & = (p_{u_1}, \dots, p_{u_n})                                      \\
+	y_{\kappa_i}    & = \vec{r}_{\kappa_i} - \vec{b'}                                  \\
+	                & = (r_{u_1 i}, \dots, r_{u_n i})^\T - (b'_{u_1}, \dots, b'_{u_n}) \\
+	u_1, \dots, u_n & \in \kappa_i
+\end{align*}
+for determining $q_i$.
+
+
 The biases can either be fixed or part of the optimization.
-If the biases are fixed, $\mu$ is the overall mean rating in the training set, $b_u = \mu_u - \mu$ is the mean user rating centered around the overall mean rating, $b_i = \mu_i - \mu$ is the mean item rating centered around the overall mean rating.
+If the biases are fixed, $\mu$ is the overall mean rating in the training set, $b'_u = \mu_u - \mu$ is the mean user rating centered around the overall mean rating, $b_i = \mu_i - \mu$ is the mean item rating centered around the overall mean rating.
 If the biases are part of the optimization, they are the affine part of the ridge regression at each step.
 This affine part can be obtained by appending a constant 1 to the training vectors and reading its respective coefficient.
 
@@ -228,165 +250,105 @@ $$\hat{r}_{ui} = \sum\limits_{k = 1}^{K} \alpha_k \hat{r}^{(k)}_{ui} = \vec{\alp
 To learn $\vec{\alpha}$, the training set is separated into two parts: a fitting set, and a held out set.
 The recommenders are then trained on the fitting set.
 Then, the recommenders predict the labels of the held out set.
-The optimal alpha should either minimize the mean absolute error
-$$\mathcal{E}_1 = \frac{1}{m}\norm{R - \vec{R} \vec{\alpha} }_1$$
-or the mean squared error
-$$\mathcal{E}_2 = \frac{1}{m}\norm{R - \vec{R} \vec{\alpha}}^2_2$$
+The optimal alpha can either minimize the mean absolute error
+$$\mathcal{E}_1 = \frac{1}{m}\norm{R - \vec{R} \vec{\alpha}}_1$$
+or the (half) mean squared error
+$$\mathcal{E}_2 = \frac{1}{2m}\norm{R - \vec{R} \vec{\alpha}}^2_2$$
 $m$ as the number of samples in the held out set,
 $R = (r_1, \dots, r_m)^\T$ as the vector of true ratings of the held out samples,
 $\vec{R} = (\vec{r}_1, \dots, \vec{r}_m)^\T$ as the matrix of predictions on the held out samples.
 
-$\vec{\alpha}$ can then be optimized with gradient descent. Every entry is intialized with $\frac{1}{K}$.
-At each step, $\vec{\alpha} \gets \vec{\alpha} - \gamma \nabla_{\vec{\alpha}}\mathcal{E}(\vec{\alpha})$ is pushed into the direction of the negative gradient of the error, scaled with a learning rate $\gamma$.
+$\vec{\alpha}$ is then optimized with gradient descent. Every entry is intialized with $\frac{1}{K}$.
+At each step, $\vec{\alpha} \gets \vec{\alpha} - \gamma \nabla\mathcal{E}(\vec{\alpha})$ is pushed into the direction of the negative gradient of the error, scaled with a learning rate $\gamma$.
 This is done until the error changes less than a threshold $\epsilon$, or the maxmimum amount of iterations is reached.
+\begin{align*}
+	\nabla\mathcal{E}_1(\vec{\alpha}) & = \frac{1}{m} \text{sign}\left(R - \vec{R} \vec{\alpha}\right)^\T \vec{R} \\
+	\nabla\mathcal{E}_2(\vec{\alpha}) & = \frac{1}{m} \left(R - \vec{R} \vec{\alpha}\right)^\T \vec{R}
+\end{align*}
 
 After $\vec{\alpha}$ has been determined, the predictors are trained on the whole training set to not miss out on information.
 Special cases do not need to be handled, as they are handled in the individual recommenders.
 
+\clearpage
 \section{Results}
 % include plot: didn't improve much from equally distributed weights
 % also talk about hyper parameters
+The hyper parameters were tuned based on the root mean squared error and the mean absolute error from cross validation.
+Those were the best performing ones:
+\begin{itemize}
+	\item user based: \begin{itemize}
+		      \item $k = 50$ neighbours in peer group
+		      \item $\alpha = 1$, not amplifying importance of similarity
+		      \item $S_{min} = 0.4$ minimum similarity
+		      \item $\beta = 4$ common dimensions before similarity reduction
+		      \item 8 clusters
+	      \end{itemize}
+	\item item based: \begin{itemize}
+		      \item $k = 50$ neighbours in peer group
+		      \item $\alpha = 1$, not amplifying importance of similarity
+		      \item $S_{min} = 0.6$ minimum similarity
+		      \item $\beta = 6$ common dimensions before similarity reduction
+	      \end{itemize}
+	\item factorization based: \begin{itemize}
+		      \item $\lambda = 5$ regularization parameter
+		      \item $f = 20$ latent dimensions
+		      \item biases not fixed
+		      \item $\epsilon = 10^{-2}$, max 20 iterations
+	      \end{itemize}
+	\item hybrid of user based, item based, factorization based: \begin{itemize}
+		      \item $\gamma = 1$ learning rate
+		      \item $\epsilon = 10^{-4}$, max 100 iterations
+	      \end{itemize}
+\end{itemize}
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[scale=0.4]{../plots/descent.png}
+	\caption{Hybrid error during gradient descent}\label{fig:hybrid_descent}
+\end{figure}
+It is worthy to note that the hybrid didn't improve much compared to the initial equal weights.
+In \autoref{fig:hybrid_descent} you can see mean absolute error of the hybrid recommender during the gradient descent of $\vec{\alpha}$.
+
 \subsection{Performance}
+For time measurement, the recommenders were trained on \href{run:../input/train.csv}{\texttt{train.csv}} (435K samples) and evaluated on \href{run:../input/qualifying_blanc.csv}{\texttt{qualifying\_blanc.csv}} (109K samples).
+\begin{table}[!htb]
+	\centering
+	\rowcolors{2}{gray!25}{white}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		Recommender   & offline phase & online phase \\\hline\hline
+		user based    & 15.97s        & 6.84s        \\\hline
+		item based    & 44.3s         & 4.79s        \\\hline
+		factorization & 85.65s        & 0.53s        \\\hline
+		hybrid        & 304.1s        & 26.79s       \\\hline
+	\end{tabular}
+	\caption{Runtime in offline and online phase}\label{tab:performance}
+\end{table}
+
 \subsection{Error Scores}
+The error scores were measured with cross validation on the training set, with $R = 8$ rotations.
+Root mean squared error (rmse) and mean absolute error (mae) were calculated.
+\begin{table}[!htb]
+	\centering
+	\rowcolors{2}{gray!25}{white}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		Recommender   & rmse  & mae   \\\hline\hline
+		user based    & 0.670 & 0.301 \\\hline
+		item based    & 0.569 & 0.222 \\\hline
+		factorization & 0.559 & 0.233 \\\hline
+		hybrid        & 0.513 & 0.202 \\\hline
+	\end{tabular}
+	\caption{Error scores}\label{tab:errors}
+\end{table}
 \subsection{Final Score}
+My final score on the \href{http://csujena.pythonanywhere.com/}{validation set} is 0.530.
+It was achieved with the hybrid recommender.
 
 
-
-% \section{Vorgehen}
-% Das initiale Feld wird gleichmäßig auf alle Prozesse aufgeteilt. In jedem Prozess werden die neuen Temperaturen im lokalen $chunk$ berechnet. Dafür gibt es einen Austausch der aktuellen Werte mit den Nachbarprozessen. Diese Werte werden in den Ghost Cells in einem Halo der Breite $g$ um den lokalen $chunk$ gespeichert.
-% Ab hier werden die Ghost Cells als Teil des lokalen Chunks angesehen. Der Teil des Chunks, der keine Ghost Cells beinhaltet, wird als innerer Chunk bezeichnet.
-% Am Ende der Berechnung werden die innneren Chunks der einzelnen Prozesse wieder zusammengesetzt.
-
-% \begin{algorithmic}[1]
-%     \State split\_up\_domain()
-%     \For{$i = 0 \rightarrow n\_iterations$}
-%         \If{$i \% g == 0$}
-%             \State exchange\_ghost\_cells()
-%         \EndIf
-%         \State calculate()
-%     \EndFor
-%     \State collect()
-% \end{algorithmic}
-% \subsection{Kommunikation}
-% Die angewandten Techniken werden größtenteils dem Paper ``Ghost Cell Pattern'' von \citeauthor{Kjolstad2010} entnommen.
-% Es wird ein Deep Halo benutzt und die Corner Cells sollen auch effizient übertragen werden.
-% Da die Ost-West-Kommunikation immer vor der Nord-Süd-Kommunikation passieren muss, damit die Ecken richtig übertragen werden, wird zwischen der Kommunikation von den beiden Richtungen gewartet.
-
-% \begin{algorithmic}[1]
-%     \State irecv\_east()
-%     \State irecv\_west()
-%     \State isend\_east()
-%     \State isend\_west()
-%     \State wait()
-%     \State irecv\_north()
-%     \State irecv\_south()
-%     \State isend\_north()
-%     \State isend\_south()
-%     \State wait()
-% \end{algorithmic}
-
-% Falls ein Nachbar in eine Richtung nicht existiert, werden die Ghost Cells mit Padding gefüllt. Dabei wird immer der nächste Wert des inneren Chunks kopiert.
-
-% \subsection{Berechnung}
-% Es werden immer nur so viele Zellen berechnet, wie für den nächsten Schritt benötigt werden. Dafür wird eine $border$ eingeführt.
-% Am Anfang umfasst die $border$ den ganzen Chunk, inklusive Halo, bis auf den äußersten Ring. Am Ende umfasst die $border$ nur noch den inneren Chunk.
-% % TODO: fancy visualisation
-
-% Um die neuen Werte zu berechnen werden zwei Arrays benutzt. Eines, das die alten Werte enthält und eines, das die Ergebnisse der Berechnung enthält. Als Vorbereitung für den nächsten Schritt werden am Ende der Berechnung die Arrays vertauscht.
-
-% \begin{algorithmic}[1]
-%     \State $border$ := adapt\_border()
-%     \For{$x,y$ in the $border$}
-%         \State results[$x,y$] := calculation\_step($x,y$) \Comment{calculation\_step uses old\_values}
-%     \EndFor
-%     \State swap(results, old\_values)
-% \end{algorithmic}
-
-
+% \typeout{}
 % \clearpage
-% \section{Implementierung}
-% % TODO: update lines
-% \subsection{Chunks}
-% Zu dem inneren Chunk kommt noch das Ghost-Block-Halo dazu:
-
-% \subsection{Kommunikation}
-
-% \subsection{Berechnung}
-% Berechnung nach Aufgabenstellung mit \verb+FACTOR+ $= \alpha \cdot \frac{\Delta t}{h^2}$.
-
-
-% \clearpage
-% \section{Benutzung}
-% Argumente, die übergeben werden müssen:
-% \begin{itemize}
-%     \item Größe des zu berechnenden Feldes
-%     \item Anzahl der Iterationen
-%     \item Anzahl der Prozesse in X-Richtung
-%     \item Anzahl der Prozesse in Y-Richtung
-% \end{itemize}
-% Parameter, die angepasst werden können:
-% \begin{itemize}
-%     \item Ausgabedatei
-%     \item Breite des Ghost Cell Halos
-%     \item Abstand der Iterationen, in denen ein Zwischenstand gespeichert wird
-% \end{itemize}
-
-% \clearpage
-% \section{Auswertung}
-% (Disclaimer:) Die Performance wurde auf meinem lokalen Rechner gemessen, da es auf dem ARA-Cluster zu fehlern kam (siehe \verb+README.md+).
-
-% \begin{figure}[!htb]
-%     \begin{subfigure}{0.5\textwidth}
-%         \centering
-%         \includegraphics[scale=0.5]{../plots/descent.png}
-%         \caption{field size 128}\label{fig:plot_128_tot}
-%     \end{subfigure}
-% 	\begin{subfigure}{0.5\textwidth}
-%         \centering
-%         \includegraphics[scale=0.5]{../plots/descent.png}
-%         \caption{field size 256}\label{fig:plot_256_tot}
-%     \end{subfigure}
-%     \newline
-%     \begin{subfigure}{0.5\textwidth}
-%         \centering
-%         \includegraphics[scale=0.5]{../plots/descent.png}
-%         \caption{field size 512}\label{fig:plot_512_tot}
-%     \end{subfigure}
-% 	\begin{subfigure}{0.5\textwidth}
-%         \centering
-%         \includegraphics[scale=0.5]{../plots/descent.png}
-%         \caption{field size 1024}\label{fig:plot_1024_tot}
-%     \end{subfigure}
-%     \begin{center}
-%         \begin{subfigure}{0.5\textwidth}
-%             \centering
-%             \includegraphics[scale=0.5]{../plots/descent.png}
-%             \caption{field size 2048}\label{fig:plot_2048_tot}
-%         \end{subfigure}
-%     \end{center}
-% 	\caption{Zeitverteilung gesamt}
-%     \label{fig:all_time}
-% \end{figure}
-
-% Jeder Prozess hat einzeln die Zeiten der Berechnungs- und Kommunikationszeiten für einzelne Schritte gemessen. Daraus wurden Gesamtzeiten und Durchschnittszeiten der einzelnen Prozesse berechnet. Über den Prozessen wurde dann der Durchschnitt gezogen.
-% Die Gesamtzeit des Programms wurde nur vom main rank gemessen.
-
-% Wie man in \autoref{fig:all_time} sieht, führt eine Erhöhung der Halobreite zuerst zu einer Verbesserung der Laufzeit, da der Aufbau der Kommunikation deutlich länger braucht als die Berechnung der inneren Werte. 
-% Durch höhere Halobreite wird seltener kommuniziert und mehr berechnet. 
-% Die zusätzliche Menge an übertragenen Daten sind erst nicht relevant, da der Kommunikationsaufbau länger braucht als die tatsächliche Übertragung der Daten.
-
-% Die höhere Halobreite führt später allerdings zu einer Verlangsamung.
-% In \autoref{fig:single_time} ist gut zu sehen, dass die Kommunikationszeiten schneller steigen als die Berechnungszeiten.
-% Die Vermutung ist, dass ab dieser Halobreite die Übertragung länger dauert, als der Aufbau der Kommunikation.
-% Die zunehmende Redundanz der Berechnungen ist sicherlich auch ein Grund für die Verlangsamung.
-
-% Die Berechnung wäre sicherlich noch um einiges schneller, wenn die Kommunikation während der Berechnung ablaufen würde, und nicht nur halb-asynchron und vor der Berechnung.
-% \FloatBarrier
-
-\typeout{}
-\clearpage
-\pagestyle{empty}
-\bibliography{literatur}
+% \pagestyle{empty}
+% \bibliography{literatur}
 % \listoffigures
 % \listoftables
 % \appendix

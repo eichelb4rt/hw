@@ -32,19 +32,20 @@ def main():
     # ratings.fit_and_save(user_based_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
 
     item_based_recommender = ItemBasedNeighborhoodRecommender(k_neighbours=50, weight_items=True, min_similarity=0.5, beta=6)
-    # ratings.fit_and_save(item_based_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
+    ratings.fit_and_save(item_based_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
 
     cluster_users_recommender = ClusterUsersRecommender(k_neighbours=50, n_clusters=8, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
-    # ratings.fit_and_save(cluster_users_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
+    ratings.fit_and_save(cluster_users_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
     
     cluster_items_recommender = ClusterItemsRecommender(k_neighbours=50, n_clusters=8, weight_items=True, min_similarity=0.4, beta=4)
 
     als_recommender = ALS(latent_dimensions=20, regularization_factor=5, epsilon=1e-1, max_iterations=10)
     # ratings.fit_and_save(als_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
     
-    als_variable_bias = ALSVariableBiases(latent_dimensions=8, regularization_factor=5, epsilon=1e-2, max_iterations=20)
+    als_variable_bias = ALSVariableBiases(latent_dimensions=20, regularization_factor=5, epsilon=1e-2, max_iterations=20)
+    ratings.fit_and_save(als_variable_bias, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
     
-    hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_recommender], min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
+    hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_variable_bias], min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
     ratings.fit_and_save(hybrid_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
 
 
