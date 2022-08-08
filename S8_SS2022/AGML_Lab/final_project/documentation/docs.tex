@@ -146,12 +146,19 @@ $$\text{Sim}(u, v) = \frac{\sum\limits_{i\in I_{uv}} w_i \cdot s_{ui} s_{vi}}{\s
 where $I_{uv}$ are the items that both users $u$ and $v$ have rated, $s_{ui} = r_{ui} - \mu_u$ is the centered rating from user $u$.
 The mean rating $\mu_u$ can be calculated individually for every comparison, based on only the common items, or it can be calculated once for every user, based on all their rated items.
 $w_i = \log\frac{\text{\# users}}{\text{\# users who rated } i}$ are item weights to combat the impact of the long tail in the number of item ratings.
+
 To prefer users with more common items, the similarites of users with less than $\beta$ common items are made smaller.
 $$\text{Sim}(u, v) \gets \text{Sim}(u, v) \cdot \frac{\min\set{\abs{I_{uv}}, \beta}}{\beta}$$
 
+The hyper parameter $\alpha$ can be used to amplify the importance of similarity.
+$$\text{Sim}(u, v) \gets \text{Sim}(u, v)^\alpha$$
+
 Based on these similarities, a peer group $P_u(i)$ of users can be determined. For this, the users are sorted by similarity.
 To improve efficiency in the online phase, the sorting is done in the offline phase.
-In the online phase, this order is simply applied. Users who have not rated the item $i$ and users whos similarity does not exceed a certain threshold, are then removed.
+For this, the similarities between every user $u, v$ are saved in the similarity matrix.
+The order of peers for a specific user can then be determined by sorting the respective row vector.
+
+In the online phase, this order is simply applied. Users are then removed, if they have not rated them item $i$, or their similarity to user $u$ is below a certain threshold $S_{min}$.
 The top $k$ remaining users are then the peer group $P_u(i)$.
 
 The predicted item rating from a user is then calculated as a sum of ratings from similar users, weighted with their relative similarity.
@@ -160,6 +167,7 @@ $$\hat{r}_{ui} = \mu_u + \sigma_u \cdot \frac{\sum\limits_{v \in P_u(i)} \text{S
 where $z_{ui} = s_{ui} / \sigma_u$ is the normalized rating, $\sigma_u$ the variance of the ratings of user $u$.
 If the user has only ever given one distinct rating, the variance is set to an arbitrary value of 1.
 
+\hypertarget{special_cases}{}
 In special cases where the user or the item has never been seen before, similarities can not be calculated. In those special cases, the ratings were predicted in a different way:
 
 \begin{itemize}
@@ -185,13 +193,58 @@ The result is then divided by the number of common dimensions to get a distance 
 
 
 \subsection[Factorization]{Factorization-Based Recommender}
-% include plot: didn't improve much from equally distributed weights
+In the factorization-based recommender, the users and items are assumed to be in a common latent factor space $R^f$ of user preferences $q_i$ and item characteristics $p_u$.
+The rating $r_{ui}$ is then modelled as the user's interest in the item's characteristics. User and item biases are also taken into account.
+$$\hat{r}_{ui} = q_i^\T p_u + \mu + b_i + b_u$$
 
+The goal is then to learn the factors $q_i, p_u$, such that the squared error function on the ratings of the training set is minimal.
+$$\min\limits_{p, q, b} \sum\limits_{(u, i) \in \kappa} (r_{ui} - \hat{r}_{ui})^2 + \lambda \left(\norm{q_i}^2 + \norm{p_u}^2 + b_i^2 + b_u^2\right)$$
+with $\kappa$ as the set of $(u, i)$ pairs in the training set, $\lambda$ as the regularization parameter.
+
+To achieve this minimzation, alternating least squares is used.
+$q, p$ are initiated randomly.
+Then, in each step, one of them is fixed and the other one is solved optimally.
+This is done until the change of the vectors in $q, p$ is below a threshold $\epsilon$ or a maximum number of iterations is reached.
+
+To optimally solve the minimization at each step, ridge regression is used.
+Because they are independent, each of the summands are optimized individually.
+\begin{gather*}
+	\min\limits_{p_u, b_u} \sum\limits_{i \in \kappa_u} \left((r_{ui} - b_i - \mu) - (q_i^\T p_u + b_u)\right)^2 + \lambda \left(\norm{p_u}^2 + b_u^2\right)\\
+	\min\limits_{q_i, b_i} \sum\limits_{u \in \kappa_i} \left((r_{ui} - b_u - \mu) - (q_i^\T p_u + b_i)\right)^2 + \lambda \left(\norm{q_i}^2 + b_i^2\right)
+\end{gather*}
+with $\kappa_u$ as the set of items that have been rated by $u$, $\kappa_i$ as the set of user that have rated $i$.
+
+The biases can either be fixed or part of the optimization.
+If the biases are fixed, $\mu$ is the overall mean rating in the training set, $b_u = \mu_u - \mu$ is the mean user rating centered around the overall mean rating, $b_i = \mu_i - \mu$ is the mean item rating centered around the overall mean rating.
+If the biases are part of the optimization, they are the affine part of the ridge regression at each step.
+This affine part can be obtained by appending a constant 1 to the training vectors and reading its respective coefficient.
+
+The special cases are handled in the same way as they are in the \hyperlink{special_cases}{User Based Recommender}.
 
 \subsection[Hybrid]{Hybrid Recommender}
-bruh
+The hybrid combines an array of $K$ recommenders. The predictions are a linear combination of the predictions of those recommenders.
+$$\hat{r}_{ui} = \sum\limits_{k = 1}^{K} \alpha_k \hat{r}^{(k)}_{ui} = \vec{\alpha}^\T \vec{r}_{ui}$$
+
+To learn $\vec{\alpha}$, the training set is separated into two parts: a fitting set, and a held out set.
+The recommenders are then trained on the fitting set.
+Then, the recommenders predict the labels of the held out set.
+The optimal alpha should either minimize the mean absolute error
+$$\mathcal{E}_1 = \frac{1}{m}\norm{R - \vec{R} \vec{\alpha} }_1$$
+or the mean squared error
+$$\mathcal{E}_2 = \frac{1}{m}\norm{R - \vec{R} \vec{\alpha}}^2_2$$
+$m$ as the number of samples in the held out set,
+$R = (r_1, \dots, r_m)^\T$ as the vector of true ratings of the held out samples,
+$\vec{R} = (\vec{r}_1, \dots, \vec{r}_m)^\T$ as the matrix of predictions on the held out samples.
+
+$\vec{\alpha}$ can then be optimized with gradient descent. Every entry is intialized with $\frac{1}{K}$.
+At each step, $\vec{\alpha} \gets \vec{\alpha} - \gamma \nabla_{\vec{\alpha}}\mathcal{E}(\vec{\alpha})$ is pushed into the direction of the negative gradient of the error, scaled with a learning rate $\gamma$.
+This is done until the error changes less than a threshold $\epsilon$, or the maxmimum amount of iterations is reached.
+
+After $\vec{\alpha}$ has been determined, the predictors are trained on the whole training set to not miss out on information.
+Special cases do not need to be handled, as they are handled in the individual recommenders.
 
 \section{Results}
+% include plot: didn't improve much from equally distributed weights
 % also talk about hyper parameters
 \subsection{Performance}
 \subsection{Error Scores}

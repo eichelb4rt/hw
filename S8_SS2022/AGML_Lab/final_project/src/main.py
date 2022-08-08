@@ -1,7 +1,10 @@
 import numpy as np
+
 import config
 import func.ratings as ratings
-from recommenders.factorization import ALS
+import func.distance as distance
+
+from recommenders.factorization import ALS, ALSVariableBiases
 from recommenders.hybrid import Hybrid, MinimizationGoal
 from recommenders.simple import MeanRecommender, RandomRecommender
 from recommenders.user_based import PredictionType, UserBasedNeighborhoodRecommender
@@ -38,6 +41,8 @@ def main():
 
     als_recommender = ALS(latent_dimensions=20, regularization_factor=5, epsilon=1e-1, max_iterations=10)
     # ratings.fit_and_save(als_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)
+    
+    als_variable_bias = ALSVariableBiases(latent_dimensions=8, regularization_factor=5, epsilon=1e-2, max_iterations=20)
     
     hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_recommender], min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
     ratings.fit_and_save(hybrid_recommender, X_TRAIN, X_QUALIFY, ROUND_PREDICTIONS)

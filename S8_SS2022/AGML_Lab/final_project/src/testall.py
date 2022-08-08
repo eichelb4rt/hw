@@ -13,7 +13,7 @@ from recommenders.user_based import UserBasedNeighborhoodRecommender, Prediction
 from recommenders.item_based import ItemBasedNeighborhoodRecommender
 from recommenders.cluster_users import ClusterUsersRecommender
 from recommenders.cluster_items import ClusterItemsRecommender
-from recommenders.factorization import ALS
+from recommenders.factorization import ALS, ALSVariableBiases
 
 ROTATIONS = 8
 ROUND_PREDICTIONS = True
@@ -62,15 +62,17 @@ def main():
     # latent_dimensions=15, regularization_factor=3, epsilon=1e-1, max_iterations=10 -> medium speed, error 2.67
     # latent_dimensions=20, regularization_factor=5, epsilon=1e-1, max_iterations=10 -> meh speed, error 2.63
     als_recommender = ALS(latent_dimensions=8, regularization_factor=5, epsilon=1e-2, max_iterations=20)
-    hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_recommender], min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
+    als_variable_bias = ALSVariableBiases(latent_dimensions=8, regularization_factor=5, epsilon=1e-2, max_iterations=20)
+    hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_variable_bias], min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
 
-    test(mean_recommender, X)
-    test(random_recommender, X)
-    test(user_based_recommender, X)
-    test(item_based_recommender, X)
-    test(cluster_users_recommender, X)
-    test(cluster_items_recommender, X)
-    test(als_recommender, X)
+    # test(mean_recommender, X)
+    # test(random_recommender, X)
+    # test(user_based_recommender, X)
+    # test(item_based_recommender, X)
+    # test(cluster_users_recommender, X)
+    # test(cluster_items_recommender, X)
+    # test(als_recommender, X)
+    # test(als_variable_bias, X)
     test(hybrid_recommender, X)
 
     clock.stop("all testing", print_time=True)

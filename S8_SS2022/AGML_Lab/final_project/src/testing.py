@@ -1,10 +1,10 @@
-import sys
+from __future__ import annotations
 import time
 import numpy as np
 
 import config
-from func.dynamic_line import Progress
 import func.ratings as ratings
+from func.dynamic_line import Progress
 
 
 def main():
@@ -12,6 +12,7 @@ def main():
     for i in range(8):
         progress.update(i + 1)
         time.sleep(0.5)
+    
     # X_TRAIN = ratings.read("train.csv")
     # users = ratings.user_map(X_TRAIN)
     # items = ratings.item_map(X_TRAIN)
