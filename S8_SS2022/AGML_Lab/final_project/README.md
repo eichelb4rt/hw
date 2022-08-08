@@ -2,6 +2,10 @@
 
 Here, Maurice Wenig is trying to implement a good Recommender System for the final project of AGML (Statistical Learning Theory) Lab.
 
+## Final Score
+
+My final score on the [validation set](http://csujena.pythonanywhere.com/) is 0.530. It was achieved with the hybrid recommender.
+
 ## Usage
 
 Run main: `python src/main.py`. Testing all recommenders: `python src/testall.py`. Example results (rounded predictions):
