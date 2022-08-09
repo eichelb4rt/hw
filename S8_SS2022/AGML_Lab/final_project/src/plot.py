@@ -6,6 +6,7 @@ from collections import Counter
 
 import config
 import func.ratings as ratings
+from func.dynamic_line import Progress
 
 from recommenders.simple import RandomRecommender, MeanRecommender
 from recommenders.cluster_items import ClusterItemsRecommender
@@ -25,6 +26,7 @@ def frequency(rating_counts: Counter, x_name="item", save_file=None):
     # plot them
     n_items = len(sorted_counts)
     plt.plot(range(n_items), sorted_counts)
+    plt.title(f"Number of ratings per {x_name}")
     plt.ylim(ymin=0)
     plt.xlabel(f"{x_name} index")
     plt.ylabel("number of ratings")
@@ -80,10 +82,10 @@ def plot_filled(recommenders: list[Recommender], x_train):
     item_map = ratings.item_map(x_train)
     combinations = np.array([[user, item] for user in user_map.keys() for item in item_map.keys()])
     ratings_matrix = ratings.ratings_matrix(x_train, user_map, item_map)
-    
+
     titles = ["original"]
     matrices = [ratings_matrix]
-    
+
     for recommender in recommenders:
         full_matrix = gen_filled(recommender, x_train, combinations, user_map, item_map, ratings_matrix)
         matrices.append(full_matrix)
@@ -100,7 +102,7 @@ def plot_filled(recommenders: list[Recommender], x_train):
         im = plt.imshow(matrix, cmap=cmap)
         im.set_clim(config.MIN_RATING, config.MAX_RATING)
         plt.colorbar(im, fraction=0.04)
-        plt.savefig(os.path.join(config.PLOT_DIR, f"matrix_{title}.png"))
+        plt.savefig(os.path.join(config.PLOT_DIR, f"matrix_{title}.png"), bbox_inches='tight')
 
 
 def gen_filled(recommender: Recommender, x_train, combinations, user_map, item_map, ratings_matrix):
@@ -119,22 +121,23 @@ def gen_filled(recommender: Recommender, x_train, combinations, user_map, item_m
 
 def main():
     x_train = ratings.read("train.csv")
-    # random_recommender = RandomRecommender(max_rating=config.MAX_RATING)
-    # mean_recommender = MeanRecommender()
-    # user_based_recommender = UserBasedNeighborhoodRecommender(k_neighbours=50, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
-    item_based_recommender = ItemBasedNeighborhoodRecommender(k_neighbours=50, weight_items=True, min_similarity=0.5, beta=6)
-    cluster_users_recommender = ClusterUsersRecommender(k_neighbours=50, n_clusters=8, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
-    # cluster_items_recommender = ClusterItemsRecommender(k_neighbours=50, n_clusters=8, weight_items=True, min_similarity=0.4, beta=4)
-    als_recommender = ALS(latent_dimensions=20, regularization_factor=5, epsilon=1e-1, max_iterations=10)
-    hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_recommender], min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
-    # plot_filled([random_recommender, mean_recommender, user_based_recommender, item_based_recommender, cluster_users_recommender, cluster_items_recommender, als_recommender, hybrid_recommender], x_train)
-    
-    rating_frequency(x_train, "train_frequency.png")
-    predictions = np.round(ratings.read_output("qualifying_hybrid.csv"))
-    rating_frequency(predictions, "prediction_frequency.png")
-    x_qualify = ratings.read("qualifying_blanc.csv")
-    predictions = np.round(ratings.generate_ratings(hybrid_recommender.fit(x_train), x_qualify))
-    rating_frequency(predictions, "prediction_frequency.png")
+
+    # item_based_recommender = ItemBasedNeighborhoodRecommender(k_neighbours=50, weight_items=True, min_similarity=0.5, beta=6)
+    # cluster_users_recommender = ClusterUsersRecommender(k_neighbours=50, n_clusters=8, prediction_type=PredictionType.Z_SCORE, weight_items=True, min_similarity=0.4, beta=4)
+    # als_recommender = ALS(latent_dimensions=20, regularization_factor=5, epsilon=1e-1, max_iterations=10)
+    # hybrid_recommender = Hybrid([cluster_users_recommender, item_based_recommender, als_recommender],
+    #                             min_goal=MinimizationGoal.MEAN_SQUARED_ERROR, epsilon=1e-4, lr=1, max_iterations=100, plot_descent=True)
+    # plot_filled([item_based_recommender, cluster_users_recommender, als_recommender, hybrid_recommender], x_train)
+
+    user_frequency(x_train, "user_frequency.png")
+    item_frequency(x_train, "item_frequency.png")
+
+    # rating_frequency(x_train, "train_frequency.png")
+    # predictions = np.round(ratings.read_output("qualifying_hybrid.csv"))
+    # rating_frequency(predictions, "prediction_frequency.png")
+    # x_qualify = ratings.read("qualifying_blanc.csv")
+    # predictions = np.round(ratings.generate_ratings(hybrid_recommender.fit(x_train), x_qualify))
+    # rating_frequency(predictions, "prediction_frequency.png")
 
 
 if __name__ == "__main__":

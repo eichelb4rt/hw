@@ -30,13 +30,18 @@ class Progress:
         self.progress_bar_length = progress_bar_length if progress_bar_length is not None else n
         self.stay = stay
         start()
-        self.update(0)
+        self._progress = 0
+        self.update(self._progress)
 
     def update(self, progress: int):
         if progress > self.n:
             raise IOError("Progress can't be beyond completed.")
+        self._progress = progress
         filled = (progress * self.progress_bar_length) // self.n
         empty = self.progress_bar_length - filled
         write(f"{self.name}: [{'=' * filled}{' ' * empty}] [{progress}/{self.n}]")
         if progress == self.n:
             end(self.stay)
+    
+    def increment(self):
+        self.update(self._progress + 1)
