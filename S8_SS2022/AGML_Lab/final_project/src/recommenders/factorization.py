@@ -91,7 +91,7 @@ class ALS(Recommender):
         return r_ui - b_ui
 
     def get_ps(self, qs: NDArray[np.float32]) -> NDArray[np.float32]:
-        """Gets q_i, the factor vectors for items."""
+        """Gets p_i, the factor vectors for users."""
         return np.array([self.get_p(u, qs) for u in range(self.n_users)])
 
     def get_qs(self, ps: NDArray[np.float32]) -> NDArray[np.float32]:
@@ -198,14 +198,6 @@ class ALSVariableBiases(Recommender):
         """Produces random vectors with entries in [-1, 1)"""
         return 2 * np.random.rand(n_vectors, self.latent_dimensions) - 1
 
-    def get_p_targets(self) -> NDArray[np.float32]:
-        """The targets (y) is always the same in every iteration, so we can precompute them."""
-        return [self.get_p_target(u) for u in range(self.n_users)]
-
-    def get_q_targets(self) -> NDArray[np.float32]:
-        """The targets (y) is always the same in every iteration, so we can precompute them."""
-        return [self.get_q_target(i) for i in range(self.n_items)]
-
     def get_p_target(self, u) -> np.float32:
         # which ratings we even know
         known = self.rated[u, :]
@@ -223,7 +215,7 @@ class ALSVariableBiases(Recommender):
         return r_ui - (b_u + self.total_mean)
 
     def get_ps(self, qs: NDArray[np.float32]) -> NDArray[np.float32]:
-        """Gets q_i, the factor vectors for items."""
+        """Gets p_i, the factor vectors for users."""
         return np.array([self.get_p(u, qs) for u in range(self.n_users)])
 
     def get_qs(self, ps: NDArray[np.float32]) -> NDArray[np.float32]:
