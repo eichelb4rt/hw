@@ -21,7 +21,7 @@ def rating_distance(distance_measure, rating1, rating2):
     n_dims = np.count_nonzero(common_dimensions)
     # if no dimensions are common, assume maximum distance
     if n_dims == 0:
-        return max_distance(euclidean, len(rating1))
+        return max_distance(distance_measure, len(rating1))
     common_1 = rating1[common_dimensions]
     common_2 = rating2[common_dimensions]
     return distance_measure(common_1, common_2) / n_dims
